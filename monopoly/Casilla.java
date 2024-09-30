@@ -15,7 +15,7 @@ public class Casilla {
     private Grupo grupo; //Grupo al que pertenece la casilla (si es solar).
     private float impuesto; //Cantidad a pagar por caer en la casilla: el alquiler en solares/servicios/transportes o impuestos.
     private float hipoteca; //Valor otorgado por hipotecar una casilla
-    private ArrayList<Avatar> avatares; //Avatares que están situados en la casilla.
+    private ArrayList<Avatar> avatares = new ArrayList<Avatar>(); //Avatares que están situados en la casilla.
 
     public String getNombre() {
         return nombre;
@@ -105,27 +105,46 @@ public class Casilla {
     /*Constructor para casillas tipo Solar, Servicios o Transporte:
     * Parámetros: nombre casilla, tipo (debe ser solar, serv. o transporte), posición en el tablero, valor y dueño.
      */
+
     public Casilla(String nombre, String tipo, int posicion, float valor, Jugador duenho) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.valor = valor;
+        this.posicion = posicion;
+        this.duenho = duenho;
     }
 
     /*Constructor utilizado para inicializar las casillas de tipo IMPUESTOS.
     * Parámetros: nombre, posición en el tablero, impuesto establecido y dueño.
      */
-    public Casilla(String nombre, int posicion, float impuesto, Jugador duenho) {
+    
+    public Casilla(String nombre, int posicion, Jugador duenho, float impuesto) {
+        this.nombre = nombre;
+        this.posicion = posicion;
+        this.tipo = "Impuesto";
+        this.duenho = duenho;
+        this.impuesto = impuesto;
     }
 
     /*Constructor utilizado para crear las otras casillas (Suerte, Caja de comunidad y Especiales):
     * Parámetros: nombre, tipo de la casilla (será uno de los que queda), posición en el tablero y dueño.
      */
+
     public Casilla(String nombre, String tipo, int posicion, Jugador duenho) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.posicion = posicion;
+        this.duenho = duenho;
     }
 
     //Método utilizado para añadir un avatar al array de avatares en casilla.
     public void anhadirAvatar(Avatar av) {
+        this.avatares.add(av);
     }
 
     //Método utilizado para eliminar un avatar del array de avatares en casilla.
     public void eliminarAvatar(Avatar av) {
+        this.avatares.remove(av);
     }
 
     /*Método para evaluar qué hacer en una casilla concreta. Parámetros:
@@ -135,6 +154,7 @@ public class Casilla {
     * Valor devuelto: true en caso de ser solvente (es decir, de cumplir las deudas), y false
     * en caso de no cumplirlas.*/
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada) {
+        return false; //PROVISIONAL
     }
 
     /*Método usado para comprar una casilla determinada. Parámetros:
@@ -148,17 +168,37 @@ public class Casilla {
     * - Sumar valor a las casillas de solar al no comprarlas tras cuatro vueltas de todos los jugadores.
     * Este método toma como argumento la cantidad a añadir del valor de la casilla.*/
     public void sumarValor(float suma) {
+        this.valor +=suma;
     }
 
+    /*Método para imprimir cada casilla del tablero
+     * 
+     * 
+     */
+    public String printOneCasilla(){
+        String name = new String();
+        name +=getNombre();
+        for (Avatar i : this.avatares) {
+            name+=i.getId(); //Juntamos como texto de la casilla, el nombre y los avatares
+        }
+        if (this.grupo!=null){
+            return(this.grupo.getColorGrupo()+name+Valor.RESET); //Si tiene grupo que pille su color
+        }
+        else{
+            return(Valor.WHITE+name+Valor.RESET); //Si no que se ponga el blanco
+        }
+    }
     /*Método para mostrar información sobre una casilla.
     * Devuelve una cadena con información específica de cada tipo de casilla.*/
     public String infoCasilla() {
+        return ""; //PROVISIONAL
     }
 
     /* Método para mostrar información de una casilla en venta.
      * Valor devuelto: texto con esa información.
      */
     public String casEnVenta() {
+        return ""; //PROVISIONAL
     }
     public static Casilla Casillaporpos(ArrayList<ArrayList<Casilla>> casillas, int posicion){
         
