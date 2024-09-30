@@ -30,7 +30,11 @@ public class Casilla {
     }
 
     public void setTipo(String tipo) {
-        if(Arrays.asList("Solar","Especial","Transporte","Servicios","Comunidad").contains(tipo)) this.tipo=tipo; //crea un array tipo lista con los nombres disponibles y comprueba si contiene tipo
+        if ("Solar".equals(tipo) || "Especial".equals(tipo) || 
+        "Transporte".equals(tipo) || "Servicios".equals(tipo) || "Comunidad".equals(tipo) || "Suerte".equals(tipo)||
+        "Impuesto".equals(tipo)) {
+        this.tipo = tipo; // Asigna el valor si es válido
+        }
         else System.out.println("Tipo de casilla no válido");
     }
 

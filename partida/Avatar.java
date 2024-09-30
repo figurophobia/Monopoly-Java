@@ -3,6 +3,7 @@ package partida;
 import monopoly.*;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class Avatar {
@@ -27,7 +28,10 @@ public class Avatar {
     }
 
     public void setTipo(String tipo) {
-        if (Arrays.asList("Sombrero","Esfinge","Pelota","Coche").contains(tipo)) this.tipo=tipo;
+        if ("Sombrero".equals(tipo) || "Esfinge".equals(tipo) || 
+            "Pelota".equals(tipo) || "Coche".equals(tipo)) {
+            this.tipo = tipo; // Asigna el valor si es válido
+        }    
         else System.out.println("Tipo no válido");
     }
 
@@ -77,7 +81,7 @@ public class Avatar {
         this.lugar.eliminarAvatar(this);
         posicionactual+=valorTirada;
         this.lugar=Casilla.Casillaporpos(casillas,posicionactual);
-        Casilla.anhadirAvatar(this);
+        casillas.anhadirAvatar(this);
     }
 
     /*Método que permite generar un ID para un avatar. Sólo lo usamos en esta clase (por ello es privado).
@@ -95,7 +99,7 @@ public class Avatar {
             idvalido=true; // de primeras pone que es un id valido
             idr=(char) (idrand.nextInt(26)+65); //negera un numero random de 0 a 26 (letras existentes) y le suma 65 (codigo ascii de a) lo pasa a char
             for (Avatar avatar : avCreados) { //for each que recorre la lista de avatares
-                if (Character.toString(idr).equals(avatar.id)){ //si avatar id es igual a idr idvalido false y vuelve a generar un 
+                if (Character.toString(idr).equals(avatar.getId())){ //si avatar id es igual a idr idvalido false y vuelve a generar un 
                     idvalido=false;
                 }
                 
