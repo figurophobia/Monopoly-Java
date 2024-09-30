@@ -17,6 +17,83 @@ public class Casilla {
     private float hipoteca; //Valor otorgado por hipotecar una casilla
     private ArrayList<Avatar> avatares; //Avatares que están situados en la casilla.
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre; // no se puede proteger ya que hay 40 nombres diferente + los nombres con el jugador en la casilla, no vale la pena
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        if(Arrays.asList("Solar","Especial","Transporte","Servicios","Comunidad").contains(tipo)) this.tipo=tipo; //crea un array tipo lista con los nombres disponibles y comprueba si contiene tipo
+        else System.out.println("Tipo de casilla no válido");
+    }
+
+    public float getValor() {
+        return valor;
+    }
+
+    public void setValor(float valor) {
+        if (valor>0) this.valor = valor; //comprueba que el valor introducido sea positivo
+        else System.out.println("Valor no válido");
+    }
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        if(posicion>=1&&posicion<=40) this.posicion=posicion;
+        else System.out.println("Posición no válida");
+    }
+
+    public Jugador getDuenho() {
+        return duenho;
+    }
+
+    public void setDuenho(Jugador duenho) {
+        this.duenho = duenho;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    public float getImpuesto() {
+        return impuesto;
+    }
+
+    public void setImpuesto(float impuesto) {
+        if (impuesto>=0) this.impuesto = impuesto;
+        else System.out.println("Impuesto no disponible");
+    }
+
+    public float getHipoteca() {
+        return hipoteca;
+    }
+
+    public void setHipoteca(float hipoteca) {
+        if (hipoteca>=0) this.hipoteca = hipoteca;
+        else System.out.println("Hipoteca no disponible");
+    }
+
+    public ArrayList<Avatar> getAvatares() {
+        return avatares;
+    }
+
+    public void setAvatares(ArrayList<Avatar> avatares) {
+        this.avatares = avatares;
+    }
+
     //Constructores:
     public Casilla() {
     }//Parámetros vacíos
@@ -78,6 +155,19 @@ public class Casilla {
      * Valor devuelto: texto con esa información.
      */
     public String casEnVenta() {
+    }
+    public static Casilla Casillaporpos(ArrayList<ArrayList<Casilla>> casillas, int posicion){
+        
+        
+        //for Tipo elemento variable : coleccion
+        for (ArrayList<Casilla> lado : casillas) {
+            for (Casilla casilla : lado) {
+                if (casilla.posicion==posicion) return casilla;
+            }
+                
+        }
+        return null; // si no encuentra casilla que no raye
+
     }
 
 }
