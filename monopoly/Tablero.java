@@ -111,22 +111,47 @@ public class Tablero {
     @Override
     public String toString() {
         StringBuilder tableroStr = new StringBuilder();
-        
-        // Imprimir el lado norte
-        for (int i = 0; i < 10; i++) { // de izquierda a derecha
-            tableroStr.append("| ").append(posiciones.get(2).get(i).printOneCasilla()).append(" ");
-        }
-        tableroStr.append("|\n");
+        // Imprimir el lado norte (posiciones[2]), de izquierda a derecha
+        tableroStr.append(" ");
+        for (int j = 0; j < 11; j++) {
+            tableroStr.append(Valor.SUBRAYADO+" ".repeat(Valor.width)+Valor.RESET+" ");
 
-        // Imprimir el lado sur
-        for (int i = 9; i >= 0; i--) { // de derecha a izquierda
-            tableroStr.append("| ").append(posiciones.get(0).get(i).printOneCasilla()).append(" ");
+        }
+        tableroStr.append("\n");
+        for (int i = 0; i < 10; i++) { 
+            tableroStr.append("|"+posiciones.get(2).get(i).printOneCasilla());
+        }
+        tableroStr.append("|"+posiciones.get(3).get(0).printOneCasilla()+"|");
+        tableroStr.append("\n");
+    
+        // Imprimir los lados oeste y este simultáneamente
+        for (int i = 9; i > 0; i--) {
+            // Lado oeste (posiciones[1]): desde la cárcel hasta el inicio (de abajo hacia arriba)
+            tableroStr.append("|"+posiciones.get(1).get(i).printOneCasilla()+"|"); 
+            if(i==1){
+                for (int j = 0; j < 8; j++) {
+                    tableroStr.append(Valor.SUBRAYADO+" ".repeat(Valor.width)+Valor.RESET+" ");
+
+                }
+                tableroStr.append(Valor.SUBRAYADO+" ".repeat(Valor.width)+Valor.RESET);
+            }else{tableroStr.append(" ".repeat(9*Valor.width+8));}
+            // Lado este (posiciones[3]): desde el inicio (arriba) hacia abajo
+            tableroStr.append("|"+posiciones.get(3).get(10-i).printOneCasilla()+"|");
+    
+            tableroStr.append("\n");
+        }
+    
+        // Imprimir el lado sur (posiciones[0]), de derecha a izquierda
+        tableroStr.append("|"+posiciones.get(1).get(0).printOneCasilla());
+        for (int i = 9; i >= 0; i--) { 
+            tableroStr.append("|"+posiciones.get(0).get(i).printOneCasilla());
         }
         tableroStr.append("|\n");
     
-
         return tableroStr.toString();
     }
+    
+    
     
 
     public Casilla getCasilla(int posicion){

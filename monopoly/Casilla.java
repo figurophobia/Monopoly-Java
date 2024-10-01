@@ -179,14 +179,14 @@ public class Casilla {
         String name = new String();
         name +=getNombre();
         for (Avatar i : this.avatares) {
-            name+=i.getId(); //Juntamos como texto de la casilla, el nombre y los avatares
+            name+="&"+i.getId(); //Juntamos como texto de la casilla, el nombre y los avatares
         }
-        name = String.format("%-10s", name);  // Rellena con espacios si es más corto, o lo ajusta a 16
+        name = String.format("%-"+Valor.width+"s", name);  // Rellena con espacios si es más corto, o lo ajusta a 16
         if (this.grupo!=null){
-            return(this.grupo.getColorGrupo()+name+Valor.RESET); //Si tiene grupo que pille su color
+            return(Valor.SUBRAYADO+this.grupo.getColorGrupo()+name+Valor.RESET); //Si tiene grupo que pille su color
         }
         else{
-            return(Valor.WHITE+name+Valor.RESET); //Si no que se ponga el blanco
+            return(Valor.SUBRAYADO+Valor.WHITE+name+Valor.RESET); //Si no que se ponga el blanco
         }
     }
     /*Método para mostrar información sobre una casilla.

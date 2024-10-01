@@ -6,7 +6,7 @@ public class Valor {
     public static final float FORTUNA_BANCA = 500000; // Cantidad que tiene inicialmente la Banca
     public static final float FORTUNA_INICIAL = 9543076.28f; // Cantidad que recibe cada jugador al comenzar la partida
     public static final float SUMA_VUELTA = 1301328.584f; // Cantidad que recibe un jugador al pasar pos la Salida
-    
+    public static final int width = 15;
     //Colores del texto:
     public static final String RESET = "\u001B[0m";
     public static final String BLACK = "\u001B[30m";
@@ -18,8 +18,8 @@ public class Valor {
     public static final String CYAN = "\u001B[36m";
     public static final String WHITE = "\u001B[37m";
     public static final String BROWN = "\u001B[38;5;94m";
-
-    
+    //Subrayado
+    public static final String SUBRAYADO = "\u001B[4m";    
     //Valores iniciales
     public static final float GRUPO_BLACK = 600000;
     public static final float GRUPO_CYAN = 520000;
