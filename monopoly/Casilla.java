@@ -206,7 +206,37 @@ public class Casilla {
     /*Método para mostrar información sobre una casilla.
     * Devuelve una cadena con información específica de cada tipo de casilla.*/
     public String infoCasilla() {
-        return ""; //PROVISIONAL
+        /*  (SOLAR)
+         *  tipo: SOLAR
+         *  grupo
+         *  propietario
+         *  valor
+         *  alquiler
+         *  valor casa
+         *  valor hotel
+         *  valor piscina
+         *  valor pista de deporte
+         *  alquiler 1 casa
+         *  alquiler 2 casas
+         *  alquiler 3 casas
+         *  alquiler 4 casas
+         *  alquiler hotel
+         *  alquiler piscina
+         *  alquiler pista de deporte
+         * 
+         *  (IMPUESTO)
+         *  tipo IMPUESTO
+         *  apagar
+         *
+         *  (PARKING)
+         *  bote
+         *  jugadores
+         * 
+         *  (CARCEL)
+         *  salir
+         *  jugadores
+         */
+        return ""; //PROVISIONAL        como cojones
     }
 
     /* Método para mostrar información de una casilla en venta.
