@@ -62,7 +62,7 @@ public class Jugador {
     }
 
     public void setTiradasCarcel(int tiradasCarcel) {
-        this.tiradasCarcel = tiradasCarcel;
+        if (tiradasCarcel >= 0) this.tiradasCarcel = tiradasCarcel;
     }
 
     public int getVueltas() {
@@ -70,7 +70,7 @@ public class Jugador {
     }
 
     public void setVueltas(int vueltas) {
-        this.vueltas = vueltas;
+        if (vueltas >= 0) this.vueltas = vueltas;
     }
 
     public ArrayList<Casilla> getPropiedades() {

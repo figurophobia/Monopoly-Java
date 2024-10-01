@@ -154,6 +154,7 @@ public class Casilla {
     * Valor devuelto: true en caso de ser solvente (es decir, de cumplir las deudas), y false
     * en caso de no cumplirlas.*/
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada) {
+
         return false; //PROVISIONAL
     }
 
@@ -217,8 +218,6 @@ public class Casilla {
         return ""; //PROVISIONAL
     }
     public static Casilla Casillaporpos(ArrayList<ArrayList<Casilla>> casillas, int posicion){
-        
-        
         //for Tipo elemento variable : coleccion
         for (ArrayList<Casilla> lado : casillas) {
             for (Casilla casilla : lado) {
@@ -226,7 +225,7 @@ public class Casilla {
             }
                 
         }
-        return null; // si no encuentra casilla que no raye
+        return null; // si no encuentra casilla retorna null
 
     }
 
