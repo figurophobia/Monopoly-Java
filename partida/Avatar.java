@@ -1,9 +1,8 @@
 package partida;
 
-import monopoly.*;
-
 import java.util.ArrayList;
 import java.util.Random;
+import monopoly.*;
 
 
 public class Avatar {
@@ -74,14 +73,12 @@ public class Avatar {
     * EN ESTA VERSIÓN SUPONEMOS QUE valorTirada siemrpe es positivo.
      */
     public void moverAvatar(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
-        //!hay que hacer funciones para devolver la casilla a partir de la posicion y devolver la posicion a partir de la casilla --------->
-        //1º recuperar la posicion de la casilla actual para poder calcular la casilla nueva; hay que eliminar el avatar de la casilla actual y añadirlo en la nueva
 
         int posicionactual=this.lugar.getPosicion();
         this.lugar.eliminarAvatar(this);
         posicionactual+=valorTirada;
         this.lugar=Casilla.Casillaporpos(casillas,posicionactual);
-        casillas.anhadirAvatar(this);
+        this.lugar.anhadirAvatar(this);
     }
 
     /*Método que permite generar un ID para un avatar. Sólo lo usamos en esta clase (por ello es privado).
@@ -102,9 +99,7 @@ public class Avatar {
                 if (Character.toString(idr).equals(avatar.getId())){ //si avatar id es igual a idr idvalido false y vuelve a generar un 
                     idvalido=false;
                 }
-                
             }
-            
         }
         this.id=Character.toString(idr);
     }

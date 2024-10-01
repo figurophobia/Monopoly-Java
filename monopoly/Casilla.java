@@ -1,7 +1,7 @@
 package monopoly;
 
-import partida.*;
 import java.util.ArrayList;
+import partida.*;
 
 
 public class Casilla {
@@ -15,7 +15,7 @@ public class Casilla {
     private Grupo grupo; //Grupo al que pertenece la casilla (si es solar).
     private float impuesto; //Cantidad a pagar por caer en la casilla: el alquiler en solares/servicios/transportes o impuestos.
     private float hipoteca; //Valor otorgado por hipotecar una casilla
-    private ArrayList<Avatar> avatares = new ArrayList<Avatar>(); //Avatares que están situados en la casilla.
+    private ArrayList<Avatar> avatares = new ArrayList<>(); //Avatares que están situados en la casilla.
 
     public String getNombre() {
         return nombre;
