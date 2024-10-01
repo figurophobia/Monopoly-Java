@@ -190,8 +190,24 @@ public class Casilla {
     }
     /*Método para mostrar información sobre una casilla.
     * Devuelve una cadena con información específica de cada tipo de casilla.*/
-    public String infoCasilla() {
-        return ""; //PROVISIONAL
+    public String infoCasilla() { 
+        StringBuilder info = new StringBuilder(); //crea una instancia de StringBuilder, una clase que permite concatenar cadenas de texto de forma mutable, info.
+        info.append("Nombre: ").append(nombre).append("\n"); // a info le añade Nombre: y el nombre de la casilla y un salto de línea
+        info.append("Tipo: ").append(tipo).append("\n"); // a info le añade Tipo: y el tipo de la casilla y un salto de línea
+        info.append("Valor: ").append(valor).append("\n"); // a info le añade Valor: y el valor de la casilla y un salto de línea
+        info.append("Posición: ").append(posicion).append("\n"); // a info le añade Posición: y la posición de la casilla y un salto de línea
+        info.append("Dueño: ").append(duenho != null ? duenho.getNombre() : "Banca").append("\n"); // a info le añade Dueño: y el nombre del dueño de la casilla o Banca si no tiene dueño y un salto de línea
+        info.append("Impuesto: ").append(impuesto).append("\n"); // a info le añade Impuesto: y el impuesto de la casilla y un salto de línea
+        info.append("Hipoteca: ").append(hipoteca).append("\n"); // a info le añade Hipoteca: y el valor de la hipoteca de la casilla y un salto de línea
+        info.append("Avatares: "); // a info le añade Avatares: y si está vacío, añade Ninguno, si no, añade los nombres de los avatares que están en la casilla
+        if (avatares.isEmpty()) { // si esta vacío imprime Ninguno
+            info.append("Ninguno");
+        } else {
+            for (Avatar avatar : avatares) { // for each que recorre la lista de avatares
+                info.append(avatar.getTipo()).append(" "); // e imprime el tipo de avatar y un espacio
+            }
+        }
+        return info.toString(); // al finalizar devuelve la cadena info como una cadena de texto
     }
 
     /* Método para mostrar información de una casilla en venta.

@@ -1,7 +1,6 @@
 package partida;
 
 import java.util.ArrayList;
-
 import monopoly.*;
 
 
@@ -16,6 +15,71 @@ public class Jugador {
     private int tiradasCarcel; //Cuando está en la carcel, contará las tiradas sin éxito que ha hecho allí para intentar salir (se usa para limitar el numero de intentos).
     private int vueltas; //Cuenta las vueltas dadas al tablero.
     private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
+
+    //getters y setters: aun queda especificar los setters
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
+
+    public float getFortuna() {
+        return fortuna;
+    }
+
+    public void setFortuna(float fortuna) {
+        this.fortuna = fortuna;
+    }
+
+    public float getGastos() {
+        return gastos;
+    }
+
+    public void setGastos(float gastos) {
+        this.gastos = gastos;
+    }
+
+    public boolean isEnCarcel() {
+        return enCarcel;
+    }
+
+    public void setEnCarcel(boolean enCarcel) {
+        this.enCarcel = enCarcel;
+    }
+
+    public int getTiradasCarcel() {
+        return tiradasCarcel;
+    }
+
+    public void setTiradasCarcel(int tiradasCarcel) {
+        this.tiradasCarcel = tiradasCarcel;
+    }
+
+    public int getVueltas() {
+        return vueltas;
+    }
+
+    public void setVueltas(int vueltas) {
+        this.vueltas = vueltas;
+    }
+
+    public ArrayList<Casilla> getPropiedades() {
+        return propiedades;
+    }
+
+    public void setPropiedades(ArrayList<Casilla> propiedades) {
+        this.propiedades = propiedades;
+    }
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {
