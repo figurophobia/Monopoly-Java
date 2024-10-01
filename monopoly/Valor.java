@@ -19,6 +19,7 @@ public class Valor {
     public static final String WHITE = "\u001B[37m";
     public static final String BROWN = "\u001B[38;5;94m";
 
+    
     //Valores iniciales
     public static final float GRUPO_BLACK = 600000;
     public static final float GRUPO_CYAN = 520000;

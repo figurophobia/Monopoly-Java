@@ -81,7 +81,7 @@ public class Avatar {
         this.lugar.eliminarAvatar(this);
         posicionactual+=valorTirada;
         this.lugar=Casilla.Casillaporpos(casillas,posicionactual);
-        casillas.anhadirAvatar(this);
+        //casillas.anhadirAvatar(this); PROVISIONAL
     }
 
     /*Método que permite generar un ID para un avatar. Sólo lo usamos en esta clase (por ello es privado).

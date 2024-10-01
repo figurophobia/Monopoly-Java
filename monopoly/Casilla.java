@@ -181,6 +181,7 @@ public class Casilla {
         for (Avatar i : this.avatares) {
             name+=i.getId(); //Juntamos como texto de la casilla, el nombre y los avatares
         }
+        name = String.format("%-10s", name);  // Rellena con espacios si es más corto, o lo ajusta a 16
         if (this.grupo!=null){
             return(this.grupo.getColorGrupo()+name+Valor.RESET); //Si tiene grupo que pille su color
         }

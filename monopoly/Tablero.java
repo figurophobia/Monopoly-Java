@@ -15,6 +15,7 @@ public class Tablero {
     public Tablero(Jugador banca) {
         this.banca = banca;
         this.posiciones = new ArrayList<ArrayList<Casilla>>();
+        this.grupos = new HashMap<String, Grupo>();
         generarCasillas();
     }
 
@@ -85,6 +86,7 @@ public class Tablero {
         this.posiciones.add(lado);
     }
     
+    
     //Casillas del 31-40
     //Método que inserta las casillas del lado este.
     private void insertarLadoEste() {
@@ -109,33 +111,20 @@ public class Tablero {
     @Override
     public String toString() {
         StringBuilder tableroStr = new StringBuilder();
-    
+        
+        // Imprimir el lado norte
+        for (int i = 0; i < 10; i++) { // de izquierda a derecha
+            tableroStr.append("| ").append(posiciones.get(2).get(i).printOneCasilla()).append(" ");
+        }
+        tableroStr.append("|\n");
+
         // Imprimir el lado sur
-        tableroStr.append("Lado Sur:\n");
         for (int i = 9; i >= 0; i--) { // de derecha a izquierda
             tableroStr.append("| ").append(posiciones.get(0).get(i).printOneCasilla()).append(" ");
         }
         tableroStr.append("|\n");
     
-        // Imprimir el lado oeste (vertical)
-        tableroStr.append("Lado Oeste:\n");
-        for (int j = 1; j < 10; j++) {
-            tableroStr.append(posiciones.get(1).get(10 - j).printOneCasilla()).append("\n");
-        }
-    
-        // Imprimir el lado norte
-        tableroStr.append("Lado Norte:\n");
-        for (int i = 0; i < 10; i++) { // de izquierda a derecha
-            tableroStr.append("| ").append(posiciones.get(2).get(i).printOneCasilla()).append(" ");
-        }
-        tableroStr.append("|\n");
-    
-        // Imprimir el lado este (vertical)
-        tableroStr.append("Lado Este:\n");
-        for (int j = 1; j < 10; j++) {
-            tableroStr.append(posiciones.get(3).get(j - 1).printOneCasilla()).append("\n");
-        }
-    
+
         return tableroStr.toString();
     }
     
