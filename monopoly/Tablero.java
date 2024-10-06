@@ -151,7 +151,9 @@ public class Tablero {
         return tableroStr.toString();
     }
     
-    
+    public ArrayList<ArrayList<Casilla>> getPosiciones() {
+        return posiciones;
+    }
     
 
     public Casilla getCasilla(int posicion){
@@ -160,15 +162,15 @@ public class Tablero {
     }
     
     //Método usado para buscar la casilla con el nombre pasado como argumento:
-    public Casilla encontrar_casilla(String nombre) {
-        for (ArrayList<Casilla> i : posiciones) { // Recorre cada lado del tablero
-            for (Casilla cas : i) { // Recorre cada casilla en el lado
-                if (cas.getNombre().equals(nombre)) { // Si el nombre coincide
-                    return cas; // Retorna la casilla encontrada
+    public Casilla casillaByName(String nombre) {
+        for (ArrayList<Casilla> lado : posiciones) {
+            for (Casilla casilla : lado) {
+                if (casilla.getNombre().equals(nombre)) {
+                    return casilla;
                 }
             }
         }
-        return null; // Retorna null si no se encontró ninguna casilla con el nombre dado
+        return null;
     }
     
 }

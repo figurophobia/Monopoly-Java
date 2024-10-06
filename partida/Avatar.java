@@ -14,7 +14,7 @@ public class Avatar {
     private Casilla lugar; //Los avatares se sitúan en casillas del tablero.
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(String id) {
@@ -25,10 +25,18 @@ public class Avatar {
     public String getTipo() {
         return tipo;
     }
-
-    public void setTipo(String tipo) {
+    //Método que comprueba si el tipo de avatar es válido. Es static porque no necesita acceder a los atributos de la clase
+    //y asi lo podemos llamar desde el main sin problemas.
+    public static boolean TipoValido(String tipo){
         if ("Sombrero".equals(tipo) || "Esfinge".equals(tipo) || 
-            "Pelota".equals(tipo) || "Coche".equals(tipo)) {
+            "Pelota".equals(tipo) || "Coche".equals(tipo)) return true;
+        else {
+            System.out.println("Tipo de avatar no válido, usa Sombrero, Esfinge, Pelota o Coche");
+            return false;
+        }
+    }
+    public void setTipo(String tipo) {
+        if (TipoValido(tipo)) {
             this.tipo = tipo; // Asigna el valor si es válido
         }    
         else System.out.println("Tipo no válido");
@@ -62,9 +70,9 @@ public class Avatar {
         this.tipo = tipo;
         this.jugador = jugador;
         this.lugar = lugar;
-
         generarId(avCreados);
     }
+
 
     //A continuación, tenemos otros métodos útiles para el desarrollo del juego.
     /*Método que permite mover a un avatar a una casilla concreta. Parámetros:
@@ -76,9 +84,15 @@ public class Avatar {
 
         int posicionactual=this.lugar.getPosicion();
         this.lugar.eliminarAvatar(this);
-        posicionactual+=valorTirada;
-        this.lugar=Casilla.Casillaporpos(casillas,posicionactual);
-        this.lugar.anhadirAvatar(this);
+        int newposition = posicionactual+valorTirada;
+        if (newposition>40) {
+            this.jugador.sumarVueltas();
+            this.jugador.sumarFortuna(Valor.SUMA_VUELTA);            
+        }
+        newposition = (newposition-1)%40;
+        Casilla newCasilla = casillas.get(newposition/10).get(newposition%10);
+        newCasilla.anhadirAvatar(this);
+        this.lugar = newCasilla;
     }
 
     /*Método que permite generar un ID para un avatar. Sólo lo usamos en esta clase (por ello es privado).
@@ -86,21 +100,39 @@ public class Avatar {
     * - Un arraylist de los avatares ya creados, con el objetivo de evitar que se generen dos ID iguales.
      */
     private void generarId(ArrayList<Avatar> avCreados) {
-        // id de una letra
-        Random idrand = new Random(); //instancai de random
-        char idr;
-        boolean idvalido=false; //se pone a false para que haga almenos un while se puede poner un do while pero bueno
-        idr='A'; //inicializa la variable con A para que no moleste diciendo que variable no inicializada o nsq
 
-        while(idvalido==false){
-            idvalido=true; // de primeras pone que es un id valido
-            idr=(char) (idrand.nextInt(26)+65); //negera un numero random de 0 a 26 (letras existentes) y le suma 65 (codigo ascii de a) lo pasa a char
-            for (Avatar avatar : avCreados) { //for each que recorre la lista de avatares
-                if (Character.toString(idr).equals(avatar.getId())){ //si avatar id es igual a idr idvalido false y vuelve a generar un 
-                    idvalido=false;
+        Random rnd = new Random();
+        String letra = String.valueOf((char) ('A' + rnd.nextInt(26)));
+        int aseguradodistinto = 0;
+        while ((aseguradodistinto == 0) && (avCreados.size() != 0)) {
+            for (Avatar A : avCreados) {
+                if (A != null && (A.id == letra)) {
+                    letra = String.valueOf((char) ('A' + rnd.nextInt(26)));
+                    aseguradodistinto = 0;
+                    break;
                 }
+                aseguradodistinto = 1;
             }
         }
-        this.id=Character.toString(idr);
+        this.id = letra;
+    }
+    //Método para describir un avatar (sobreescribir toString), se mostrarán todas las características de un avatar:
+    /*Estilo:
+     * $> describir avatar M
+    *{
+    *id: M,
+    *tipo: sombrero,
+    *casilla: Cartagena,
+    *jugador: Maria
+    *}
+     */
+    @Override
+    public String toString() {
+        return "{\n" +
+                "id: " + id + ",\n" +
+                "tipo: " + tipo + ",\n" +
+                "casilla: " + lugar.getNombre() + ",\n" +
+                "jugador: " + jugador.getNombre() + "\n" +
+                "}";
     }
 }

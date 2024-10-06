@@ -178,7 +178,7 @@ public class Casilla {
      */
     public String printOneCasilla(){
         String name = new String();
-        name +=getNombre();
+        name +=getNombre() +" ";
         for (Avatar i : this.avatares) {
             name+="&"+i.getId(); //Juntamos como texto de la casilla, el nombre y los avatares
         }
@@ -198,7 +198,7 @@ public class Casilla {
         info.append("Tipo: ").append(tipo).append("\n"); // a info le añade Tipo: y el tipo de la casilla y un salto de línea
         info.append("Valor: ").append(valor).append("\n"); // a info le añade Valor: y el valor de la casilla y un salto de línea
         info.append("Posición: ").append(posicion).append("\n"); // a info le añade Posición: y la posición de la casilla y un salto de línea
-        info.append("Dueño: ").append(duenho != null ? duenho.getNombre() : "Banca").append("\n"); // a info le añade Dueño: y el nombre del dueño de la casilla o Banca si no tiene dueño y un salto de línea
+        info.append("Dueño: ").append(duenho != null ? duenho.getNombre() : "banca").append("\n"); // a info le añade Dueño: y el nombre del dueño de la casilla o Banca si no tiene dueño y un salto de línea
         info.append("Impuesto: ").append(impuesto).append("\n"); // a info le añade Impuesto: y el impuesto de la casilla y un salto de línea
         info.append("Hipoteca: ").append(hipoteca).append("\n"); // a info le añade Hipoteca: y el valor de la hipoteca de la casilla y un salto de línea
         info.append("Avatares: "); // a info le añade Avatares: y si está vacío, añade Ninguno, si no, añade los nombres de los avatares que están en la casilla
@@ -218,16 +218,6 @@ public class Casilla {
     public String casEnVenta() {
         return ""; //PROVISIONAL
     }
-    public static Casilla Casillaporpos(ArrayList<ArrayList<Casilla>> casillas, int posicion){
-        //for Tipo elemento variable : coleccion
-        for (ArrayList<Casilla> lado : casillas) {
-            for (Casilla casilla : lado) {
-                if (casilla.posicion==posicion) return casilla;
-            }
-                
-        }
-        return null; // si no encuentra casilla retorna null
 
-    }
 
 }

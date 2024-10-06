@@ -18,7 +18,8 @@ public class Valor {
     public static final String CYAN = "\u001B[36m";
     public static final String WHITE = "\u001B[37m";
     public static final String BROWN = "\u001B[38;5;94m";
-    //Subrayado
+    //Subrayado y negrita
+    public static final String NEGRITA = "\u001B[1m";
     public static final String SUBRAYADO = "\u001B[4m";    
     //Valores iniciales
     public static final float GRUPO_BLACK = 600000;
