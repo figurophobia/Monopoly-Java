@@ -148,6 +148,13 @@ public class Menu {
                     System.out.println("Comando no reconocido");
                 }
                 break;
+            case "mover":
+                if (partes.length == 2) {
+                    moverJugador(Integer.parseInt(partes[1]));
+                } else {
+                    System.out.println("Comando no reconocido");
+                }
+                break;
             case "end":
                 endGame();
                 break;
@@ -223,6 +230,11 @@ public class Menu {
         } else {
             System.out.println("Ya has lanzado los dados en este turno.");
         }
+    }
+
+    //Método de prueba que mueve un jugador n posiciones.
+    private void moverJugador(int posiciones) {
+        this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), posiciones);
     }
 
     /*Método que ejecuta todas las acciones realizadas con el comando 'comprar nombre_casilla'.
