@@ -159,7 +159,7 @@ public class Jugador {
         StringBuilder str = new StringBuilder();
         str.append("{\n");
         str.append("nombre: " + this.nombre + ",\n");
-        str.append("avatar: " + this.avatar.getId() + ",\n");
+        str.append("avatar: " + (avatar != null ? avatar.getId() : "null") + ",\n");
         str.append("fortuna: " + this.fortuna + ",\n");
         str.append("propiedades: " + this.propiedades + ",\n");
         str.append("hipotecas: " + "PROVISIONAL" + ",\n");

@@ -287,7 +287,11 @@ public class Menu {
 
     // Método que realiza las acciones asociadas al comando 'listar jugadores'.
     private void listarJugadores() {
-    }
+        for (Jugador jugador: jugadores){
+            if (jugador!=null) {
+                System.out.println(jugador);
+            }
+    }}
 
     // Método que realiza las acciones asociadas al comando 'listar avatares'.
     private void listarAvatares() {
