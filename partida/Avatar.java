@@ -31,7 +31,7 @@ public class Avatar {
         if ("Sombrero".equals(tipo) || "Esfinge".equals(tipo) || 
             "Pelota".equals(tipo) || "Coche".equals(tipo)) return true;
         else {
-            System.out.println("Tipo de avatar no válido, usa Sombrero, Esfinge, Pelota o Coche");
+            //System.out.println("Tipo de avatar no válido, usa Sombrero, Esfinge, Pelota o Coche");
             return false;
         }
     }

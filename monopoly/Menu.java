@@ -33,17 +33,10 @@ public class Menu {
         this.avatares.add(null); //Para que el índice coincida con el número de avatar.
         this.jugadores.add(banca); //Para que el índice coincida con el número de jugador.
         this.tablero = new Tablero(banca);
-        System.out.println("Creamos los 2 jugadores minimos para jugar");
-        System.out.println("Jugador 1: Nombre");
-        String nombre1 = sc.nextLine();
-        System.out.println("Tipo Avatar: Sombrero, Esfinge, Pelota, Coche");
-        String tipo1 = sc.nextLine();
-        crearJugador(nombre1, tipo1);
-        System.out.println("Jugador 2: Nombre");
-        String nombre2 = sc.nextLine();
-        System.out.println("Tipo Avatar: Sombrero, Esfinge, Pelota, Coche");
-        String tipo2 = sc.nextLine();
-        crearJugador(nombre2, tipo2);
+        System.out.println("Creamos los 2 jugadores mínimos para jugar...");
+        anadirjugador();
+        anadirjugador();
+        System.out.print("Si desea añadir más jugadores, introduzca 'crear jugador'.");
         while (!partida_OFF) {
             System.out.print("\n$> ");
             String comando = sc.nextLine();
@@ -75,8 +68,8 @@ public class Menu {
                 "ver tablero");                
                 break;
             case "crear":
-                if (partes.length == 4 && partes[1].equals("jugador")) {
-                    crearJugador(partes[2], partes[3]);
+                if (partes.length == 2 && partes[1].equals("jugador")) {
+                    anadirjugador();
                 } else {
                     System.out.println("Comando no reconocido");
                 }
@@ -105,7 +98,7 @@ public class Menu {
                     
                 }
                 break;
-            case "lanzar dados":
+            case "lanzar":
                 if (partes.length == 2) {
                     lanzarDados();
                 } else {
@@ -166,8 +159,41 @@ public class Menu {
     /*Método que realiza las acciones asociadas al comando 'crear jugador'.
     * Parámetro: cadena de caracteres con el nombre del jugador, y cadena con el tipo de avatar.
     */
+    private void anadirjugador(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\nIndica el nombre del jugador "+jugadores.size()+":");
+        String nombre = sc.nextLine();
+        if (nombreRepetido(nombre)){
+            while (nombreRepetido(nombre)) {
+                System.out.println("Nombre repetido, introduce otro nombre:");
+                nombre = sc.nextLine();
+            }
+        }
+        System.out.println("Indica el tipo de avatar: Sombrero, Esfinge, Pelota, Coche");
+        String tipo = sc.nextLine();
+        if (Avatar.TipoValido(tipo)) {
+            crearJugador(nombre, tipo);
+        } else {
+            while (!Avatar.TipoValido(tipo)) {
+                System.out.println("Tipo de avatar no válido, introduce uno de los siguientes: Sombrero, Esfinge, Pelota, Coche.");
+                tipo = sc.nextLine();
+            }
+            crearJugador(nombre, tipo);
+        }
+
+    }
+    private boolean nombreRepetido(String nombre) {
+        for (Jugador player : jugadores) {
+            if (player!=null && player.getNombre().equals(nombre)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     private void crearJugador(String nombre, String tipo) {
-        if (jugadores.size() < 7 && Avatar.TipoValido(tipo)) {
+        if (jugadores.size() < 7) {
             Jugador jugador = new Jugador(nombre, tipo, tablero.getCasilla(0), avatares);
             Avatar avatar = jugador.getAvatar();
             jugadores.add(jugador);
@@ -175,7 +201,7 @@ public class Menu {
             System.out.println("Jugador " + nombre + " creado con éxito.");
             tablero.getCasilla(0).anhadirAvatar(avatar);
         } else {
-            System.out.println("No se pueden crear más jugadores o tipo no válido");
+            System.out.println("No se pueden crear más jugadores");
         }
         
     }
