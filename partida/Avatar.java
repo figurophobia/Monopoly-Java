@@ -100,20 +100,21 @@ public class Avatar {
     * - Un arraylist de los avatares ya creados, con el objetivo de evitar que se generen dos ID iguales.
      */
     private void generarId(ArrayList<Avatar> avCreados) {
-
         Random rnd = new Random();
-        String letra = String.valueOf((char) ('A' + rnd.nextInt(26)));
-        int aseguradodistinto = 0;
-        while ((aseguradodistinto == 0) && (avCreados.size() != 0)) {
+        String letra;
+        boolean idUnico;
+    
+        do {
+            letra = String.valueOf((char) ('A' + rnd.nextInt(26)));
+            idUnico = true;
             for (Avatar A : avCreados) {
-                if (A != null && (A.id == letra)) {
-                    letra = String.valueOf((char) ('A' + rnd.nextInt(26)));
-                    aseguradodistinto = 0;
+                if (A != null && A.id.equals(letra)) {
+                    idUnico = false;
                     break;
                 }
-                aseguradodistinto = 1;
             }
-        }
+        } while (!idUnico);
+    
         this.id = letra;
     }
     //Método para describir un avatar (sobreescribir toString), se mostrarán todas las características de un avatar:
