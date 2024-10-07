@@ -28,6 +28,7 @@ public class Menu {
     // Método para inciar una partida: crea los jugadores y avatares.
     private void iniciarPartida() {
         this.turno = 1;
+        this.partida_ON = true;
         Scanner sc = new Scanner(System.in);
         this.banca = new Jugador();
         this.avatares.add(null); //Para que el índice coincida con el número de avatar.
@@ -38,7 +39,7 @@ public class Menu {
         anadirjugador();
         System.out.println("Si desea añadir más jugadores, introduzca 'crear jugador'...");
         while (!partida_OFF) {
-            System.out.println("\n('help' para ver los comandos disponibles | 'end' para finalizar la partida)");
+            System.out.println("\n('help' para ver los comandos disponibles | 'lanzar dados' para tirar los dados | 'acabar turno' para terminar el turno | 'end' para finalizar la partida)");
             System.out.print("Introduce un comando: ");
             String comando = sc.nextLine();
             analizarComando(comando);
@@ -121,7 +122,7 @@ public class Menu {
                     
                 }
                 break;
-            case "acabar turno":
+            case "acabar":
                 acabarTurno();
                 break;
             case "describir":
@@ -153,7 +154,7 @@ public class Menu {
                 endGame();
                 break;
             default:
-                System.out.println("Comando no reconocido (help para ver los comandos disponibles)");
+                System.out.println("Comando no reconocido");
         }
     }
 
@@ -245,14 +246,20 @@ public class Menu {
     //Método que ejecuta todas las acciones relacionadas con el comando 'lanzar dados'.
     private void lanzarDados() {
         if (!this.tirado) {
-            this.dado1 = new Dado();
-            this.dado2 = new Dado();
+            System.out.print("Lanzando dados");sleep(600);System.out.print(".");sleep(600);System.out.print(".");sleep(600);System.out.println(".");sleep(400);
+            
+            dado1 = new Dado();
+            dado2 = new Dado();
             int resultado1 = dado1.hacerTirada();
             int resultado2 = dado2.hacerTirada();
-            int suma = resultado1 + resultado2;
-            System.out.println("El avatar " + this.avatares.get(turno).getId() + " ha avanzado " + suma + " posiciones. Desde "+ 
-            this.avatares.get(turno).getLugar().getNombre()+"hasta "+this.tablero.getCasilla(suma).getNombre());
-            this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), suma);
+            System.out.println("Han salido "+resultado1+" y "+resultado2+"!");
+            sleep(1000);
+            int total = resultado1 + resultado2;
+            System.out.println("El avatar " + this.avatares.get(turno).getId() + " avanzará " + total + " posiciones. Desde "+ 
+            this.avatares.get(turno).getLugar().getNombre()+" hasta "+this.tablero.getCasilla(total).getNombre());
+            this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), total);
+            tirado = true;
+            lanzamientos++;
             verTablero();
         } else {
             System.out.println("Ya has lanzado los dados en este turno.");
@@ -288,6 +295,13 @@ public class Menu {
 
     // Método que realiza las acciones asociadas al comando 'acabar turno'.
     private void acabarTurno() {
+        turno++;
+        if (turno>jugadores.size()) {
+            turno = 1;
+        }
+        lanzamientos = 0;
+        tirado = false;
+        System.out.println("Turno de "+ jugadores.get(turno).getNombre());
     }
     
     //Método que imprime el tablero.
@@ -300,5 +314,13 @@ public class Menu {
     private void endGame() {
         partida_OFF = true;
         System.exit(0);
+    }
+    private void sleep(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("El hilo fue interrumpido.");
+        }
     }
 }
