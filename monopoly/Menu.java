@@ -33,12 +33,13 @@ public class Menu {
         this.avatares.add(null); //Para que el índice coincida con el número de avatar.
         this.jugadores.add(banca); //Para que el índice coincida con el número de jugador.
         this.tablero = new Tablero(banca);
-        System.out.println("Creamos los 2 jugadores mínimos para jugar...");
+        System.out.println("\n\nCreamos los 2 jugadores mínimos para jugar...");
         anadirjugador();
         anadirjugador();
-        System.out.print("Si desea añadir más jugadores, introduzca 'crear jugador'.");
+        System.out.println("Si desea añadir más jugadores, introduzca 'crear jugador'...");
         while (!partida_OFF) {
-            System.out.print("\n$> ");
+            System.out.println("\n('help' para ver los comandos disponibles | 'end' para finalizar la partida)");
+            System.out.print("Introduce un comando: ");
             String comando = sc.nextLine();
             analizarComando(comando);
         }
@@ -161,15 +162,15 @@ public class Menu {
     */
     private void anadirjugador(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("\nIndica el nombre del jugador "+jugadores.size()+":");
+        System.out.print("Indica el nombre del jugador ("+jugadores.size()+"): ");
         String nombre = sc.nextLine();
         if (nombreRepetido(nombre)){
             while (nombreRepetido(nombre)) {
-                System.out.println("Nombre repetido, introduce otro nombre:");
+                System.out.print("Nombre repetido, introduce otro nombre: ");
                 nombre = sc.nextLine();
             }
         }
-        System.out.println("Indica el tipo de avatar: Sombrero, Esfinge, Pelota, Coche");
+        System.out.print("Indica el tipo de avatar (Sombrero, Esfinge, Pelota, Coche): ");
         String tipo = sc.nextLine();
         if (Avatar.TipoValido(tipo)) {
             crearJugador(nombre, tipo);
