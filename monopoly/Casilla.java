@@ -166,7 +166,7 @@ public class Casilla {
         if(actual.avatar.lugar.tipo == "Servicios" && actual.avatar.lugar.duenho != banca){
             if(actual.fortuna < actual.avatar.lugar.impuesto) return false;  //TIENE QUE HIPOTECAR
             else return true;
-        } 
+        }
     }
 
     /*Método usado para comprar una casilla determinada. Parámetros:
