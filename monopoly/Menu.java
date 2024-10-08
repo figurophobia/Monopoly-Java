@@ -325,14 +325,23 @@ public class Menu {
 
     //Método que ejecuta todas las acciones relacionadas con el comando 'salir carcel'. 
     private void salirCarcel() {
-        jugadores.get(turno).setEnCarcel(false);
-        jugadores.get(turno).setTiradasCarcel(0);
-
-
+        if (lanzamientos==0) { //al inicio del turno en el que esta en la carcel, puede pagar
+            jugadores.get(turno).pagarSalidaCarcel();
+        }else{ //si no ha salido en el turno anterior, sale de la carcel
+            System.out.println("Solo puedes pagar la multa al inicio de un turno en el que no hayas tirado los dados.");
+        }
     }
 
     // Método que realiza las acciones asociadas al comando 'listar enventa'.
+    //Recorremos todas las casillas del tablero y si son de tipo Solar, Transporte o Servicio y no tienen dueño, las imprimimos.
     private void listarVenta() {
+        for (int i = 0; i < 40; i++) {
+            Casilla c=this.tablero.getCasilla(i);
+            if (c.getDuenho()==banca && (c.getTipo().equals("Solar") || c.getTipo().equals("Transporte") || c.getTipo().equals("Servicio"))) {
+                System.out.println(c.casEnVenta());
+                
+            }
+        }
     }
 
     // Método que realiza las acciones asociadas al comando 'listar jugadores'.

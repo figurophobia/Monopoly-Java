@@ -14,6 +14,7 @@ public class Jugador {
     private boolean enCarcel; //Será true si el jugador está en la carcel
     private int tiradasCarcel; //Cuando está en la carcel, contará las tiradas sin éxito que ha hecho allí para intentar salir (se usa para limitar el numero de intentos).
     private int vueltas; //Cuenta las vueltas dadas al tablero.
+    private float bote; //Bote que se va acumulando en la partida por la banca en impuesto, comunidad...
     private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
 
     //getters y setters: aun queda especificar los setters
@@ -71,6 +72,18 @@ public class Jugador {
 
     public void setVueltas(int vueltas) {
         if (vueltas >= 0) this.vueltas = vueltas;
+    }
+    
+    public float getBote() {
+        return bote;
+    }
+
+    public void sumarBote(float bote) {
+        this.bote += bote;
+    }
+
+    public void ReiniciarBote() {
+        this.bote = 0;
     }
 
     public ArrayList<Casilla> getPropiedades() {
@@ -186,5 +199,79 @@ public class Jugador {
         this.avatar.moverAvatar(pos, 10);
     }
 //this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), total);
+
+    //Método para recibir el bote de la banca al caer en Parking.
+    public void recibirBote(Jugador banca){
+        float cantidad = banca.getBote();
+        this.sumarFortuna(cantidad);
+        banca.ReiniciarBote();
+        System.out.println("El jugador "+this.getNombre()+" ha recibido el bote de " +cantidad+"€");
+    }
+
+    //Método para saber cuántos transportes tiene un jugador.
+    public int numTransportes(){
+        int num = 0;
+        for (Casilla casilla : this.getPropiedades()) {
+            if (casilla.getTipo().equals("Transporte")) {
+                num++;
+            }
+        }
+        return num;
+    }
+
+    //Método para saber cuántos servicios tiene un jugador.
+    public int numServicios(){
+        int num = 0;
+        for (Casilla casilla : this.getPropiedades()) {
+            if (casilla.getTipo().equals("Servicio")) {
+                num++;
+            }
+        }
+        return num;
+    }
+
+    //Método para pagar a otro jugador, devuelve true si se ha podido pagar y false en otro caso.
+    public boolean pagarAJugador(Jugador recibidor, float cantidad){
+        if (this.getFortuna() < cantidad) {
+            System.out.println("No tienes suficiente dinero para pagar");
+            return false;
+        }
+        this.sumarFortuna(-cantidad);
+        this.sumarGastos(cantidad);
+        recibidor.sumarFortuna(cantidad);
+        return true;
+    }
+
+    //Método para pagar impuesto a la banca, devuelve true si se ha podido pagar y false en otro caso.
+    public boolean pagarImpuesto(float cantidad,Jugador banca){
+        if (this.getFortuna() < cantidad) {
+            System.out.println("No tienes suficiente dinero para pagar");
+            return false;
+        }
+        this.sumarFortuna(-cantidad);
+        this.sumarGastos(cantidad);
+        banca.sumarBote(cantidad);
+        return true;
+    }
+
+    //Metodo para poner al jugador como salido de la carcel
+    public void sacarCarcel(){
+        this.enCarcel = false;
+        this.tiradasCarcel = 0;
+    }
+
+
+    //Metodo para pagar la salida de la carcel, devuelve true si se ha podido pagar y false en otro caso.
+    public boolean pagarSalidaCarcel(){
+        if (this.getFortuna() < Valor.SUMA_VUELTA*0.25f) {
+            System.out.println("No tienes suficiente dinero para pagar");
+            return false;
+        }
+        this.sumarFortuna(-Valor.SUMA_VUELTA*0.25f);
+        this.sumarGastos(Valor.SUMA_VUELTA*0.25f);
+        this.sacarCarcel();
+        System.out.println("Has pagado 25% de la vuelta para salir de la carcel");
+        return true;
+    }
 
 }

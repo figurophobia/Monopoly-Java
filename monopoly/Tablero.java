@@ -52,7 +52,7 @@ public class Tablero {
         ArrayList<Casilla> lado = new ArrayList<Casilla>();
         lado.add(new Casilla("Carcel", "Especial", 11, banca));
         lado.add(new Casilla("Solar6", "Solar", 12, Valor.GRUPO_PURPLE, banca));
-        lado.add(new Casilla("Serv1", "Serv", 13, Valor.SUMA_VUELTA*0.75f, banca));
+        lado.add(new Casilla("Serv1", "Servicio", 13, Valor.SUMA_VUELTA*0.75f, banca));
         lado.add(new Casilla("Solar7", "Solar", 14, Valor.GRUPO_PURPLE, banca));
         lado.add(new Casilla("Solar8", "Solar", 15, Valor.GRUPO_PURPLE, banca));
         lado.add(new Casilla("Trans2", "Transporte", 16, Valor.SUMA_VUELTA, banca));
@@ -78,7 +78,7 @@ public class Tablero {
         lado.add(new Casilla("Trans3", "Transporte", 26, Valor.SUMA_VUELTA, banca));
         lado.add(new Casilla("Solar15", "Solar", 27, Valor.GRUPO_BROWN, banca));
         lado.add(new Casilla("Solar16", "Solar", 28, Valor.GRUPO_BROWN, banca));
-        lado.add(new Casilla("Serv2", "Serv", 29, Valor.SUMA_VUELTA * 0.75f, banca));
+        lado.add(new Casilla("Serv2", "Servicio", 29, Valor.SUMA_VUELTA * 0.75f, banca));
         lado.add(new Casilla("Solar17", "Solar",30, Valor.GRUPO_BROWN, banca));
 
         grupos.put("red", new Grupo(lado.get(1), lado.get(3),lado.get(4), Valor.RED));
