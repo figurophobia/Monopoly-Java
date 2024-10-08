@@ -154,8 +154,19 @@ public class Casilla {
     * Valor devuelto: true en caso de ser solvente (es decir, de cumplir las deudas), y false
     * en caso de no cumplirlas.*/
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada) {
-
-        return false; //PROVISIONAL
+        //Solar, Especial, Transporte, Servicios, Comunidad, Suerte y Impuesto
+        if(actual.avatar.lugar.tipo == "Solar" && actual.avatar.lugar.duenho != banca){
+            if(actual.fortuna < actual.avatar.lugar.impuesto) return false;  //TIENE QUE HIPOTECAR
+            else return true;
+        }
+        if(actual.avatar.lugar.tipo == "Impuesto"){
+            if(actual.fortuna < actual.avatar.lugar.impuesto) return false;  //TIENE QUE HIPOTECAR
+            else return true;
+        }      
+        if(actual.avatar.lugar.tipo == "Servicios" && actual.avatar.lugar.duenho != banca){
+            if(actual.fortuna < actual.avatar.lugar.impuesto) return false;  //TIENE QUE HIPOTECAR
+            else return true;
+        } 
     }
 
     /*Método usado para comprar una casilla determinada. Parámetros:
