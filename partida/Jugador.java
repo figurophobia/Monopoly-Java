@@ -183,7 +183,6 @@ public class Jugador {
     public void encarcelar(ArrayList<ArrayList<Casilla>> pos) {
         this.enCarcel = true;
         this.tiradasCarcel = 0;
-        this.avatar.setLugar(pos.get(1).get(0));
         this.avatar.moverAvatar(pos, 10);
     }
 //this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), total);

@@ -117,6 +117,7 @@ public class Menu {
                 break;
             case "ir":
                 if (partes.length == 2) {
+                    System.out.println("Jugador enviado a la cárcel.");
                     jugadores.get(turno).encarcelar(tablero.getPosiciones());
                 } else {
                     System.out.println("Comando no reconocido");
