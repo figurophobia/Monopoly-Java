@@ -244,7 +244,7 @@ public class Menu {
             System.out.println("Casilla no encontrada con ese nombre.");
         }
     }
-
+    
     //Método que ejecuta todas las acciones relacionadas con el comando 'lanzar dados'.
     private void lanzarDados() {
         dado1 = new Dado();
@@ -312,6 +312,23 @@ public class Menu {
         }
     }
 
+    /* 
+    //Metodo para lanzar los dados 2.0, el primero puede que este mal
+    public void lanzarDados(){
+        Jugador jugador = jugadores.get(turno);
+        Avatar avatar = jugador.getAvatar();
+        Casilla inicial = avatar.getLugar();
+
+        dado1 = new Dado();
+        dado2 = new Dado();
+        int resultado1 = dado1.hacerTirada();
+        int resultado2 = dado2.hacerTirada();
+        int total = resultado1 + resultado2;
+        System.out.println("Han salido "+resultado1+" y "+resultado2+"!");
+
+
+    }
+    */
     //Método de prueba que mueve un jugador n posiciones.
     private void moverJugador(int posiciones) {
         this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), posiciones);

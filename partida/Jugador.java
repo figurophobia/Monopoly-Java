@@ -194,9 +194,12 @@ public class Jugador {
     /*Método para establecer al jugador en la cárcel. 
     * Se requiere disponer de las casillas del tablero para ello (por eso se pasan como parámetro).*/
     public void encarcelar(ArrayList<ArrayList<Casilla>> pos) {
+        this.avatar.getLugar().eliminarAvatar(this.avatar);
         this.enCarcel = true;
+        Casilla carcel = pos.get(1).get(0);
+        this.avatar.setLugar(carcel);
         this.tiradasCarcel = 0;
-        this.avatar.moverAvatar(pos, 10);
+        this.avatar.getLugar().anhadirAvatar(this.avatar);
     }
 //this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), total);
 
@@ -254,24 +257,25 @@ public class Jugador {
         return true;
     }
 
+    //Metodo para pagar la salida de la carcel, devuelve true si se ha podido pagar y false en otro caso.
+    public boolean pagarSalidaCarcel(){
+        if (this.getFortuna() < Valor.PAGO_CARCEL) {
+            System.out.println("No tienes suficiente dinero para pagar");
+            return false;
+        }
+        this.sumarFortuna(-Valor.PAGO_CARCEL);
+        this.sumarGastos(Valor.PAGO_CARCEL);
+        this.sacarCarcel();
+        System.out.println("Has pagado 25% de la vuelta para salir de la carcel");
+        return true;
+    }
+
     //Metodo para poner al jugador como salido de la carcel
     public void sacarCarcel(){
         this.enCarcel = false;
         this.tiradasCarcel = 0;
     }
+    
 
-
-    //Metodo para pagar la salida de la carcel, devuelve true si se ha podido pagar y false en otro caso.
-    public boolean pagarSalidaCarcel(){
-        if (this.getFortuna() < Valor.SUMA_VUELTA*0.25f) {
-            System.out.println("No tienes suficiente dinero para pagar");
-            return false;
-        }
-        this.sumarFortuna(-Valor.SUMA_VUELTA*0.25f);
-        this.sumarGastos(Valor.SUMA_VUELTA*0.25f);
-        this.sacarCarcel();
-        System.out.println("Has pagado 25% de la vuelta para salir de la carcel");
-        return true;
-    }
 
 }

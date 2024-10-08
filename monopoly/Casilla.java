@@ -279,7 +279,7 @@ public class Casilla {
                     info.append("salir:" + "Valor.SALIR_CARCEL\n");
                 } else if (this.nombre.equals("Parking")) {
                     info.append("nombre: ").append(this.nombre).append(",\n")
-                    .append("bote: ").append("Poner bote IMPLEMENTAR").append(",\n");
+                    .append("bote: ").append(getDuenho().getBote()).append(",\n");
                 } else if (this.nombre.equals("Salida")) {
                     info.append("nombre: ").append(this.nombre).append("\n");
                 } else if (this.nombre.equals("Ir a Cárcel")) {

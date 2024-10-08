@@ -172,5 +172,22 @@ public class Tablero {
         }
         return null;
     }
+    /*
+     * Las casillas de solar tienen un precio de compra inicial, el cual se incrementa un 5% cada vez que todos
+    los avatares completen cuatro vueltas al tablero sin que hayan sido compradas por ninguno de ellos.
+    No se considera una vuelta si el avatar va a la casilla de Cárcel.
+     */
+    public void subirPrecio4Vueltas(){
+        for (ArrayList<Casilla> lado : posiciones) {
+            for (Casilla casilla : lado) {
+                if (casilla.getTipo().equals("Solar") && casilla.getDuenho().equals(banca)) {
+                    float valor = casilla.getValor()*0.05f;
+                    casilla.setValor(valor);
+                }
+            }
+        }
+    }
+
+    
     
 }
