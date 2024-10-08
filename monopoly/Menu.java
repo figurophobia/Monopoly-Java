@@ -182,7 +182,6 @@ public class Menu {
             }
             crearJugador(nombre, tipo);
         }
-
     }
     private boolean nombreRepetido(String nombre) {
         for (Jugador player : jugadores) {
