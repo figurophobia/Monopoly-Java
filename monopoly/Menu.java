@@ -274,6 +274,7 @@ public class Menu {
     * Parámetro: cadena de caracteres con el nombre de la casilla.
      */
     private void comprar(String nombre) {
+        
     }
 
     //Método que ejecuta todas las acciones relacionadas con el comando 'salir carcel'. 
@@ -294,6 +295,11 @@ public class Menu {
 
     // Método que realiza las acciones asociadas al comando 'listar avatares'.
     private void listarAvatares() {
+        for(Avatar avatar: avatares){
+            if(avatar!=null){
+                System.out.println(avatar);
+            }
+        }
     }
 
     // Método que realiza las acciones asociadas al comando 'acabar turno'.

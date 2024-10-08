@@ -113,7 +113,6 @@ public class Jugador {
     public void anhadirPropiedad(Casilla casilla) {
         if (!this.propiedades.contains(casilla)) {
             this.propiedades.add(casilla);
-            
         }
     }
 
