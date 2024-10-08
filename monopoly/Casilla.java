@@ -230,7 +230,8 @@ public class Casilla {
      * Valor devuelto: texto con esa información.
      */
     public String casEnVenta() {
-        return ""; //PROVISIONAL
+        StringBuilder info = new StringBuilder();
+        
     }
 
 
