@@ -250,7 +250,7 @@ public class Menu {
         dado2 = new Dado();
         if (!this.tirado) {
             if(jugadores.get(turno).isEnCarcel()){
-                if (jugadores.get(turno).getTiradasCarcel() == 3) {
+                if (jugadores.get(turno).getTiradasCarcel() >= 3) {
                     System.out.println("Has pasado 3 turnos en la cárcel, sales! Tira los dados!");
                     salirCarcel();
                 }else{
@@ -267,6 +267,12 @@ public class Menu {
                         jugadores.get(turno).setEnCarcel(false);
                         jugadores.get(turno).setTiradasCarcel(0);
                         salirCarcel();
+                        sleep(1000);
+                        int total = resultado1 + resultado2;
+                        System.out.println("El avatar " + this.avatares.get(turno).getId() + " avanzará " + total + " posiciones. Desde "+ 
+                        this.avatares.get(turno).getLugar().getNombre()+" hasta "+this.tablero.getCasilla(total).getNombre());
+                        this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), total);
+                        verTablero();
                         }
                     else { 
                         System.out.println("No has sacado dobles, sigues en la cárcel.");
