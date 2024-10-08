@@ -236,7 +236,8 @@ public class Menu {
     private void descCasilla(String nombre) {
         Casilla casilla = this.tablero.casillaByName(nombre);
         if (casilla != null) {
-            casilla.infoCasilla();
+            System.err.println(casilla.getNombre());
+            System.out.println(casilla.infoCasilla());
         } else {
             System.out.println("Casilla no encontrada con ese nombre.");
         }
@@ -294,6 +295,11 @@ public class Menu {
 
     // Método que realiza las acciones asociadas al comando 'listar avatares'.
     private void listarAvatares() {
+        for (Avatar avatar: avatares){
+            if (avatar!=null) {
+                System.out.println(avatar);
+            }
+        }
     }
 
     // Método que realiza las acciones asociadas al comando 'acabar turno'.

@@ -110,6 +110,7 @@ public class Casilla {
         this.nombre = nombre;
         this.tipo = tipo;
         this.valor = valor;
+        this.impuesto = valor/10; //Valor por defecto para impuesto en casillas de servicios
         this.posicion = posicion;
         this.duenho = duenho;
     }
@@ -192,26 +193,83 @@ public class Casilla {
     }
     /*Método para mostrar información sobre una casilla.
     * Devuelve una cadena con información específica de cada tipo de casilla.*/
-    public String infoCasilla() { 
-        StringBuilder info = new StringBuilder(); //crea una instancia de StringBuilder, una clase que permite concatenar cadenas de texto de forma mutable, info.
-        info.append("Nombre: ").append(nombre).append("\n"); // a info le añade Nombre: y el nombre de la casilla y un salto de línea
-        info.append("Tipo: ").append(tipo).append("\n"); // a info le añade Tipo: y el tipo de la casilla y un salto de línea
-        info.append("Valor: ").append(valor).append("\n"); // a info le añade Valor: y el valor de la casilla y un salto de línea
-        info.append("Posición: ").append(posicion).append("\n"); // a info le añade Posición: y la posición de la casilla y un salto de línea
-        info.append("Dueño: ").append(duenho != null ? duenho.getNombre() : "banca").append("\n"); // a info le añade Dueño: y el nombre del dueño de la casilla o Banca si no tiene dueño y un salto de línea
-        info.append("Impuesto: ").append(impuesto).append("\n"); // a info le añade Impuesto: y el impuesto de la casilla y un salto de línea
-        info.append("Hipoteca: ").append(hipoteca).append("\n"); // a info le añade Hipoteca: y el valor de la hipoteca de la casilla y un salto de línea
-        info.append("Avatares: "); // a info le añade Avatares: y si está vacío, añade Ninguno, si no, añade los nombres de los avatares que están en la casilla
-        if (avatares.isEmpty()) { // si esta vacío imprime Ninguno
-            info.append("Ninguno");
-        } else {
-            for (Avatar avatar : avatares) { // for each que recorre la lista de avatares
-                info.append(avatar.getTipo()).append(" "); // e imprime el tipo de avatar y un espacio
-            }
+        public String infoCasilla() { 
+        StringBuilder info = new StringBuilder();
+        
+        switch (this.tipo) {
+            case "Solar":
+                info.append("{\n")
+                    .append("tipo: ").append(this.tipo).append(",\n")
+                    .append("grupo: ").append(this.grupo.getColorGrupo() + "Color" + Valor.RESET).append(",\n")
+                    .append("propietario: ").append(this.duenho != null ? this.duenho.getNombre() : "N/A").append(",\n")
+                    .append("valor: ").append(this.valor).append(",\n")
+                    .append("alquiler: ").append(this.valor * 0.1f).append(",\n")
+                    .append("valor hotel: ").append(this.valor * 0.6f).append(",\n")
+                    .append("valor casa: ").append(this.valor * 0.6f).append(",\n")
+                    .append("valor piscina: ").append(this.valor * 0.4f).append(",\n")
+                    .append("valor pista de deporte: ").append(this.valor * 1.25f).append(",\n")
+                    .append("alquiler una casa: ").append(this.valor * 0.1f * 5).append(",\n")
+                    .append("alquiler dos casas: ").append(this.valor * 0.1f * 15).append(",\n")
+                    .append("alquiler tres casas: ").append(this.valor * 0.1f * 35).append(",\n")
+                    .append("alquiler cuatro casas: ").append(this.valor * 0.1f * 50).append(",\n")
+                    .append("alquiler hotel: ").append(this.valor * 0.1f * 70).append(",\n")
+                    .append("alquiler piscina: ").append(this.valor * 0.1f * 25).append(",\n")
+                    .append("alquiler pista de deporte: ").append(this.valor * 0.1f * 25).append("\n")
+                    .append("}");
+                break;
+            case "Impuesto":
+                info.append("{\n")
+                    .append("tipo: ").append(this.tipo).append(",\n")
+                    .append("apagar: ").append(this.impuesto).append("\n")
+                    .append("}");
+                break;
+            case "Especial":
+                if (this.nombre.equals("Carcel")) {
+                    info.append("{\n")
+                        .append("tipo: ").append(this.tipo).append(",\n")
+                        .append("nombre: ").append(this.nombre).append(",\n")
+                        .append("jugadores: [");
+                    for (Avatar avatar : this.avatares) {
+                        info.append(avatar.getJugador().getNombre()).append(", ");
+                    }
+                    if (!this.avatares.isEmpty()) {
+                        info.setLength(info.length() - 2); // Eliminar la última coma y espacio
+                    }
+                    info.append("]\n")
+                        .append("}");
+                } else if (this.nombre.equals("Parking")) {
+                    info.append("{\n")
+                        .append("tipo: ").append(this.tipo).append(",\n")
+                        .append("nombre: ").append(this.nombre).append(",\n")
+                        .append("bote: ").append("Poner bote IMPLEMENTAR").append(",\n")
+                        .append("jugadores: [");
+                    for (Avatar avatar : this.avatares) {
+                        info.append(avatar.getJugador().getNombre()).append(", ");
+                    }
+                    if (!this.avatares.isEmpty()) {
+                        info.setLength(info.length() - 2); // Eliminar la última coma y espacio
+                    }
+                    info.append("]\n")
+                        .append("}");
+                } else if (this.nombre.equals("Salida")) {
+                    info.append("{\n")
+                        .append("tipo: ").append(this.tipo).append(",\n")
+                        .append("nombre: ").append(this.nombre).append("\n")
+                        .append("}");
+                } else if (this.nombre.equals("Ir a Cárcel")) {
+                    info.append("{\n")
+                        .append("tipo: ").append(this.tipo).append(",\n")
+                        .append("nombre: ").append(this.nombre).append("\n")
+                        .append("}");
+                }
+                break;
+            default:
+                info.append("Tipo de casilla desconocido.");
+                break;
         }
-        return info.toString(); // al finalizar devuelve la cadena info como una cadena de texto
+        
+        return info.toString();
     }
-
     /* Método para mostrar información de una casilla en venta.
      * Valor devuelto: texto con esa información.
      */
