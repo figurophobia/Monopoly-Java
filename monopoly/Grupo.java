@@ -22,6 +22,8 @@ class Grupo {
         this.miembros = new ArrayList<Casilla>();
         this.miembros.add(cas1);
         this.miembros.add(cas2);
+        cas1.setGrupo(this);
+        cas2.setGrupo(this);
         this.colorGrupo = colorGrupo;
         this.numCasillas =2;
 
@@ -36,6 +38,9 @@ class Grupo {
         this.miembros.add(cas1);
         this.miembros.add(cas2);
         this.miembros.add(cas3);
+        cas1.setGrupo(this);
+        cas2.setGrupo(this);
+        cas3.setGrupo(this);
         this.colorGrupo = colorGrupo;
         this.numCasillas =3;
     }

@@ -15,10 +15,11 @@ public class Tablero {
     public Tablero(Jugador banca) {
         this.banca = banca;
         this.posiciones = new ArrayList<ArrayList<Casilla>>();
+        this.grupos = new HashMap<String, Grupo>();
         generarCasillas();
     }
 
-    
+
     //Método para crear todas las casillas del tablero. Formado a su vez por cuatro métodos (1/lado).
     private void generarCasillas() {
         this.insertarLadoSur();
@@ -85,6 +86,7 @@ public class Tablero {
         this.posiciones.add(lado);
     }
     
+    
     //Casillas del 31-40
     //Método que inserta las casillas del lado este.
     private void insertarLadoEste() {
@@ -109,34 +111,48 @@ public class Tablero {
     @Override
     public String toString() {
         StringBuilder tableroStr = new StringBuilder();
+        // Imprimir el lado norte (posiciones[2]), de izquierda a derecha
+        tableroStr.append(" ");
+        for (int j = 0; j < 11; j++) {
+            tableroStr.append(Valor.SUBRAYADO+" ".repeat(Valor.width)+Valor.RESET+" ");
+
+        }
+        tableroStr.append("\n");
+        for (int i = 0; i < 10; i++) { 
+            tableroStr.append("|"+posiciones.get(2).get(i).printOneCasilla());
+        }
+        tableroStr.append("|"+posiciones.get(3).get(0).printOneCasilla()+"|");
+        tableroStr.append("\n");
     
-        // Imprimir el lado sur
-        tableroStr.append("Lado Sur:\n");
-        for (int i = 9; i >= 0; i--) { // de derecha a izquierda
-            tableroStr.append("| ").append(posiciones.get(0).get(i).printOneCasilla()).append(" ");
+        // Imprimir los lados oeste y este simultáneamente
+        for (int i = 9; i > 0; i--) {
+            // Lado oeste (posiciones[1]): desde la cárcel hasta el inicio (de abajo hacia arriba)
+            tableroStr.append("|"+posiciones.get(1).get(i).printOneCasilla()+"|"); 
+            if(i==1){
+                for (int j = 0; j < 8; j++) {
+                    tableroStr.append(Valor.SUBRAYADO+" ".repeat(Valor.width)+Valor.RESET+" ");
+
+                }
+                tableroStr.append(Valor.SUBRAYADO+" ".repeat(Valor.width)+Valor.RESET);
+            }else{tableroStr.append(" ".repeat(9*Valor.width+8));}
+            // Lado este (posiciones[3]): desde el inicio (arriba) hacia abajo
+            tableroStr.append("|"+posiciones.get(3).get(10-i).printOneCasilla()+"|");
+    
+            tableroStr.append("\n");
+        }
+    
+        // Imprimir el lado sur (posiciones[0]), de derecha a izquierda
+        tableroStr.append("|"+posiciones.get(1).get(0).printOneCasilla());
+        for (int i = 9; i >= 0; i--) { 
+            tableroStr.append("|"+posiciones.get(0).get(i).printOneCasilla());
         }
         tableroStr.append("|\n");
-    
-        // Imprimir el lado oeste (vertical)
-        tableroStr.append("Lado Oeste:\n");
-        for (int j = 1; j < 10; j++) {
-            tableroStr.append(posiciones.get(1).get(10 - j).printOneCasilla()).append("\n");
-        }
-    
-        // Imprimir el lado norte
-        tableroStr.append("Lado Norte:\n");
-        for (int i = 0; i < 10; i++) { // de izquierda a derecha
-            tableroStr.append("| ").append(posiciones.get(2).get(i).printOneCasilla()).append(" ");
-        }
-        tableroStr.append("|\n");
-    
-        // Imprimir el lado este (vertical)
-        tableroStr.append("Lado Este:\n");
-        for (int j = 1; j < 10; j++) {
-            tableroStr.append(posiciones.get(3).get(j - 1).printOneCasilla()).append("\n");
-        }
     
         return tableroStr.toString();
+    }
+    
+    public ArrayList<ArrayList<Casilla>> getPosiciones() {
+        return posiciones;
     }
     
 
@@ -146,15 +162,15 @@ public class Tablero {
     }
     
     //Método usado para buscar la casilla con el nombre pasado como argumento:
-    public Casilla encontrar_casilla(String nombre) {
-        for (ArrayList<Casilla> i : posiciones) { // Recorre cada lado del tablero
-            for (Casilla cas : i) { // Recorre cada casilla en el lado
-                if (cas.getNombre().equals(nombre)) { // Si el nombre coincide
-                    return cas; // Retorna la casilla encontrada
+    public Casilla casillaByName(String nombre) {
+        for (ArrayList<Casilla> lado : posiciones) {
+            for (Casilla casilla : lado) {
+                if (casilla.getNombre().equals(nombre)) {
+                    return casilla;
                 }
             }
         }
-        return null; // Retorna null si no se encontró ninguna casilla con el nombre dado
+        return null;
     }
     
 }
