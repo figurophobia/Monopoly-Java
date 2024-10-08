@@ -274,7 +274,11 @@ public class Menu {
     * Parámetro: cadena de caracteres con el nombre de la casilla.
      */
     private void comprar(String nombre) {
-        
+        if(getCasilla(nombre).duenho = banca){
+            Jugador.propiedades.add(getCasilla(nombre));
+            Jugador.fortuna = Jugador.fortuna - getCasilla(nombre).valor;
+            getCasilla(nombre).duenho = Jugador;
+        }
     }
 
     //Método que ejecuta todas las acciones relacionadas con el comando 'salir carcel'. 
@@ -283,6 +287,7 @@ public class Menu {
 
     // Método que realiza las acciones asociadas al comando 'listar enventa'.
     private void listarVenta() {
+        
     }
 
     // Método que realiza las acciones asociadas al comando 'listar jugadores'.
