@@ -184,7 +184,8 @@ public class Jugador {
         this.enCarcel = true;
         this.tiradasCarcel = 0;
         this.avatar.setLugar(pos.get(1).get(0));
+        this.avatar.moverAvatar(pos, 10);
     }
-
+//this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), total);
 
 }
