@@ -275,7 +275,7 @@ public class Menu {
                         int total = resultado1 + resultado2;
                         System.out.println("El avatar " + this.avatares.get(turno).getId() + " avanzará " + total + " posiciones. Desde "+ 
                         this.avatares.get(turno).getLugar().getNombre()+" hasta "+this.tablero.getCasilla(total-1+this.avatares.get(turno).getLugar().getPosicion()).getNombre());
-                        this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), total);
+                        moverJugador(total);
                         verTablero();
                         }
                     else { 
