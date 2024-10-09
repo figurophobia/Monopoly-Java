@@ -1,5 +1,6 @@
 package monopoly;
 
+import com.sun.source.tree.CaseTree;
 import java.util.ArrayList;
 import java.util.Scanner;
 import partida.*;
@@ -24,7 +25,7 @@ public class Menu {
     public Menu() {
         iniciarPartida();
     }
-    
+
     // Método para inciar una partida: crea los jugadores y avatares.
     private void iniciarPartida() {
         this.turno = 1;
@@ -40,7 +41,7 @@ public class Menu {
         System.out.println("Si desea añadir más jugadores, introduzca 'crear jugador'...");
         while (!partida_OFF) {
             // checkear la casilla actual
-            System.out.println("\n('help' para ver los comandos disponibles | 'lanzar dados' para tirar los dados | 'acabar turno' para terminar el turno | 'end' para finalizar la partida)");
+            casillaActual();
             System.out.print("Introduce un comando: ");
             String comando = sc.nextLine();
             analizarComando(comando);
@@ -48,6 +49,52 @@ public class Menu {
         sc.close();
         endGame();
 
+    }
+    private void casillaActual(){
+        String nombrecasilla = jugadores.get(turno).getAvatar().getLugar().getNombre();
+        System.out.println("Estás en la casilla "+nombrecasilla);
+        if(!this.tirado){
+            System.out.println("Puedes lanzar los dados.");
+            System.out.println("\n('help' para ver los comandos disponibles | 'lanzar dados' para tirar los dados | 'acabar turno' para terminar el turno | 'end' para finalizar la partida)");
+        }else{
+            System.out.println("Ya has lanzado los dados en este turno.");
+            System.out.println("\n('help' para ver los comandos disponibles | 'acabar turno' para terminar el turno | 'end' para finalizar la partida)");
+        }
+        switch (nombrecasilla) {
+            case "Salida":
+                
+                break;
+            case "Caja":
+                // en esta entrega no es necesario
+                break;
+            case "Suerte": case "Suerte2": case "Suerte3":
+                // en esta entrega no es necesario
+                break;
+            case "Imp1": case "Imp2":
+                // no queda claro si hay que implementarlo o no
+                break;
+            case "Carcel":
+                // si paga puede salir de la carcel
+                break;
+            case "Parking":
+                // recibe el bote recaudado por los impuestos
+                break;
+            case "IrCarcel":
+                System.out.println("Vas a la cárcel.");
+                jugadores.get(turno).encarcelar(tablero.getPosiciones());
+                break;
+            case "Trans1": case "Trans2": case "Trans3": case "Trans4":
+                // hay que revisar si se puede comprar, y si es de otro jugador pagar la tasa automaticamente
+                break;
+            case "Serv1": case "Serv2":
+                // hay que revisar si se puede comprar, y si es de otro jugador pagar la tasa automaticamente
+                break;
+            case "Solar1": case "Solar2": case "Solar3": case "Solar4": case "Solar5": case "Solar6": case "Solar7": case "Solar8": case "Solar9": case "Solar10": case "Solar11": case "Solar12": case "Solar13": case "Solar14": case "Solar15": case "Solar16": case "Solar17": case "Solar18": case "Solar19": case "Solar20": case "Solar21": case "Solar22":
+                // hay que revisar si se puede comprar, y si es de otro jugador pagar la tasa automaticamente
+                break;
+            default:
+                throw new AssertionError();
+        }
     }
     /*Método que interpreta el comando introducido y toma la accion correspondiente.
     * Parámetro: cadena de caracteres (el comando).
