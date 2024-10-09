@@ -87,7 +87,8 @@ public class Avatar {
         int newposition = posicionactual+valorTirada;
         if (newposition>40) {
             this.jugador.sumarVueltas();
-            this.jugador.sumarFortuna(Valor.SUMA_VUELTA);            
+            this.jugador.sumarFortuna(Valor.SUMA_VUELTA); 
+            System.out.println("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);           
         }
         newposition = (newposition-1)%40;
         Casilla newCasilla = casillas.get(newposition/10).get(newposition%10);
