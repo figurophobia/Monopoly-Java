@@ -52,7 +52,7 @@ public class Tablero {
         ArrayList<Casilla> lado = new ArrayList<Casilla>();
         lado.add(new Casilla("Carcel", "Especial", 11, banca));
         lado.add(new Casilla("Solar6", "Solar", 12, Valor.GRUPO_PURPLE, banca));
-        lado.add(new Casilla("Serv1", "Serv", 13, Valor.SUMA_VUELTA*0.75f, banca));
+        lado.add(new Casilla("Serv1", "Servicio", 13, Valor.SUMA_VUELTA*0.75f, banca));
         lado.add(new Casilla("Solar7", "Solar", 14, Valor.GRUPO_PURPLE, banca));
         lado.add(new Casilla("Solar8", "Solar", 15, Valor.GRUPO_PURPLE, banca));
         lado.add(new Casilla("Trans2", "Transporte", 16, Valor.SUMA_VUELTA, banca));
@@ -78,7 +78,7 @@ public class Tablero {
         lado.add(new Casilla("Trans3", "Transporte", 26, Valor.SUMA_VUELTA, banca));
         lado.add(new Casilla("Solar15", "Solar", 27, Valor.GRUPO_BROWN, banca));
         lado.add(new Casilla("Solar16", "Solar", 28, Valor.GRUPO_BROWN, banca));
-        lado.add(new Casilla("Serv2", "Serv", 29, Valor.SUMA_VUELTA * 0.75f, banca));
+        lado.add(new Casilla("Serv2", "Servicio", 29, Valor.SUMA_VUELTA * 0.75f, banca));
         lado.add(new Casilla("Solar17", "Solar",30, Valor.GRUPO_BROWN, banca));
 
         grupos.put("red", new Grupo(lado.get(1), lado.get(3),lado.get(4), Valor.RED));
@@ -172,5 +172,22 @@ public class Tablero {
         }
         return null;
     }
+    /*
+     * Las casillas de solar tienen un precio de compra inicial, el cual se incrementa un 5% cada vez que todos
+    los avatares completen cuatro vueltas al tablero sin que hayan sido compradas por ninguno de ellos.
+    No se considera una vuelta si el avatar va a la casilla de Cárcel.
+     */
+    public void subirPrecio4Vueltas(){
+        for (ArrayList<Casilla> lado : posiciones) {
+            for (Casilla casilla : lado) {
+                if (casilla.getTipo().equals("Solar") && casilla.getDuenho().equals(banca)) {
+                    float valor = casilla.getValor()*0.05f;
+                    casilla.setValor(valor);
+                }
+            }
+        }
+    }
+
+    
     
 }
