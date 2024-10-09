@@ -94,7 +94,11 @@ public class Avatar {
         newCasilla.anhadirAvatar(this);
         this.lugar = newCasilla;
     }
-
+    public void establecerAvatar(ArrayList<ArrayList<Casilla>> casillas, int posicion) {
+        int posactual=getLugar().getPosicion();
+        int avanzar = (40-posactual+posicion)%40;
+        moverAvatar(casillas, avanzar+1);
+    }
     /*Método que permite generar un ID para un avatar. Sólo lo usamos en esta clase (por ello es privado).
     * El ID generado será una letra mayúscula. Parámetros:
     * - Un arraylist de los avatares ya creados, con el objetivo de evitar que se generen dos ID iguales.

@@ -185,6 +185,7 @@ public class Menu {
             crearJugador(nombre, tipo);
         }
     }
+
     private boolean nombreRepetido(String nombre) {
         for (Jugador player : jugadores) {
             if (player!=null && player.getNombre().equals(nombre)) {
@@ -245,9 +246,18 @@ public class Menu {
     }
 
     //Método que ejecuta todas las acciones relacionadas con el comando 'lanzar dados'.
+
+
+    private void tiradados(int dado1, int dado2){
+        System.out.print("Lanzando dados");sleep(600);System.out.print(".");sleep(600);System.out.print(".");sleep(600);System.out.println(".");sleep(400);
+        tirado = true;
+        lanzamientos++;
+        System.out.println("Han salido "+dado1+" y "+dado2+"!");
+    }
+
+
     private void lanzarDados() {
-        dado1 = new Dado();
-        dado2 = new Dado();
+        dado1 = new Dado();dado2 = new Dado();
         if (!this.tirado) {
             if(jugadores.get(turno).isEnCarcel()){
                 if (jugadores.get(turno).getTiradasCarcel() >= 3) {
@@ -255,22 +265,16 @@ public class Menu {
                     salirCarcel();
                 }else{
                     System.out.println("Estás en la cárcel, debes sacar dobles para salir.");
-                    System.out.print("Lanzando dados");sleep(600);System.out.print(".");sleep(600);System.out.print(".");sleep(600);System.out.println(".");sleep(400);
-                    int resultado1 = dado1.hacerTirada();
-                    int resultado2 = dado2.hacerTirada();
-                    tirado = true;
-                    lanzamientos++;
-                    System.out.println("Han salido "+resultado1+" y "+resultado2+"!");
+                    int resultado1 = dado1.hacerTirada();int resultado2 = dado2.hacerTirada();
+                    tiradados(resultado1, resultado2);
 
                     if (resultado1 == resultado2) {
                         System.out.println("¡Dobles! Sales de la cárcel.");
-                        jugadores.get(turno).setEnCarcel(false);
-                        jugadores.get(turno).setTiradasCarcel(0);
                         salirCarcel();
                         sleep(1000);
                         int total = resultado1 + resultado2;
                         System.out.println("El avatar " + this.avatares.get(turno).getId() + " avanzará " + total + " posiciones. Desde "+ 
-                        this.avatares.get(turno).getLugar().getNombre()+" hasta "+this.tablero.getCasilla(total).getNombre());
+                        this.avatares.get(turno).getLugar().getNombre()+" hasta "+this.tablero.getCasilla(total-1+this.avatares.get(turno).getLugar().getPosicion()).getNombre());
                         this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), total);
                         verTablero();
                         }
@@ -280,19 +284,17 @@ public class Menu {
                         acabarTurno();
                         }
             
-            }}else{
-            System.out.print("Lanzando dados");sleep(600);System.out.print(".");sleep(600);System.out.print(".");sleep(600);System.out.println(".");sleep(400);
-            int resultado1 = dado1.hacerTirada();
-            int resultado2 = dado2.hacerTirada();
-            tirado = true;
-            lanzamientos++;
-            System.out.println("Han salido "+resultado1+" y "+resultado2+"!");
+            }}
+            else{
+            int resultado1 = dado1.hacerTirada();int resultado2 = dado2.hacerTirada();
+            tiradados(resultado1, resultado2);
             if (resultado1 == resultado2) {
                 if (lanzamientos == 3) {
                     System.out.println("¡Dobles! Has sacado tres veces dobles, vas a la cárcel.");
                     jugadores.get(turno).encarcelar(tablero.getPosiciones());
                     verTablero();
                     acabarTurno();
+                    return;
                 }else{
                     System.out.println("¡Dobles! Puedes tirar otra vez.");
                     tirado = false;
@@ -302,14 +304,15 @@ public class Menu {
             sleep(1000);
             int total = resultado1 + resultado2;
             System.out.println("El avatar " + this.avatares.get(turno).getId() + " avanzará " + total + " posiciones. Desde "+ 
-            this.avatares.get(turno).getLugar().getNombre()+" hasta "+this.tablero.getCasilla(total).getNombre());
-            this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), total);
+            this.avatares.get(turno).getLugar().getNombre()+" hasta "+this.tablero.getCasilla((total-1+this.avatares.get(turno).getLugar().getPosicion())%40).getNombre());
+            moverJugador(total);
             verTablero();}
 
         } else {
             System.out.println("Ya has lanzado los dados en este turno.");
         }
     }
+
 
     //Método de prueba que mueve un jugador n posiciones.
     private void moverJugador(int posiciones) {
