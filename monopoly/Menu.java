@@ -24,7 +24,7 @@ public class Menu {
     public Menu() {
         iniciarPartida();
     }
-
+    
     // Método para inciar una partida: crea los jugadores y avatares.
     private void iniciarPartida() {
         this.turno = 1;
