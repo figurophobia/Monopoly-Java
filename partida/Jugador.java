@@ -174,7 +174,7 @@ public class Jugador {
         str.append("nombre: " + this.nombre + ",\n");
         str.append("avatar: " + (avatar != null ? avatar.getId() : "null") + ",\n");
         str.append("fortuna: " + this.fortuna + ",\n");
-        str.append("propiedades: " + this.propiedades + ",\n");
+        str.append("propiedades: " + this.describirPropiedades() + ",\n");
         str.append("hipotecas: " + "PROVISIONAL" + ",\n");
         str.append("edificios: " + "PROVISIONAL" + "\n");
         str.append("}\n");
@@ -184,9 +184,8 @@ public class Jugador {
     //Método para describir las propiedades de un jugador.
     public String describirPropiedades() {
         StringBuilder str = new StringBuilder();
-        str.append("Propiedades de " + this.nombre + ":\n");
         for (Casilla casilla : this.propiedades) {
-            str.append(casilla.getNombre() + "\n");
+            str.append(casilla.getNombre() + " ");
         }
         return str.toString();
     }
@@ -266,7 +265,7 @@ public class Jugador {
         this.sumarFortuna(-Valor.PAGO_CARCEL);
         this.sumarGastos(Valor.PAGO_CARCEL);
         this.sacarCarcel();
-        System.out.println("Has pagado 25% de la vuelta para salir de la carcel");
+        System.out.println("Has pagado 25% "+Valor.PAGO_CARCEL +" para salir de la carcel");
         return true;
     }
 

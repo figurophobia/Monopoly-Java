@@ -185,7 +185,7 @@ public class Casilla {
         else if (this.nombre.equals("Carcel")) {
             System.out.println("Estás en la cárcel, pero de VISITA");
         }
-        return false;
+        return true;
     }
 
     //Metodo para calcular los costes de las casillas
@@ -236,7 +236,7 @@ public class Casilla {
             solicitante.anhadirPropiedad(this);
             banca.eliminarPropiedad(this);
             if (this.tipo.equals("Solar") && this.grupo.esDuenhoGrupo(solicitante)) {
-                System.out.println("Enhorabuena"+solicitante.getNombre()+", ahora tienes todo el grupo, tus solares pasan a dar mas dinero");
+                System.out.println("Enhorabuena "+solicitante.getNombre()+", ahora tienes todo el grupo, tus solares pasan a dar mas dinero");
             }
             System.out.println("El jugador "+solicitante.getNombre()+" ha comprado la casilla "+this.nombre+" por "+this.valor+", te quedan "+solicitante.getFortuna());
         }
@@ -305,7 +305,7 @@ public class Casilla {
                 if (this.nombre.equals("Carcel")) {
 
                     info.append("nombre: ").append(this.nombre).append(",\n");
-                    info.append("salir:" + "Valor.SALIR_CARCEL\n");
+                    info.append("salir:" + Valor.PAGO_CARCEL).append("\n");
                 } else if (this.nombre.equals("Parking")) {
                     info.append("nombre: ").append(this.nombre).append(",\n")
                     .append("bote: ").append(getDuenho().getBote()).append(",\n");
