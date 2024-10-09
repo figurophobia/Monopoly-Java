@@ -82,16 +82,13 @@ class Grupo {
     * Valor devuelto: true si es dueño de todas las casillas del grupo, false en otro caso.
      */
     public boolean esDuenhoGrupo(Jugador jugador) {
-    
-        int count = 0; // Contador de casillas del grupo que pertenecen al jugador
-    
-        // Recorremos las propiedades del jugador y verificamos si pertenecen al grupo
-        for (Casilla propiedad : jugador.getPropiedades()) {
-            if (miembros.contains(propiedad)) {
-                count++;
+        boolean esDuenho = true;
+        for (Casilla miembro : this.miembros) {
+            if (miembro.getDuenho()!=jugador) {
+                esDuenho = false;
+                break;
             }
         }
-        // Verificar si el jugador posee todas las casillas del grupo
-        return count == numCasillas;
+        return esDuenho; //PROVISIONAL
     }
 }

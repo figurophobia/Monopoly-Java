@@ -31,7 +31,7 @@ public class Casilla {
 
     public void setTipo(String tipo) {
         if ("Solar".equals(tipo) || "Especial".equals(tipo) || 
-        "Transporte".equals(tipo) || "Servicios".equals(tipo) || "Comunidad".equals(tipo) || "Suerte".equals(tipo)||
+        "Transporte".equals(tipo) || "Servicio".equals(tipo) || "Comunidad".equals(tipo) || "Suerte".equals(tipo)||
         "Impuesto".equals(tipo)) {
         this.tipo = tipo; // Asigna el valor si es válido
         }
@@ -110,7 +110,15 @@ public class Casilla {
         this.nombre = nombre;
         this.tipo = tipo;
         this.valor = valor;
-        this.impuesto = valor/10; //Valor por defecto para impuesto en casillas de servicios
+        if (this.tipo.equals("Solar")) {
+            this.impuesto= valor*0.1f; //Valor por defecto para impuesto en casillas de solar
+        }
+        else if (this.tipo.equals("Servicio")) {
+            this.impuesto= (Valor.SUMA_VUELTA/200); //Valor por defecto para impuesto en casillas de servicios
+        }
+        else if (this.tipo.equals("Transporte")) {
+            this.impuesto= Valor.SUMA_VUELTA; //Valor por defecto para impuesto en casillas de transporte
+        }
         this.posicion = posicion;
         this.duenho = duenho;
     }
@@ -155,28 +163,88 @@ public class Casilla {
     * Valor devuelto: true en caso de ser solvente (es decir, de cumplir las deudas), y false
     * en caso de no cumplirlas.*/
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada) {
-        //Solar, Especial, Transporte, Servicios, Comunidad, Suerte y Impuesto
-        if(actual.avatar.lugar.tipo == "Solar" && actual.avatar.lugar.duenho != banca){
-            if(actual.fortuna < actual.avatar.lugar.impuesto) return false;  //TIENE QUE HIPOTECAR
-            else return true;
+        if (this.esComprable(actual, banca)) {
+            System.out.println("Puedes comprar la casilla "+this.nombre+" por "+this.valor);
         }
-        if(actual.avatar.lugar.tipo == "Impuesto"){
-            if(actual.fortuna < actual.avatar.lugar.impuesto) return false;  //TIENE QUE HIPOTECAR
-            else return true;
-        }      
-        if(actual.avatar.lugar.tipo == "Servicios" && actual.avatar.lugar.duenho != banca){
-            if(actual.fortuna < actual.avatar.lugar.impuesto) return false;  //TIENE QUE HIPOTECAR
-            else return true;
+        else if (this.duenho!=actual && this.duenho!=banca) {
+            System.out.println("Has pagado "+calcularPago(tirada)+" al jugador "+this.duenho.getNombre()+" por caer en la casilla "+ this.nombre);   
+            return actual.pagarAJugador(this.duenho,calcularPago(tirada));
         }
+        else if (this.tipo.equals("Impuesto")) {
+            System.out.println("Has pagado "+this.impuesto+" a la banca por caer en la casilla "+ this.nombre);
+            return actual.pagarImpuesto(this.impuesto, banca);
+        }
+        else if (this.nombre.equals("Parking")) {
+            actual.recibirBote(banca);
+            System.out.println("Has recibido "+banca.getBote()+" del bote, bote puesto a "+banca.getBote());
+            return true;
+        }
+        else if (this.nombre.equals("Ir a Cárcel")) {
+            System.out.println("Has sido enviado a la cárcel");
+        }
+        else if (this.nombre.equals("Carcel")) {
+            System.out.println("Estás en la cárcel, pero de VISITA");
+        }
+        return true;
     }
+
+    //Metodo para calcular los costes de las casillas
+    public float calcularPago(int tirada) {
+        Casilla c=  this;
+        float coste = 0;
+        switch (c.tipo) {
+            case "Solar":
+                coste=c.impuesto;  
+                if (c.getGrupo().esDuenhoGrupo(c.duenho)) {
+                    coste= coste*2;
+                }
+                break;
+            case "Transporte":
+                coste=(c.impuesto*0.25f)*c.duenho.numTransportes();
+                break;
+            case "Servicio":
+                if (c.duenho.numServicios()==1) {
+                    coste=c.impuesto*tirada*4;
+                } else {
+                    coste=c.impuesto*tirada*10;
+                }
+                break;
+            default:
+                break;
+        }
+    
+        return coste;
+    }
+    
+    //Metodo para calcular si una casilla es comprable o no
+    public boolean esComprable(Jugador solicitante, Jugador banca) {
+        boolean bool= (this.duenho==banca && solicitante.getFortuna()>=this.valor && (this.tipo.equals("Solar") || this.tipo.equals("Transporte") || this.tipo.equals("Servicio")));
+        return bool; 
+    }
+
+    
 
     /*Método usado para comprar una casilla determinada. Parámetros:
     * - Jugador que solicita la compra de la casilla.
     * - Banca del monopoly (es el dueño de las casillas no compradas aún).*/
     public void comprarCasilla(Jugador solicitante, Jugador banca) {
-        this.duenho = solicitante;
-        anhadirPropiedad(solicitante.avatar.lugar);
-        solicitante.fortuna = solicitante.fortuna - solicitante.avatar.lugar.valor;
+        if (esComprable(solicitante, banca)) {
+            solicitante.sumarGastos(this.valor);
+            solicitante.setFortuna(solicitante.getFortuna()-this.valor);
+            banca.sumarFortuna(this.valor);
+            this.duenho = solicitante;
+            solicitante.anhadirPropiedad(this);
+            banca.eliminarPropiedad(this);
+            if (this.tipo.equals("Solar") && this.grupo.esDuenhoGrupo(solicitante)) {
+                System.out.println("Enhorabuena "+solicitante.getNombre()+", ahora tienes todo el grupo, tus solares pasan a dar mas dinero");
+            }
+            System.out.println("El jugador "+solicitante.getNombre()+" ha comprado la casilla "+this.nombre+" por "+this.valor+", te quedan "+solicitante.getFortuna());
+        }
+        else if (solicitante.getFortuna()<this.valor) {
+            System.out.println("No tienes suficiente dinero para comprar la casilla");
+            
+        }
+        else System.out.println("No se puede comprar la casilla en la que estás");
     }
 
     /*Método para añadir valor a una casilla. Utilidad:
@@ -209,79 +277,58 @@ public class Casilla {
     * Devuelve una cadena con información específica de cada tipo de casilla.*/
         public String infoCasilla() { 
         StringBuilder info = new StringBuilder();
-        
+        info.append("{\n");
+        info.append("tipo: ").append(this.tipo).append(",\n");
+
         switch (this.tipo) {
             case "Solar":
-                info.append("{\n")
-                    .append("tipo: ").append(this.tipo).append(",\n")
-                    .append("grupo: ").append(this.grupo.getColorGrupo() + "Color" + Valor.RESET).append(",\n")
-                    .append("propietario: ").append(this.duenho != null ? this.duenho.getNombre() : "N/A").append(",\n")
-                    .append("valor: ").append(this.valor).append(",\n")
-                    .append("alquiler: ").append(this.valor * 0.1f).append(",\n")
-                    .append("valor hotel: ").append(this.valor * 0.6f).append(",\n")
-                    .append("valor casa: ").append(this.valor * 0.6f).append(",\n")
-                    .append("valor piscina: ").append(this.valor * 0.4f).append(",\n")
-                    .append("valor pista de deporte: ").append(this.valor * 1.25f).append(",\n")
-                    .append("alquiler una casa: ").append(this.valor * 0.1f * 5).append(",\n")
-                    .append("alquiler dos casas: ").append(this.valor * 0.1f * 15).append(",\n")
-                    .append("alquiler tres casas: ").append(this.valor * 0.1f * 35).append(",\n")
-                    .append("alquiler cuatro casas: ").append(this.valor * 0.1f * 50).append(",\n")
-                    .append("alquiler hotel: ").append(this.valor * 0.1f * 70).append(",\n")
-                    .append("alquiler piscina: ").append(this.valor * 0.1f * 25).append(",\n")
-                    .append("alquiler pista de deporte: ").append(this.valor * 0.1f * 25).append("\n")
-                    .append("}");
+                info.append("grupo: ").append(this.grupo.getColorGrupo() + "#####" + Valor.RESET).append(",\n")
+                .append("propietario: ").append(this.duenho != null ? this.duenho.getNombre() : "N/A").append(",\n")
+                .append("valor: ").append(this.valor).append(",\n")
+                .append("alquiler: ").append(this.impuesto).append(",\n")
+                .append("valor hotel: ").append(this.valor * 0.6f).append(",\n")
+                .append("valor casa: ").append(this.valor * 0.6f).append(",\n")
+                .append("valor piscina: ").append(this.valor * 0.4f).append(",\n")
+                .append("valor pista de deporte: ").append(this.valor * 1.25f).append(",\n")
+                .append("alquiler una casa: ").append(this.impuesto * 5).append(",\n")
+                .append("alquiler dos casas: ").append(this.impuesto * 15).append(",\n")
+                .append("alquiler tres casas: ").append(this.impuesto * 35).append(",\n")
+                .append("alquiler cuatro casas: ").append(this.impuesto * 50).append(",\n")
+                .append("alquiler hotel: ").append(this.impuesto * 70).append(",\n")
+                .append("alquiler piscina: ").append(this.impuesto * 25).append(",\n")
+                .append("alquiler pista de deporte: ").append(this.impuesto * 25).append("\n");
                 break;
             case "Impuesto":
-                info.append("{\n")
-                    .append("tipo: ").append(this.tipo).append(",\n")
-                    .append("apagar: ").append(this.impuesto).append("\n")
-                    .append("}");
+                    info.append("a pagar: ").append(this.impuesto).append("\n");
                 break;
             case "Especial":
                 if (this.nombre.equals("Carcel")) {
-                    info.append("{\n")
-                        .append("tipo: ").append(this.tipo).append(",\n")
-                        .append("nombre: ").append(this.nombre).append(",\n")
-                        .append("jugadores: [");
-                    for (Avatar avatar : this.avatares) {
-                        info.append(avatar.getJugador().getNombre()).append(", ");
-                    }
-                    if (!this.avatares.isEmpty()) {
-                        info.setLength(info.length() - 2); // Eliminar la última coma y espacio
-                    }
-                    info.append("]\n")
-                        .append("}");
+
+                    info.append("nombre: ").append(this.nombre).append(",\n");
+                    info.append("salir:" + Valor.PAGO_CARCEL).append("\n");
                 } else if (this.nombre.equals("Parking")) {
-                    info.append("{\n")
-                        .append("tipo: ").append(this.tipo).append(",\n")
-                        .append("nombre: ").append(this.nombre).append(",\n")
-                        .append("bote: ").append("Poner bote IMPLEMENTAR").append(",\n")
-                        .append("jugadores: [");
-                    for (Avatar avatar : this.avatares) {
-                        info.append(avatar.getJugador().getNombre()).append(", ");
-                    }
-                    if (!this.avatares.isEmpty()) {
-                        info.setLength(info.length() - 2); // Eliminar la última coma y espacio
-                    }
-                    info.append("]\n")
-                        .append("}");
+                    info.append("nombre: ").append(this.nombre).append(",\n")
+                    .append("bote: ").append(getDuenho().getBote()).append(",\n");
                 } else if (this.nombre.equals("Salida")) {
-                    info.append("{\n")
-                        .append("tipo: ").append(this.tipo).append(",\n")
-                        .append("nombre: ").append(this.nombre).append("\n")
-                        .append("}");
+                    info.append("nombre: ").append(this.nombre).append("\n");
                 } else if (this.nombre.equals("Ir a Cárcel")) {
-                    info.append("{\n")
-                        .append("tipo: ").append(this.tipo).append(",\n")
-                        .append("nombre: ").append(this.nombre).append("\n")
-                        .append("}");
+                    info.append("nombre: ").append(this.nombre).append("\n");
                 }
                 break;
             default:
-                info.append("Tipo de casilla desconocido.");
+                info.append("Tipo de casilla desconocido.\n");
                 break;
         }
-        
+        info.append("jugadores: [");
+        for (Avatar avatar : this.avatares) {
+            info.append(avatar.getJugador().getNombre()).append(", ");
+        }
+        if (!this.avatares.isEmpty()) {
+            info.setLength(info.length() - 2); // Eliminar la última coma y espacio
+        }
+        info.append("]\n");
+        info.append("}");
+
         return info.toString();
     }
     /* Método para mostrar información de una casilla en venta.
@@ -289,7 +336,14 @@ public class Casilla {
      */
     public String casEnVenta() {
         StringBuilder info = new StringBuilder();
-        
+        info.append("{\n");
+        info.append("tipo: ").append(this.tipo).append(",\n");
+        info.append("nombre: "+nombre).append(",\n");
+        if(this.tipo.equals("Solar")){
+            info.append("grupo: ").append(this.grupo.getColorGrupo() + "#####" + Valor.RESET).append(",\n");
+        }
+        info.append("valor: ").append(this.valor).append(",\n");
+        return info.toString();
     }
 
 
