@@ -182,10 +182,14 @@ public class Tablero {
             for (Casilla casilla : lado) {
                 if (casilla.getTipo().equals("Solar") && casilla.getDuenho().equals(banca)) {
                     float valor = casilla.getValor()*0.05f;
-                    casilla.setValor(valor);
+                    float impuesto = casilla.getImpuesto()*0.05f;
+                    casilla.sumarValor(valor);
+                    casilla.sumarImpuesto(impuesto);
                 }
             }
         }
+        System.out.println("Todos los jugadores han dado 4 vueltas.");
+        System.out.println("Los precios de los solares no comprados han subido un 5%.");
     }
 
     

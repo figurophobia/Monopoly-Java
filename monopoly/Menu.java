@@ -152,13 +152,22 @@ public class Menu {
                     System.out.println("Comando no reconocido");
                 }
                 break;
+            /////Comandos debug
             case "mover":
                 if (partes.length == 2) {
-                    moverJugador(Integer.parseInt(partes[1]));
+                    lanzarDados(Integer.parseInt(partes[1]));
                 } else {
                     System.out.println("Comando no reconocido");
                 }
                 break;
+            case "fortuna":
+                if (partes.length == 2) {
+                    fortunaManual(Float.parseFloat(partes[1]));
+                } else {
+                    System.out.println("Comando no reconocido");
+                }
+                break;
+            /////Fin comandos debug
             case "end":
                 endGame();
                 break;
@@ -342,11 +351,23 @@ public class Menu {
             System.out.println("El jugador " + jugadorActual.getNombre() + " no tiene dinero para pagar, acaba el juego en esta primera version!");
             partida_OFF = true;
         }
+
+        if (avatarActual.DarCuartaVuelta()) {
+            boolean todosHanDado4Vueltas= true;
+            for (int i=1; i<jugadores.size(); i++) { //Empezamos el bucle en 1 para no comparar con la banca
+                if (jugadores.get(i).getVueltas()  < jugadorActual.getVueltas()){
+                    todosHanDado4Vueltas = false; //Si tienen menos vueltas que el jugador que acaba de dar la cuarta vuelta, no todos han dado 4 vueltas
+                    break;
+                }
+            }
+            if (todosHanDado4Vueltas) {
+                tablero.subirPrecio4Vueltas();
+            }
+            
+        }
     
         verTablero();
     }
-    
-
     
     //Método de prueba que mueve un jugador n posiciones.
     private void moverJugador(int posiciones) {
@@ -442,4 +463,21 @@ public class Menu {
             System.out.println("El hilo fue interrumpido.");
         }
     }
+
+    ////////////////////////////////////////////
+    //Comandos debug
+
+    public void lanzarDados(int tiradaTotal){
+        Jugador jugadorActual = jugadores.get(turno);
+        Avatar avatarActual = avatares.get(turno);
+        Casilla posicionActual = avatarActual.getLugar();
+        moverYVerTablero(jugadorActual, avatarActual, posicionActual, tiradaTotal);
+    }
+
+    public void fortunaManual(float cantidad){
+        jugadores.get(turno).setFortuna(cantidad);
+        System.out.println("Fortuna de "+jugadores.get(turno).getNombre()+" actualizada a "+cantidad);
+    }
+    
+    ////////////////////////////////////////////
 }

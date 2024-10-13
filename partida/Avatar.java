@@ -12,6 +12,7 @@ public class Avatar {
     private String tipo; //Sombrero, Esfinge, Pelota, Coche
     private Jugador jugador; //Un jugador al que pertenece ese avatar.
     private Casilla lugar; //Los avatares se sitúan en casillas del tablero.
+    private boolean CuartaVuelta; //Indica si el jugador acaba de hacer una vuelta completa multiplo de 4.
 
     public String getId() {
         return this.id;
@@ -81,6 +82,8 @@ public class Avatar {
     * EN ESTA VERSIÓN SUPONEMOS QUE valorTirada siemrpe es positivo.
      */
     public void moverAvatar(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
+        this.CuartaVuelta = false; //Al moverse, se reinicia el contador de cuarta vuelta, para no añadir valor cada vez que se juega en la cuarta vuelta
+
 
         int posicionactual=this.lugar.getPosicion();
         this.lugar.eliminarAvatar(this);
@@ -88,12 +91,19 @@ public class Avatar {
         if (newposition>40) {
             this.jugador.sumarVueltas();
             this.jugador.sumarFortuna(Valor.SUMA_VUELTA); 
-            System.out.println("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);           
+            System.out.println("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);
+            if (this.jugador.getVueltas()%4==0) {
+                this.CuartaVuelta=true;
+            } 
         }
         newposition = (newposition-1)%40;
         Casilla newCasilla = casillas.get(newposition/10).get(newposition%10);
         newCasilla.anhadirAvatar(this);
         this.lugar = newCasilla;
+    }
+
+    public boolean DarCuartaVuelta(){
+        return this.CuartaVuelta;
     }
 
     /*Método que permite generar un ID para un avatar. Sólo lo usamos en esta clase (por ello es privado).

@@ -176,7 +176,7 @@ public class Casilla {
         }
         else if (this.nombre.equals("Parking")) {
             actual.recibirBote(banca);
-            System.out.println("Has recibido "+banca.getBote()+" del bote, bote puesto a "+banca.getBote());
+            System.out.println("Bote puesto a "+banca.getBote());
             return true;
         }
         else if (this.nombre.equals("Ir a Cárcel")) {
@@ -254,6 +254,12 @@ public class Casilla {
     public void sumarValor(float suma) {
         this.valor +=suma;
     }
+
+    //Método para añadir impuesto a una casilla. Se usa para las casillas de tipo Solar.
+    public void sumarImpuesto(float suma) {
+        this.impuesto +=suma;
+    }
+
 
     /*Método para imprimir cada casilla del tablero
      * 
