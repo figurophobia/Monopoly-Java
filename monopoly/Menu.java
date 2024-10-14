@@ -63,7 +63,7 @@ public class Menu {
                 "listar avatares\n" +
                 "lanzar dados\n" +
                 "acabar turno\n" +
-                "ir carcel\n" +
+                "salir carcel\n" +
                 "describir (nombre)\n" +
                 "describir jugador/avatar (Nombre/id)\n" +
                 "comprar (nombre propiedad)\n" +
@@ -115,7 +115,7 @@ public class Menu {
                     System.out.println("Comando no reconocido");
                 }
                 break;
-            case "ir":
+            case "ir": // Comando debug para ir Cárcel
                 if (partes.length == 2) {
                     System.out.println("Jugador enviado a la cárcel.");
                     jugadores.get(turno).encarcelar(tablero.getPosiciones());
