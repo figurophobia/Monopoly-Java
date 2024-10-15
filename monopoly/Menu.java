@@ -93,7 +93,9 @@ public class Menu {
                         //edificar hotel
                     }else if (partes[1].equals("piscina")){
                         //edificar piscina
-                    }}
+                    }else if (partes[1].equals("pista")){
+                        //edificar pista
+                }}
                 else{
                     System.out.println("Comando no reconocido");
                 }
@@ -492,5 +494,13 @@ public class Menu {
         System.out.println("Fortuna de "+jugadores.get(turno).getNombre()+" actualizada a "+cantidad);
     }
     
+    public boolean tieneCasilla(Jugador jugador){
+        if (jugador.getAvatar().getLugar().getDuenho().equals(jugador)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     ////////////////////////////////////////////
 }
