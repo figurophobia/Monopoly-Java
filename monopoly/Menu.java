@@ -63,7 +63,7 @@ public class Menu {
                 "listar avatares\n" +
                 "lanzar dados\n" +
                 "acabar turno\n" +
-                "salir carcel\n" +
+                "ir carcel\n" +
                 "describir (nombre)\n" +
                 "describir jugador/avatar (Nombre/id)\n" +
                 "comprar (nombre propiedad)\n" +
@@ -85,6 +85,19 @@ public class Menu {
                                 "avatar: " + jugadorActual.getAvatar().getId() + "\n" +
                                 "}");          
                 break;  
+            case "edificar":
+                if (partes.length == 2) {
+                    if(partes[1].equals("casa")){
+                        //edificar casa
+                    }else if (partes[1].equals("hotel")){
+                        //edificar hotel
+                    }else if (partes[1].equals("piscina")){
+                        //edificar piscina
+                    }}
+                else{
+                    System.out.println("Comando no reconocido");
+                }
+                break;
             case "listar":
                 if (partes.length==2) {
                     if (partes[1].equals("jugadores")) {
@@ -115,7 +128,7 @@ public class Menu {
                     System.out.println("Comando no reconocido");
                 }
                 break;
-            case "ir": // Comando debug para ir Cárcel
+            case "ir":
                 if (partes.length == 2) {
                     System.out.println("Jugador enviado a la cárcel.");
                     jugadores.get(turno).encarcelar(tablero.getPosiciones());
