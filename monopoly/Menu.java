@@ -57,18 +57,19 @@ public class Menu {
         switch (partes[0]) {
             case "help":
                 System.out.println("Comandos disponibles:\n" +
-                "crear jugador (Nombre, tipo)\n" +
-                "jugador\n" +
-                "listar jugadores\n" +
-                "listar avatares\n" +
-                "lanzar dados\n" +
-                "acabar turno\n" +
-                "ir carcel\n" +
-                "describir (nombre)\n" +
-                "describir jugador/avatar (Nombre/id)\n" +
-                "comprar (nombre propiedad)\n" +
-                "listar enventa\n" +
-                "ver tablero");                
+                "[+] crear jugador\n" +
+                "[+] jugador\n" +
+                "[+] listar jugadores\n" +
+                "[+] listar avatares\n" +
+                "[+] lanzar dados\n" +
+                "[+] acabar turno\n" +
+                "[+] ir carcel\n" +
+                "[+] describir (nombre_casilla)\n" +
+                "[+] dados (valor1) (valor2)\n" +
+                "[+] describir jugador/avatar (nombre/id)\n" +
+                "[+] comprar (nombre propiedad)\n" +
+                "[+] listar enventa\n" +
+                "[+] ver tablero");                
                 break;
             case "crear":
                 if (partes.length == 2 && partes[1].equals("jugador")) {
@@ -128,6 +129,11 @@ public class Menu {
                     comprar(partes[1]);
                 } else {
                     System.out.println("Comando no reconocido");
+                }
+                break;
+            case "dados":
+                if (partes.length==3){
+                    lanzarDados(partes[1],partes[2]);
                 }
                 break;
             case "ir":
@@ -283,7 +289,25 @@ public class Menu {
         lanzamientos++;
         System.out.println("Han salido "+dado1+" y "+dado2+"!");
     }
-
+    private void lanzarDados(String dado1, String dado2) {
+        int dadoint1= Integer.parseInt(dado1);
+        int dadoint2= Integer.parseInt(dado2);
+        if ((dadoint1>6)||(dadoint2>6)) System.out.println("Valor de tirada no válida");
+        if (tirado) {
+            System.out.println("Ya has lanzado los dados en este turno.");
+            return;
+        }
+    
+        Jugador jugadorActual = jugadores.get(turno);
+        Avatar avatarActual = avatares.get(turno);
+        Casilla posicionActual = avatarActual.getLugar();
+    
+        if (jugadorActual.isEnCarcel()) {
+            manejarCarcel(jugadorActual, avatarActual, posicionActual,dadoint1,dadoint2);
+        } else {
+            manejarTiradaNormal(jugadorActual, avatarActual, posicionActual,dadoint1,dadoint2);
+        }
+    }
     private void lanzarDados() {
         dado1 = new Dado();
         dado2 = new Dado();
@@ -303,7 +327,29 @@ public class Menu {
             manejarTiradaNormal(jugadorActual, avatarActual, posicionActual);
         }
     }
+    private void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) {
+        if (jugadorActual.getTiradasCarcel() >= 3) {
+            System.out.println("Has pasado 3 turnos en la cárcel, sales! Tira los dados!");
+            salirCarcel();
+        } else {
+            System.out.println("Estás en la cárcel, debes sacar dobles para salir.");
+            int resultado1 = dado1;
+            int resultado2 = dado2;
+            tiradados(resultado1, resultado2);
     
+            if (resultado1 == resultado2) {
+                System.out.println("¡Dobles! Sales de la cárcel.");
+                jugadorActual.sacarCarcel();
+                sleep(1000);
+                moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2);
+            } else {
+                System.out.println("No has sacado dobles, sigues en la cárcel.");
+                jugadorActual.setTiradasCarcel(jugadorActual.getTiradasCarcel() + 1);
+                acabarTurno();
+            }
+        }
+    }
+
     private void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) {
         if (jugadorActual.getTiradasCarcel() >= 3) {
             System.out.println("Has pasado 3 turnos en la cárcel, sales! Tira los dados!");
@@ -326,7 +372,28 @@ public class Menu {
             }
         }
     }
+    private void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) {
+        int resultado1 = dado1;
+        int resultado2 = dado2;
+        tiradados(resultado1, resultado2);
     
+        if (resultado1 == resultado2) {
+            if (lanzamientos == 3) {
+                System.out.println("¡Dobles! Has sacado tres veces dobles, vas a la cárcel.");
+                jugadorActual.encarcelar(tablero.getPosiciones());
+                verTablero();
+                acabarTurno();
+                return;
+            } else {
+                System.out.println("¡Dobles! Puedes tirar otra vez.");
+                tirado = false;
+            }
+        }
+    
+        sleep(1000);
+        moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2);
+    }
+
     private void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) {
         int resultado1 = dado1.hacerTirada();
         int resultado2 = dado2.hacerTirada();
