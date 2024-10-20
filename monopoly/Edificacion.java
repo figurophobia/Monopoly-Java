@@ -85,6 +85,15 @@ public class Edificacion {
 
 ////////////////METODOS///////////////
     public void edificar(String tipo){
-        
+        switch (tipo) {
+            case "casa"-> {
+                
+            }
+                
+
+            default->{
+                System.out.println("Tipo de edificación no reconocido...");
+            }
+        }
     }
 }
