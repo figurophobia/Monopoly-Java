@@ -16,6 +16,7 @@ public class Casilla {
     private float impuesto; //Cantidad a pagar por caer en la casilla: el alquiler en solares/servicios/transportes o impuestos.
     private float hipoteca; //Valor otorgado por hipotecar una casilla
     private ArrayList<Avatar> avatares = new ArrayList<>(); //Avatares que están situados en la casilla.
+    private ArrayList<Edificacion> edificaciones = new ArrayList<>();
 
     public String getNombre() {
         return nombre;
@@ -46,7 +47,9 @@ public class Casilla {
         if (valor>0) this.valor = valor; //comprueba que el valor introducido sea positivo
         else System.out.println("Valor no válido");
     }
-
+    public ArrayList<Edificacion> getEdificaciones(){
+        return this.edificaciones;
+    }
     public int getPosicion() {
         return posicion;
     }
@@ -165,6 +168,9 @@ public class Casilla {
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada) {
         if (this.esComprable(actual, banca)) {
             System.out.println("Puedes comprar la casilla "+this.nombre+" por "+this.valor);
+        }
+        else if ((this.duenho==actual)){
+            System.out.println("Has caido en la casilla "+this.nombre+" y te pertenece todo el grupo, puedes edificar");
         }
         else if (this.duenho!=actual && this.duenho!=banca) {
             System.out.println("Has pagado "+calcularPago(tirada)+" al jugador "+this.duenho.getNombre()+" por caer en la casilla "+ this.nombre);   
@@ -355,5 +361,25 @@ public class Casilla {
         return info.toString();
     }
 
+    public void edificar(String tipo){
+        switch (tipo) {
+            case "casa"-> {
+                
+            }
+            case "hotel"-> {
+                
+            }
+            case "piscina"-> {
+                
+            }
+            case "pista"-> {
+                
+            }
+                
 
-}
+            default->{
+                System.out.println("Tipo de edificación no reconocido...");
+            }
+        }
+    }
+}   

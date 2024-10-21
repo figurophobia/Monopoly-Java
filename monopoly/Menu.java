@@ -81,21 +81,12 @@ public class Menu {
             }
             case "edificar" -> {
                 if (partes.length == 2) {
-                    switch (partes[1]) {
-                        case "casa" -> {
-                        }
-                        case "hotel" -> {
-                        }
-                        case "piscina" -> {
-                        }
-                        case "pista" -> {
-                        }
-                        default -> {
-                            System.out.println("Comando no reconocido");
-                        }
+                    if(puedeEdificar){// una funcion que chekee si se puede edificar, 1 es duenho de grupo 2 segunda vez que pisa la casilla
+                        jugadores.get(turno).getAvatar().getLugar().edificar(partes[2]);
                     }
-                }else System.out.println("Comando no reconocido");
-            }
+                    }else System.out.println("Comando no reconocido");
+                }
+            
             case "listar" -> {
                 if (partes.length==2) {
                     switch (partes[1]) {
@@ -450,6 +441,11 @@ public class Menu {
 //////---METODO COMPRUEBA SI JUGADOR POSEE CASILLA
     public boolean tieneCasilla(Jugador jugador){
         return jugador.getAvatar().getLugar().getDuenho().equals(jugador);
+    }
+//////---METODO COMPRUEBA SI JUGADOR PUEDE EDIFICAR
+    public boolean puedeEdificar(Jugador jugador){
+        return jugador.esDuenhoDeGrupo(this.tablero.getPosiciones());
+        // hay que meter lo de que si paso 2 veces por la casilla la pueda comprar tambien;
     }
 ////////////////////////////////////DEBUG COMMANDS////////////////////////////////////
 //////---METODO LANZA DADOS VALORES ESPECIFICOS---
