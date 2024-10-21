@@ -274,16 +274,7 @@ public class Jugador {
         this.enCarcel = false;
         this.tiradasCarcel = 0;
     }
-    public boolean esDuenhoDeGrupo(ArrayList<ArrayList<Casilla>> casillas) {
-        for (ArrayList<Casilla> lado : casillas) {
-            for (Casilla casilla : lado) {
-                if (casilla.getGrupo()==avatar.getLugar().getGrupo() && this != (casilla.getDuenho())) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+
 
 
 }

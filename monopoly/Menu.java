@@ -81,9 +81,10 @@ public class Menu {
             }
             case "edificar" -> {
                 if (partes.length == 2) {
-                    if(puedeEdificar){// una funcion que chekee si se puede edificar, 1 es duenho de grupo 2 segunda vez que pisa la casilla
-                        jugadores.get(turno).getAvatar().getLugar().edificar(partes[2]);
-                    }
+                    if(puedeEdificar(jugadores.get(turno))){// hay que meter que este en la casilla y que si es la segunda vez que pisa la casilla
+                        System.out.println("Puedes edificar!");
+                        jugadores.get(turno).getAvatar().getLugar().edificar(partes[1]);
+                    } else System.out.println("No puedes edificar, no te pertenece todo el grupo.");
                     }else System.out.println("Comando no reconocido");
                 }
             
@@ -444,7 +445,7 @@ public class Menu {
     }
 //////---METODO COMPRUEBA SI JUGADOR PUEDE EDIFICAR
     public boolean puedeEdificar(Jugador jugador){
-        return jugador.esDuenhoDeGrupo(this.tablero.getPosiciones());
+        return (jugador.getAvatar().getLugar().getGrupo().esDuenhoGrupo(jugador));
         // hay que meter lo de que si paso 2 veces por la casilla la pueda comprar tambien;
     }
 ////////////////////////////////////DEBUG COMMANDS////////////////////////////////////

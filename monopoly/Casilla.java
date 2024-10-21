@@ -360,23 +360,27 @@ public class Casilla {
         info.append("valor: ").append(this.valor).append(",\n");
         return info.toString();
     }
-
+    
     public void edificar(String tipo){
         switch (tipo) {
             case "casa"-> {
-                
+                if(duenho.getFortuna()>=grupo.valor()){
+                    System.out.println("Has comprado una casa por " + grupo.valor()+".");
+                    duenho.setFortuna(duenho.getFortuna()-grupo.valor());
+                    edificaciones.add(new Edificacion("casa", this.duenho, this));
+                }else{
+                    System.out.println("No tienes suficiente dinero\n");
+                }
             }
             case "hotel"-> {
-                
+                edificaciones.add(new Edificacion("hotel", this.duenho, this));
             }
             case "piscina"-> {
-                
+                edificaciones.add(new Edificacion("piscina", this.duenho, this));
             }
             case "pista"-> {
-                
+                edificaciones.add(new Edificacion("pista", this.duenho, this));
             }
-                
-
             default->{
                 System.out.println("Tipo de edificación no reconocido...");
             }
