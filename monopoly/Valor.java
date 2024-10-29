@@ -7,7 +7,7 @@ public class Valor {
     public static final float FORTUNA_INICIAL = 9543076.28f; // Cantidad que recibe cada jugador al comenzar la partida
     public static final float SUMA_VUELTA = 1301328.584f; // Cantidad que recibe un jugador al pasar pos la Salida
     public static final float PAGO_CARCEL = Valor.SUMA_VUELTA*0.25f; // Cantidad que debe pagar un jugador para salir de la cárcel
-    public static final int width = 20;
+    public static final int width = 16; // Anchura de las casillas
     //Colores del texto:
     public static final String RESET = "\u001B[0m";
     public static final String BLACK = "\u001B[30m";
