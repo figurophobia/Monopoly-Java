@@ -172,22 +172,22 @@ public class Casilla {
         actual.getNumeroVisitas().put(this, actual.getNumeroVisitas().getOrDefault(this, 0) + 1);
         //debug System.out.println("Entrando en evaluar casilla");
         if (this.esComprable(actual, banca)) {
-            System.out.println("Puedes comprar la casilla "+ Valor.BLUE +this.nombre+ Valor.RESET +" por "+Valor.BLUE + this.valor + Valor.RESET);
+            System.out.println("Puedes comprar la casilla "+ Valor.BLUE +this.nombre+ Valor.RESET +" por "+Valor.BLUE + this.valor +"€"+ Valor.RESET);
         }
         else if ((actual.puedeEdificar(this))){
             System.out.println("Has caido en la casilla "+ Valor.BLUE +this.nombre+Valor.RESET +" y puedes edificar en ella");
         }
         else if (this.duenho!=actual && this.duenho!=banca) {
-            System.out.println("Has pagado "+Valor.RED+calcularPago(tirada)+Valor.RESET+" al jugador "+Valor.BLUE+this.duenho.getNombre()+Valor.RESET+" por caer en la casilla "+ Valor.BLUE+ this.nombre+Valor.RESET);   
+            System.out.println("Has pagado "+Valor.RED+calcularPago(tirada)+"€"+Valor.RESET+" al jugador "+Valor.BLUE+this.duenho.getNombre()+Valor.RESET+" por caer en la casilla "+ Valor.BLUE+ this.nombre+Valor.RESET);   
             return actual.pagarAJugador(this.duenho,calcularPago(tirada));
         }
         else if (this.tipo.equals("Impuesto")) {
-            System.out.println("Has pagado "+ Valor.RED+this.impuesto+Valor.RESET + " a la banca por caer en la casilla "+Valor.BLUE+ this.nombre+Valor.RESET);
+            System.out.println("Has pagado "+ Valor.RED+this.impuesto+"€"+Valor.RESET + " a la banca por caer en la casilla "+Valor.BLUE+ this.nombre+Valor.RESET);
             return actual.pagarImpuesto(this.impuesto, banca);
         }
         else if (this.nombre.equals("Parking")) {
             actual.recibirBote(banca);
-            System.out.println("Bote puesto a "+Valor.RED+banca.getBote()+Valor.RESET);
+            System.out.println("Bote puesto a "+Valor.RED+banca.getBote()+"€"+Valor.RESET);
             return true;
         }
         else if (this.nombre.equals("Ir a Cárcel")) {

@@ -321,8 +321,8 @@ public class Menu {
 //////---METODO MOVER AVATAR AL LANZAR DADOS---
     private void moverYVerTablero(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int total) {
         Casilla nuevaCasilla = tablero.getCasilla((total - 1 + posicionActual.getPosicion()) % 40);
-        System.out.println("El avatar " + avatarActual.getId() + " avanzará " + total + " posiciones. Desde " + 
-            posicionActual.getNombre() + " hasta " + nuevaCasilla.getNombre());
+        System.out.println("El avatar " + Valor.BLUE + avatarActual.getId()+ Valor.RESET + " avanzará " +Valor.BLUE + total + Valor.RESET +" posiciones. Desde " + 
+            Valor.RED+posicionActual.getNombre()+ Valor.RESET + " hasta " +Valor.GREEN+ nuevaCasilla.getNombre()+Valor.RESET);
     
         moverJugador(total);
     
