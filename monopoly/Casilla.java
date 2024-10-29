@@ -170,32 +170,33 @@ public class Casilla {
 
         // Incrementar el valor en 1 punto para la casilla actual
         actual.getNumeroVisitas().put(this, actual.getNumeroVisitas().getOrDefault(this, 0) + 1);
-
+        //debug System.out.println("Entrando en evaluar casilla");
         if (this.esComprable(actual, banca)) {
-            System.out.println("Puedes comprar la casilla "+this.nombre+" por "+this.valor);
+            System.out.println("Puedes comprar la casilla "+ Valor.BLUE +this.nombre+ Valor.RESET +" por "+Valor.BLUE + this.valor + Valor.RESET);
         }
         else if ((actual.puedeEdificar(this))){
-            System.out.println("Has caido en la casilla "+this.nombre+" y puedes edificar en ella");
+            System.out.println("Has caido en la casilla "+ Valor.BLUE +this.nombre+Valor.RESET +" y puedes edificar en ella");
         }
         else if (this.duenho!=actual && this.duenho!=banca) {
-            System.out.println("Has pagado "+calcularPago(tirada)+" al jugador "+this.duenho.getNombre()+" por caer en la casilla "+ this.nombre);   
+            System.out.println("Has pagado "+Valor.RED+calcularPago(tirada)+Valor.RESET+" al jugador "+Valor.BLUE+this.duenho.getNombre()+Valor.RESET+" por caer en la casilla "+ Valor.BLUE+ this.nombre+Valor.RESET);   
             return actual.pagarAJugador(this.duenho,calcularPago(tirada));
         }
         else if (this.tipo.equals("Impuesto")) {
-            System.out.println("Has pagado "+this.impuesto+" a la banca por caer en la casilla "+ this.nombre);
+            System.out.println("Has pagado "+ Valor.RED+this.impuesto+Valor.RESET + " a la banca por caer en la casilla "+Valor.BLUE+ this.nombre+Valor.RESET);
             return actual.pagarImpuesto(this.impuesto, banca);
         }
         else if (this.nombre.equals("Parking")) {
             actual.recibirBote(banca);
-            System.out.println("Bote puesto a "+banca.getBote());
+            System.out.println("Bote puesto a "+Valor.RED+banca.getBote()+Valor.RESET);
             return true;
         }
         else if (this.nombre.equals("Ir a Cárcel")) {
-            System.out.println("Has sido enviado a la cárcel");
+            System.out.println(Valor.RED+"Has sido enviado a la cárcel"+Valor.RESET);
         }
         else if (this.nombre.equals("Carcel")) {
-            System.out.println("Estás en la cárcel, pero de VISITA");
+            System.out.println("Estás en la"+Valor.BLUE+ "cárcel" +Valor.RESET +", pero de VISITA");
         }
+        // debug System.out.println("Saliendo de evaluar casilla");
         return true;
     }
 
@@ -367,28 +368,30 @@ public class Casilla {
     }
     
     public void edificar(String tipo){
-        switch (tipo) {
-            case "casa"-> {
-                if(duenho.getFortuna()>=grupo.valor()){
-                    System.out.println("Has comprado una casa por " + grupo.valor()+".");
-                    duenho.setFortuna(duenho.getFortuna()-grupo.valor());
-                    edificaciones.add(new Edificacion("casa", this.duenho, this));
-                }else{
-                    System.out.println("No tienes suficiente dinero\n");
+        if(duenho.puedeEdificar(this)){
+            switch (tipo) {
+                case "casa"-> {
+                    if(duenho.getFortuna()>=grupo.valor()){
+                        System.out.println("Has comprado una casa por " + grupo.valor()+".");
+                        duenho.setFortuna(duenho.getFortuna()-grupo.valor());
+                        edificaciones.add(new Edificacion("casa", this.duenho, this));
+                    }else{
+                        System.out.println("No tienes suficiente dinero");
+                    }
+                }
+                case "hotel"-> {
+                    edificaciones.add(new Edificacion("hotel", this.duenho, this));
+                }
+                case "piscina"-> {
+                    edificaciones.add(new Edificacion("piscina", this.duenho, this));
+                }
+                case "pista"-> {
+                    edificaciones.add(new Edificacion("pista", this.duenho, this));
+                }
+                default->{
+                    System.out.println("Tipo de edificación no reconocido...");
                 }
             }
-            case "hotel"-> {
-                edificaciones.add(new Edificacion("hotel", this.duenho, this));
-            }
-            case "piscina"-> {
-                edificaciones.add(new Edificacion("piscina", this.duenho, this));
-            }
-            case "pista"-> {
-                edificaciones.add(new Edificacion("pista", this.duenho, this));
-            }
-            default->{
-                System.out.println("Tipo de edificación no reconocido...");
-            }
-        }
+        }else System.out.println(Valor.RED + "No"+ Valor.RESET+ "puedes edificar en esta casilla.");
     }
 }   

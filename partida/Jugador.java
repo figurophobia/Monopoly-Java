@@ -27,10 +27,6 @@ public class Jugador {
         this.nombre = nombre;
     }
 
-    public HashMap<Casilla, Integer> getNumeroVisitas() {
-        return numeroVisitas;
-    }
-
     public Avatar getAvatar() {
         return avatar;
     }
@@ -125,6 +121,7 @@ public class Jugador {
         this.tiradasCarcel = 0;
         this.vueltas = 0;
         this.propiedades = new ArrayList<>();
+        this.numeroVisitas = new HashMap<>();
     }
     //Otros métodos:
     //Método para añadir una propiedad al jugador. Como parámetro, la casilla a añadir.
@@ -281,9 +278,25 @@ public class Jugador {
     }
 
     public boolean puedeEdificar(Casilla actual){
-        return (avatar.getLugar().getGrupo().esDuenhoGrupo(this) || ((numeroVisitas.get(actual) >= 3) && (this == actual.getDuenho())));
-            //return (jugador.getAvatar().getLugar().getGrupo().esDuenhoGrupo(jugador));
+        if (avatar.getLugar().getGrupo()!=null){
+            return (avatar.getLugar().getGrupo().esDuenhoGrupo(this) || ((numeroVisitas.get(actual) >= 3) && (this == actual.getDuenho())));
+        }else return false;
     }
 
     
+
+    /**
+     * @return HashMap<Casilla,Integer> return the numeroVisitas
+     */
+    public HashMap<Casilla,Integer> getNumeroVisitas() {
+        return numeroVisitas;
+    }
+
+    /**
+     * @param numeroVisitas the numeroVisitas to set
+     */
+    public void setNumeroVisitas(HashMap<Casilla,Integer> numeroVisitas) {
+        this.numeroVisitas = numeroVisitas;
+    }
+
 }

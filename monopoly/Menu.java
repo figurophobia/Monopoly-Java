@@ -25,6 +25,7 @@ public class Menu {
     }
 //////---METODO INICIA LA PARTIDA---
     private void iniciarPartida() {
+        System.out.println("Bienvenido a Monopoly!");
         this.turno = 1;
         this.partida_ON = true;
         Scanner sc = new Scanner(System.in);
@@ -81,10 +82,7 @@ public class Menu {
             }
             case "edificar" -> {
                 if (partes.length == 2) {
-                    if(puedeEdificar(jugadores.get(turno))){// hay que meter que este en la casilla y que si es la segunda vez que pisa la casilla
-                        System.out.println("Puedes edificar!");
-                        jugadores.get(turno).getAvatar().getLugar().edificar(partes[1]);
-                    } else System.out.println("No puedes edificar, no te pertenece todo el grupo.");
+                    jugadores.get(turno).getAvatar().getLugar().edificar(partes[1]);
                     }else System.out.println("Comando no reconocido");
                 }
             
@@ -444,10 +442,6 @@ public class Menu {
         return jugador.getAvatar().getLugar().getDuenho().equals(jugador);
     }
 //////---METODO COMPRUEBA SI JUGADOR PUEDE EDIFICAR
-    public boolean puedeEdificar(Jugador jugador){
-        return (jugador.getAvatar().getLugar().getGrupo().esDuenhoGrupo(jugador));
-        // hay que meter lo de que si paso 2 veces por la casilla la pueda comprar tambien;
-    }
 ////////////////////////////////////DEBUG COMMANDS////////////////////////////////////
 //////---METODO LANZA DADOS VALORES ESPECIFICOS---
     private void lanzarDados(String dado1, String dado2) {
