@@ -25,7 +25,7 @@ public class Menu {
     }
 //////---METODO INICIA LA PARTIDA---
     private void iniciarPartida() {
-        System.out.println("Bienvenido a Monopoly!");
+        System.out.println("6!");
         this.turno = 1;
         this.partida_ON = true;
         Scanner sc = new Scanner(System.in);

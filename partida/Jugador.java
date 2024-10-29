@@ -178,8 +178,60 @@ public class Jugador {
         str.append("fortuna: " + this.fortuna + ",\n");
         str.append("propiedades: " + this.describirPropiedades() + ",\n");
         str.append("hipotecas: " + "PROVISIONAL" + ",\n");
-        str.append("edificios: " + "PROVISIONAL" + "\n");
-        str.append("}\n");
+
+        boolean hayCasas = false; // Bandera para rastrear si hay casas
+        for (Casilla casilla : propiedades) {
+            int num = casilla.getEdificaciones().getOrDefault("casa", new ArrayList<>()).size();
+            if (num != 0) {
+                if (!hayCasas) {
+                    str.append("Casas:"); // Imprimir "Casas:" solo una vez
+                    hayCasas = true;
+                }
+                String resultado = (num == 1) ? " casa en " : " casas en ";
+                str.append("\n- ").append(Valor.BLUE).append(num).append(Valor.RESET).append(resultado).append(Valor.BLUE).append(casilla.getNombre()).append(Valor.RESET);
+            }
+        }
+        str.append("\n");
+        boolean hayHoteles = false; // Bandera para rastrear si hay casas
+        for (Casilla casilla : propiedades) {
+            int num = casilla.getEdificaciones().getOrDefault("hotel", new ArrayList<>()).size();
+            if (num != 0) {
+                if (!hayHoteles) {
+                    str.append("Hoteles:"); // Imprimir "Casas:" solo una vez
+                    hayHoteles = true;
+                }
+                String resultado = (num == 1) ? " hotel en " : " hoteles en ";
+                str.append("\n- ").append(Valor.BLUE).append(num).append(Valor.RESET).append(resultado).append(Valor.BLUE).append(casilla.getNombre()).append(Valor.RESET);
+            }
+        }
+        str.append("\n");
+        boolean hayPiscinas = false; // Bandera para rastrear si hay casas
+        for (Casilla casilla : propiedades) {
+            int num = casilla.getEdificaciones().getOrDefault("piscina", new ArrayList<>()).size();
+            if (num != 0) {
+                if (!hayPiscinas) {
+                    str.append("Piscinas:"); // Imprimir "Casas:" solo una vez
+                    hayPiscinas = true;
+                }
+                String resultado = (num == 1) ? " piscina en " : " piscinas en ";
+                str.append("\n- ").append(Valor.BLUE).append(num).append(Valor.RESET).append(resultado).append(Valor.BLUE).append(casilla.getNombre()).append(Valor.RESET);
+            }
+        }
+        str.append("\n");
+        boolean hayPistas = false; // Bandera para rastrear si hay casas
+        for (Casilla casilla : propiedades) {
+            int num = casilla.getEdificaciones().getOrDefault("pista", new ArrayList<>()).size();
+            if (num != 0) {
+                if (!hayPistas) {
+                    str.append("Pistas:"); // Imprimir "Casas:" solo una vez
+                    hayPistas = true;
+                }
+                String resultado = (num == 1) ? " pista en " : " pistas en ";
+                str.append("\n- ").append(Valor.BLUE).append(num).append(Valor.RESET).append(resultado).append(Valor.BLUE).append(casilla.getNombre()).append(Valor.RESET);
+            }
+        }
+
+        str.append("\n}\n");
         return str.toString();
     }
 

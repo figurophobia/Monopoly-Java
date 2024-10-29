@@ -49,9 +49,11 @@ public class Casilla {
         if (valor>0) this.valor = valor; //comprueba que el valor introducido sea positivo
         else System.out.println("Valor no válido");
     }
-    /*public ArrayList<Edificacion> getEdificaciones(){
-        return this.edificaciones;
-    }*/
+    
+    public HashMap<String,ArrayList<Edificacion>> getEdificaciones() {
+        return edificaciones;
+    }
+
     public int getPosicion() {
         return posicion;
     }
@@ -376,7 +378,7 @@ public class Casilla {
                     comprarCasa();
                 }
                 case "hotel"-> {
-                    //edificaciones.add(new Edificacion("hotel", this.duenho, this));
+                    comprarHotel();
                 }
                 case "piscina"-> {
                     //edificaciones.add(new Edificacion("piscina", this.duenho, this));
@@ -388,31 +390,67 @@ public class Casilla {
                     System.out.println("Tipo de edificación no reconocido...");
                 }
             }
+            calcularImpuesto();
         }else System.out.println(Valor.RED + "No"+ Valor.RESET+ "puedes edificar en esta casilla.");
     }
-    private void calcularImpuesto(){
-        
+    
+    private void calcularImpuesto() {
+        float inicial = valor * 0.1f;
+        impuesto = inicial;
+        if (grupo.esDuenhoGrupo(duenho)) impuesto *= 2;
+        impuesto += inicial * calcularMultiplicadorAlquiler(edificaciones.getOrDefault("casa", new ArrayList<>()).size());
+        impuesto += inicial * edificaciones.getOrDefault("hotel", new ArrayList<>()).size() * 70;
+        impuesto += inicial * edificaciones.getOrDefault("piscina", new ArrayList<>()).size() * 25;
+        impuesto += inicial * edificaciones.getOrDefault("pista", new ArrayList<>()).size() * 25;
     }
     private void comprarCasa(){
         int maxcasa;
         grupo.getEdificaciones().putIfAbsent("casa", new ArrayList<>());
         edificaciones.putIfAbsent("casa",new ArrayList<>());
         if(duenho.getFortuna()>=grupo.valor()){
-            if (grupo.getEdificaciones().get("hotel").size()<grupo.getMiembros().size()){
+            if (grupo.getEdificaciones().getOrDefault("hotel",new ArrayList<>()).size()<grupo.getMiembros().size()){
                 maxcasa=grupo.getMiembros().size()*4;
             }else maxcasa=grupo.getMiembros().size();
-            if((edificaciones.get("casa").size()<4)&&(grupo.getEdificaciones().get("casa").size()<maxcasa)){
+            if((edificaciones.getOrDefault("casa",new ArrayList<>()).size()<4)&&(grupo.getEdificaciones().getOrDefault("casa",new ArrayList<>()).size()<maxcasa)){
                 System.out.println("Has comprado una casa por " + grupo.valor()+".");
                 duenho.setFortuna(duenho.getFortuna()-grupo.valor());
-                edificaciones.get("casa").add(new Edificacion("casa",duenho,this));
+                edificaciones.getOrDefault("casa",new ArrayList<>()).add(new Edificacion("casa",duenho,this));
             }else System.out.println("No puedes construir más casas");
         }else{
             System.out.println("No tienes suficiente dinero");
         }
     }
+    private void comprarHotel(){
+        grupo.getEdificaciones().putIfAbsent("hotel", new ArrayList<>());
+        edificaciones.putIfAbsent("hotel",new ArrayList<>());
+        System.out.println("num miembros grupo "+grupo.getMiembros().size());
+        System.out.println("num hoteles en el grupo "+grupo.getEdificaciones().getOrDefault("hotel",new ArrayList<>()).size());
+        if(duenho.getFortuna()>=grupo.valor()){
+            //si el numero de hoteles < el numero de solares del grupo
+            if(edificaciones.get("casa").size()==4){
+                if(grupo.getEdificaciones().get("hotel").size()<grupo.getMiembros().size()){
+                    System.out.println("Has comprado un hotel por " + grupo.valor()+".");
+                    duenho.setFortuna(duenho.getFortuna()-grupo.valor());
+                    edificaciones.get("hotel").add(new Edificacion("hotel",duenho,this));
+                    grupo.getEdificaciones().get("hotel").add(new Edificacion("hotel", duenho, this));
+                    //eliminar las casas
+                }else System.out.println("No puedes construir más hoteles");
+            }else System.out.println("No tienes suficientes casas");
+        }else{
+            System.out.println("No tienes suficiente dinero");
+        }
+    }
+    private float calcularMultiplicadorAlquiler(int numCasas) {
+        return switch (numCasas) {
+            case 1 -> 5.0f;
+            case 2 -> 15.0f;
+            case 3 -> 35.0f;
+            case 4 -> 50.0f;
+            default -> 1.0f;
+        }; // Sin casas, el multiplicador es 1
+    }
 
 
 
-
-}  
+}
 
