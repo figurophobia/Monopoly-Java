@@ -166,11 +166,16 @@ public class Casilla {
     * Valor devuelto: true en caso de ser solvente (es decir, de cumplir las deudas), y false
     * en caso de no cumplirlas.*/
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada) {
+
+
+        // Incrementar el valor en 1 punto para la casilla actual
+        actual.getNumeroVisitas().put(this, actual.getNumeroVisitas().getOrDefault(this, 0) + 1);
+
         if (this.esComprable(actual, banca)) {
             System.out.println("Puedes comprar la casilla "+this.nombre+" por "+this.valor);
         }
-        else if ((this.duenho==actual)){
-            System.out.println("Has caido en la casilla "+this.nombre+" y te pertenece todo el grupo, puedes edificar");
+        else if ((actual.puedeEdificar(this))){
+            System.out.println("Has caido en la casilla "+this.nombre+" y puedes edificar en ella");
         }
         else if (this.duenho!=actual && this.duenho!=banca) {
             System.out.println("Has pagado "+calcularPago(tirada)+" al jugador "+this.duenho.getNombre()+" por caer en la casilla "+ this.nombre);   

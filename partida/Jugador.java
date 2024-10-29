@@ -1,8 +1,8 @@
 package partida;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import monopoly.*;
-
 
 public class Jugador {
 
@@ -16,6 +16,7 @@ public class Jugador {
     private int vueltas; //Cuenta las vueltas dadas al tablero.
     private float bote; //Bote que se va acumulando en la partida por la banca en impuesto, comunidad...
     private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
+    private HashMap<Casilla,Integer> numeroVisitas;
 
     //getters y setters: aun queda especificar los setters
     public String getNombre() {
@@ -24,6 +25,10 @@ public class Jugador {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public HashMap<Casilla, Integer> getNumeroVisitas() {
+        return numeroVisitas;
     }
 
     public Avatar getAvatar() {
@@ -275,6 +280,10 @@ public class Jugador {
         this.tiradasCarcel = 0;
     }
 
+    public boolean puedeEdificar(Casilla actual){
+        return (avatar.getLugar().getGrupo().esDuenhoGrupo(this) || ((numeroVisitas.get(actual) >= 3) && (this == actual.getDuenho())));
+            //return (jugador.getAvatar().getLugar().getGrupo().esDuenhoGrupo(jugador));
+    }
 
-
+    
 }
