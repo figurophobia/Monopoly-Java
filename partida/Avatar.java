@@ -13,6 +13,7 @@ public class Avatar {
     private Jugador jugador; //Un jugador al que pertenece ese avatar.
     private Casilla lugar; //Los avatares se sitúan en casillas del tablero.
     private boolean CuartaVuelta; //Indica si el jugador acaba de hacer una vuelta completa multiplo de 4.
+    private boolean movAvanzado; //Indica si el jugador ha activado el modo avanzado de movimiento
 
     public String getId() {
         return this.id;
@@ -21,6 +22,14 @@ public class Avatar {
     public void setId(String id) {
         if (id.matches("[A-Z]")) this.id=id;
         else System.out.println("Id inválido");
+    }
+
+    public boolean esMovAvanzado() {
+        return this.movAvanzado;
+    }
+
+    public void setMovAvanzado(boolean movAvanzado) {
+        this.movAvanzado = movAvanzado;
     }
 
     public String getTipo() {
@@ -100,6 +109,10 @@ public class Avatar {
         Casilla newCasilla = casillas.get(newposition/10).get(newposition%10);
         newCasilla.anhadirAvatar(this);
         this.lugar = newCasilla;
+    }
+
+    public void moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
+
     }
 
     public boolean DarCuartaVuelta(){
