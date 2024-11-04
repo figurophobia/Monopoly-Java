@@ -16,6 +16,7 @@ public class Jugador {
     private int vueltas; //Cuenta las vueltas dadas al tablero.
     private float bote; //Bote que se va acumulando en la partida por la banca en impuesto, comunidad...
     private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
+    private ArrayList<Edificacion> edificaciones; //Edificaciones que posee el jugador.
 
     //getters y setters: aun queda especificar los setters
     public String getNombre() {
@@ -94,6 +95,14 @@ public class Jugador {
         this.propiedades = propiedades;
     }
 
+    public ArrayList<Edificacion> getEdificaciones() {
+        return edificaciones;
+    }
+
+    public void setEdificaciones(ArrayList<Edificacion> edificaciones) {
+        this.edificaciones = edificaciones;
+    }
+
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {
         this.nombre = "banca";
@@ -126,7 +135,6 @@ public class Jugador {
     public void anhadirPropiedad(Casilla casilla) {
         if (!this.propiedades.contains(casilla)) {
             this.propiedades.add(casilla);
-            
         }
     }
 
