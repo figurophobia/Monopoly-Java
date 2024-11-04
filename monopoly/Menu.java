@@ -205,6 +205,7 @@ public class Menu {
             crearJugador(nombre, tipo);
         }
     }
+
 //////---METODO COMPRUEBA SI NOMBRE REPETIDO---
     private boolean nombreRepetido(String nombre) {
         for (Jugador player : jugadores) {
