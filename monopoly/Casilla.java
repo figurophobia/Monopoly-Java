@@ -1,6 +1,7 @@
 package monopoly;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 import partida.*;
 
 
@@ -164,7 +165,12 @@ public class Casilla {
     * en caso de no cumplirlas.*/
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada) {
         if (this.esComprable(actual, banca)) {
-            System.out.println("Puedes comprar la casilla "+this.nombre+" por "+this.valor);
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Puedes comprar la casilla "+this.nombre+" por "+this.valor+" ¿Quieres comprarla? (s/n)");
+            String respuesta = sc.nextLine();
+            if (respuesta.equals("s")) {
+                this.comprarCasilla(actual, banca);
+            }
         }
         else if (this.duenho!=actual && this.duenho!=banca) {
             System.out.println("Has pagado "+calcularPago(tirada)+" al jugador "+this.duenho.getNombre()+" por caer en la casilla "+ this.nombre);   
@@ -172,6 +178,7 @@ public class Casilla {
         }
         else if (this.tipo.equals("Impuesto")) {
             System.out.println("Has pagado "+this.impuesto+" a la banca por caer en la casilla "+ this.nombre);
+            System.out.println("Tu fortuna es de "+actual.getFortuna());
             return actual.pagarImpuesto(this.impuesto, banca);
         }
         else if (this.nombre.equals("Parking")) {

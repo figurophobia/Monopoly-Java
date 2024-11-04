@@ -65,6 +65,8 @@ public class Menu {
                                               [+] describir jugador/avatar (nombre/id)
                                               [+] comprar (nombre propiedad)
                                               [+] listar enventa
+                                              [+] cambiar modo
+                                              [+] salir carcel
                                               [+] ver tablero""");
             case "crear" -> {
                 if (partes.length == 2 && partes[1].equals("jugador")) {
@@ -174,6 +176,13 @@ public class Menu {
             case "fortuna" -> {
                 if (partes.length == 2) {
                     fortunaManual(Float.parseFloat(partes[1]));
+                } else {
+                    System.out.println("Comando no reconocido");
+                }
+            }
+            case "cambiar" -> {
+                if (partes.length == 2 && partes[1].equals("modo")) {
+                    avatares.get(turno).cambiarModo();
                 } else {
                     System.out.println("Comando no reconocido");
                 }
@@ -341,11 +350,12 @@ public class Menu {
         if (nuevaCasilla == tablero.getPosiciones().get(3).get(0)) {
             jugadorActual.encarcelar(tablero.getPosiciones());
         }
-    
-        // Verificar si el jugador puede pagar sus deudas
-        if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, total)) {
-            System.out.println("El jugador " + jugadorActual.getNombre() + " no tiene dinero para pagar, acaba el juego en esta primera version!");
-            partida_OFF = true;
+        if (!avatarActual.esMovAvanzado()){
+            // Verificar si el jugador puede pagar sus deudas
+            if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, total)) {
+                System.out.println("El jugador " + jugadorActual.getNombre() + " no tiene dinero para pagar, entra en bancarrota, acaba el juego en esta primera version!");
+                partida_OFF = true;
+            }
         }
 
         if (avatarActual.DarCuartaVuelta()) {
@@ -366,7 +376,19 @@ public class Menu {
     }
 //////---METODO MUEVE AVATAR VALOR ESPECIFICO---
     private void moverJugador(int posiciones) {
-        this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), posiciones);
+        if (avatares.get(turno).esMovAvanzado()) {
+            if (avatares.get(turno).getTipo().equals("Pelota")) {
+                avatares.get(turno).moverAvatarPelota(tablero.getPosiciones(), posiciones, banca);
+            }
+            else if (avatares.get(turno).getTipo().equals("Coche")) {
+                avatares.get(turno).moverAvatarCoche(tablero.getPosiciones(), posiciones);
+                
+            }
+            
+        }
+        else {
+            this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), posiciones);
+        }
     }
 //////---METODO COMPRA CASILLA---
     private void comprar(String nombre) {

@@ -84,6 +84,17 @@ public class Avatar {
     }
 
 
+    public void cambiarModo(){
+        if (this.movAvanzado) {
+            this.movAvanzado=false;
+            System.out.println("Modo avanzado desactivado");
+        }
+        else{ 
+            this.movAvanzado=true;
+            System.out.println("Modo avanzado activado");
+        }
+    }
+
     //A continuación, tenemos otros métodos útiles para el desarrollo del juego.
     /*Método que permite mover a un avatar a una casilla concreta. Parámetros:
     * - Un array con las casillas del tablero. Se trata de un arrayList de arrayList de casillas (uno por lado).
@@ -111,7 +122,73 @@ public class Avatar {
         this.lugar = newCasilla;
     }
 
-    public void moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
+    public void moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada, Jugador banca) {
+        CuartaVuelta = false;
+        int posicion = lugar.getPosicion();
+    
+        // Determinar dirección de movimiento
+        boolean dir = valorTirada > 4; // Si el valor de la tirada es mayor a 4, avanzar, sino retroceder
+    
+        // Si se cruza la salida
+        if (dir &&(posicion + valorTirada > 40)) {
+            System.out.println("has dado una vuelta completa, recibes" + Valor.SUMA_VUELTA + ".");
+            this.jugador.sumarVueltas();
+            this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
+            if (jugador.getVueltas() % 4 == 0) {
+                CuartaVuelta = true;
+            }
+        }
+        if (dir){ // Si se avanza
+            for(int i =5; i<=valorTirada; i+=2){
+                int newposition = (posicion+i-1)%40;
+                detenerse(newposition, banca, valorTirada,this.getLugar() ,casillas);
+            }
+            if (valorTirada % 2 == 0){
+                detenerse((posicion+valorTirada-1)%40, banca, valorTirada, this.getLugar(), casillas);
+            }
+        }else{ // Si se retrocede
+            for(int i = 1; i<=valorTirada; i+=2){
+                int newposition = (posicion-i-1);
+                newposition = newposition < 0 ? (40 + newposition)%40 : newposition %40;
+                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
+            }
+            if (valorTirada % 2 == 0){
+                int newposition = (posicion-valorTirada-1);
+                newposition = newposition < 0 ? (40 + newposition)%40 : newposition %40;
+                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
+            }
+
+        }
+
+    }
+
+    //Detenerse en casilla
+    public void detenerse(int posicion, Jugador banca, int valorTirada, Casilla casillaActual,ArrayList<ArrayList<Casilla>> casillas) {
+        casillaActual.eliminarAvatar(this);
+        Casilla casillaFinal = casillas.get(posicion / 10).get(posicion % 10);
+        System.out.println("El avatar " + this.getId() + " se detiene en la casilla " + casillaFinal.getNombre());
+
+        // Evaluar la casilla para posibles interacciones
+        if (!casillaFinal.evaluarCasilla(jugador, banca, valorTirada)) {
+            System.out.println("El jugador " + jugador.getNombre() + " no puede pagar sus deudas!");
+            return;
+        }
+
+        // Si la casilla es "Ir a Cárcel", mover al avatar a la cárcel y terminar el movimiento
+        if (casillaFinal.getPosicion() == 31) {
+            jugador.encarcelar(casillas);
+            return;
+        }
+    
+
+    // Al finalizar, actualizar la posición y registrar la visita
+    casillaFinal.anhadirAvatar(this);
+    //vecesCaidasCasilla[posicion]++;
+    this.lugar = casillaFinal;
+    }
+    
+
+    public void moverAvatarCoche(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
 
     }
 
