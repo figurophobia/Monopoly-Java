@@ -182,7 +182,10 @@ public class Menu {
             }
             case "cambiar" -> {
                 if (partes.length == 2 && partes[1].equals("modo")) {
-                    avatares.get(turno).cambiarModo();
+                    if (!tirado) {
+                        avatares.get(turno).cambiarModo();
+                    }
+                    else System.out.println("Debes acabar el turno antes de cambiar el modo de movimiento.");
                 } else {
                     System.out.println("Comando no reconocido");
                 }
@@ -345,12 +348,12 @@ public class Menu {
             posicionActual.getNombre() + " hasta " + nuevaCasilla.getNombre());
     
         moverJugador(total);
-    
-        // Verificar si el jugador debe ser encarcelado
-        if (nuevaCasilla == tablero.getPosiciones().get(3).get(0)) {
-            jugadorActual.encarcelar(tablero.getPosiciones());
-        }
-        if (!avatarActual.esMovAvanzado()){
+        
+        if(avatarActual.esMovAvanzado()){
+            // Verificar si el jugador debe ser encarcelado
+            if (nuevaCasilla == tablero.getPosiciones().get(3).get(0)) {
+                jugadorActual.encarcelar(tablero.getPosiciones());
+            }
             // Verificar si el jugador puede pagar sus deudas
             if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, total)) {
                 System.out.println("El jugador " + jugadorActual.getNombre() + " no tiene dinero para pagar, entra en bancarrota, acaba el juego en esta primera version!");

@@ -14,6 +14,7 @@ public class Avatar {
     private Casilla lugar; //Los avatares se sitúan en casillas del tablero.
     private boolean CuartaVuelta; //Indica si el jugador acaba de hacer una vuelta completa multiplo de 4.
     private boolean movAvanzado; //Indica si el jugador ha activado el modo avanzado de movimiento
+    private boolean modoCambiado = false; //Indica si el jugador ha cambiado el modo de movimiento
 
     public String getId() {
         return this.id;
@@ -85,13 +86,18 @@ public class Avatar {
 
 
     public void cambiarModo(){
-        if (this.movAvanzado) {
-            this.movAvanzado=false;
-            System.out.println("Modo avanzado desactivado");
+        if (this.movAvanzado){
+            if (!this.modoCambiado) {
+                this.movAvanzado=false;
+                System.out.println("Modo avanzado desactivado");               
+            }
+            else System.out.println("Ya has cambiado el modo de movimiento");
         }
-        else{ 
+        else{
             this.movAvanzado=true;
+            this.modoCambiado=true;
             System.out.println("Modo avanzado activado");
+
         }
     }
 
@@ -162,6 +168,10 @@ public class Avatar {
 
     }
 
+    public void moverAvatarCoche(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
+
+    }
+
     //Detenerse en casilla
     public void detenerse(int posicion, Jugador banca, int valorTirada, Casilla casillaActual,ArrayList<ArrayList<Casilla>> casillas) {
         casillaActual.eliminarAvatar(this);
@@ -188,9 +198,7 @@ public class Avatar {
     }
     
 
-    public void moverAvatarCoche(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
 
-    }
 
     public boolean DarCuartaVuelta(){
         return this.CuartaVuelta;
