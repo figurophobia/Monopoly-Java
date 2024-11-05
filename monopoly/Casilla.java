@@ -312,7 +312,7 @@ public class Casilla {
 
         switch (this.tipo) {
             case "Solar":
-                info.append("grupo: ").append(this.grupo.getColorGrupo() + "#####" + Valor.RESET).append(",\n")
+                info.append("grupo: ").append(this.grupo.getColorGrupo()).append("#####" + Valor.RESET).append(",\n")
                 .append("propietario: ").append(this.duenho != null ? this.duenho.getNombre() : "N/A").append(",\n")
                 .append("valor: ").append(this.valor).append(",\n")
                 .append("alquiler: ").append(this.impuesto).append(",\n")
@@ -335,7 +335,7 @@ public class Casilla {
                 if (this.nombre.equals("Carcel")) {
 
                     info.append("nombre: ").append(this.nombre).append(",\n");
-                    info.append("salir:" + Valor.PAGO_CARCEL).append("\n");
+                    info.append("salir:").append(Valor.PAGO_CARCEL).append("\n");
                 } else if (this.nombre.equals("Parking")) {
                     info.append("nombre: ").append(this.nombre).append(",\n")
                     .append("bote: ").append(getDuenho().getBote()).append(",\n");
@@ -368,9 +368,9 @@ public class Casilla {
         StringBuilder info = new StringBuilder();
         info.append("{\n");
         info.append("tipo: ").append(this.tipo).append(",\n");
-        info.append("nombre: "+nombre).append(",\n");
+        info.append("nombre: ").append(nombre).append(",\n");
         if(this.tipo.equals("Solar")){
-            info.append("grupo: ").append(this.grupo.getColorGrupo() + "#####" + Valor.RESET).append(",\n");
+            info.append("grupo: ").append(this.grupo.getColorGrupo()).append("#####" + Valor.RESET).append(",\n");
         }
         info.append("valor: ").append(this.valor).append(",\n");
         return info.toString();
