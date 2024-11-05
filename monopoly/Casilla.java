@@ -188,6 +188,9 @@ public class Casilla {
             System.out.println("Has pagado "+Valor.RED+calcularPago(tirada)+"€"+Valor.RESET+" al jugador "+Valor.BLUE+this.duenho.getNombre()+Valor.RESET+" por caer en la casilla "+ Valor.BLUE+ this.nombre+Valor.RESET);   
             return actual.pagarAJugador(this.duenho,calcularPago(tirada));
         }
+        else if ((actual.puedeEdificar(this))){
+            System.out.println("Has caido en la casilla "+ Valor.BLUE +this.nombre+Valor.RESET +" y puedes edificar en ella");
+        }
         else if (this.tipo.equals("Impuesto")) {
             System.out.println("Has pagado "+this.impuesto+" a la banca por caer en la casilla "+ this.nombre);
             System.out.println("Tu fortuna es de "+actual.getFortuna());
