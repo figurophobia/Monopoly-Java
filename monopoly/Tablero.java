@@ -11,6 +11,21 @@ public class Tablero {
     private HashMap<String, Grupo> grupos; //Grupos del tablero, almacenados como un HashMap con clave String (será el color del grupo).
     private Jugador banca; //Un jugador que será la banca.
 
+    public void setPosiciones(ArrayList<ArrayList<Casilla>> posiciones) {
+        this.posiciones = posiciones;
+    }
+
+
+    public HashMap<String, Grupo> getGrupos() {
+        return grupos;
+    }
+
+
+    public void setGrupos(HashMap<String, Grupo> grupos) {
+        this.grupos = grupos;
+    }
+
+
     //Constructor: únicamente le pasamos el jugador banca (que se creará desde el menú).
     public Tablero(Jugador banca) {
         this.banca = banca;
