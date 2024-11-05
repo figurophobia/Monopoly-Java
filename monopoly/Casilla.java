@@ -464,8 +464,5 @@ public class Casilla {
             default -> 1.0f;
         }; // Sin casas, el multiplicador es 1
     }
-
-
-
 }
 
