@@ -18,6 +18,13 @@ public class Jugador {
     private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
     private HashMap<Casilla,Integer> numeroVisitas;
     private ArrayList<Edificacion> edificaciones; //Edificaciones que posee el jugador.
+    private int vecesEnLaCarcel =0; //Veces que ha estado en la carcel.
+    private int pagoTasasEImpuestos = 0; //Dinero pagado en tasas e impuestos.
+    private int pagoDeAlquileres=0; //Dinero pagado en alquileres.
+    private int cobroDeAlquileres=0; //Dinero cobrado en alquileres.
+    private int vecespasarPorCasillaDeSalida=0; //Veces que ha pasado por la casilla de salida.
+    private int premiosInversionesOBote=0; //Dinero ganado en premios, inversiones o bote.
+
 
 
     //getters y setters: aun queda especificar los setters
@@ -358,6 +365,22 @@ public class Jugador {
      */
     public void setNumeroVisitas(HashMap<Casilla,Integer> numeroVisitas) {
         this.numeroVisitas = numeroVisitas;
+    }
+
+
+    //Metodo para ver las estadisticas de un jugador:
+    public void estadisticas(){
+        StringBuilder str = new StringBuilder();
+        str.append("{\n");
+        str.append("dineroInvertido: " + this.gastos + ",\n");
+        str.append("pagoTasasEImpuestos: " + "PROVISIONAL" + ",\n");
+        str.append("pagoDeAlquileres: " + "PROVISIONAL" + ",\n");
+        str.append("cobroDeAlquileres: " + "PROVISIONAL" + ",\n");
+        str.append("pasarPorCasillaDeSalida: " + "PROVISIONAL" + ",\n");
+        str.append("premiosInversionesOBote: " + "PROVISIONAL" + ",\n");
+        str.append("vecesEnLaCarcel: " + "PROVISIONAL" + ",\n");
+        str.append("}\n");
+        System.out.println(str.toString());
     }
 
 }

@@ -15,6 +15,7 @@ public class Avatar {
     private boolean CuartaVuelta; //Indica si el jugador acaba de hacer una vuelta completa multiplo de 4.
     private boolean movAvanzado; //Indica si el jugador ha activado el modo avanzado de movimiento
     private boolean modoCambiado = false; //Indica si el jugador ha cambiado el modo de movimiento
+    private boolean compradoCoche = false; //Indica si el jugador ha comprado en su turno de ser coche
 
     public String getId() {
         return this.id;
@@ -23,6 +24,14 @@ public class Avatar {
     public void setId(String id) {
         if (id.matches("[A-Z]")) this.id=id;
         else System.out.println("Id inválido");
+    }
+
+    public boolean isCompradoCoche() {
+        return compradoCoche;
+    }
+
+    public void setCompradoCoche(boolean compradoCoche) {
+        this.compradoCoche = compradoCoche;
     }
 
     public boolean esMovAvanzado() {
@@ -169,6 +178,32 @@ public class Avatar {
     }
 
     public void moverAvatarCoche(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
+        this.CuartaVuelta = false; //Al moverse, se reinicia el contador de cuarta vuelta, para no añadir valor cada vez que se juega en la cuarta vuelta
+
+
+        int posicionactual=this.lugar.getPosicion();
+        this.lugar.eliminarAvatar(this);
+        int newposition;
+        if (valorTirada>4) { //Si es mayor que 4, se mueve hacia adelante normalmente
+        
+            newposition = posicionactual+valorTirada;
+            if (newposition>40) {
+                this.jugador.sumarVueltas();
+                this.jugador.sumarFortuna(Valor.SUMA_VUELTA); 
+                System.out.println("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);
+                if (this.jugador.getVueltas()%4==0) {
+                    this.CuartaVuelta=true;
+                } 
+            }
+            newposition = (newposition-1)%40;
+        }
+        else{ // Si es menor que 4 retrocede
+            newposition = posicionactual-valorTirada-1;
+            newposition = newposition < 0 ? (40 + newposition)%40 : newposition %40;
+        }
+        Casilla newCasilla = casillas.get(newposition/10).get(newposition%10);
+        newCasilla.anhadirAvatar(this);
+        this.lugar = newCasilla;
 
     }
 

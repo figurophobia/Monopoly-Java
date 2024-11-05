@@ -19,6 +19,9 @@ public class Menu {
     private boolean solvente; //Booleano para comprobar si el jugador que tiene el turno es solvente, es decir, si ha pagado sus deudas.
     private boolean partida_ON; //Booleano para comprobar si la partida sigue en curso.
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
+    private int tiros_coche; //Booleano para comprobar si el jugador que tiene el turno ha tirado los dados con el avatar coche.
+
+
 //////---MENU---
     public Menu() {
         iniciarPartida();
@@ -68,6 +71,7 @@ public class Menu {
                                               [+] listar enventa
                                               [+] cambiar modo
                                               [+] salir carcel
+                                              [+] estadisticas (nombre jugador)
                                               [+] ver tablero""");
             case "crear" -> {
                 if (partes.length == 2 && partes[1].equals("jugador")) {
@@ -180,6 +184,13 @@ public class Menu {
                     System.out.println("Comando no reconocido");
                 }
             }
+            case "estadisticas" -> {
+                if (partes.length == 2) {
+                    estadisticas(partes[1]);
+                } else {
+                    System.out.println("Comando no reconocido");
+                }
+            }
             default -> System.out.println("Comando no reconocido");
         }
         //---COMANDOS DEBUG---
@@ -263,7 +274,23 @@ public class Menu {
     private void tiradados(int dado1, int dado2){
         System.out.print("Lanzando dados");sleep(600);System.out.print(".");sleep(600);System.out.print(".");sleep(600);System.out.println(".");sleep(400);
         tirado = true;
-        lanzamientos++;
+        if (avatares.get(turno).esMovAvanzado() && avatares.get(turno).getTipo().equals("Coche") ) {
+            if ((dado1 + dado2) <=4 ){
+                tiros_coche=4; //Terminan los tiros del coche
+            }
+            else if((dado1+dado2)>4){
+                tiros_coche++; //Aumenta el contador de tiros del coche
+            }
+        }
+        if (avatares.get(turno).esMovAvanzado() && avatares.get(turno).getTipo().equals("Coche")) {
+            if (tiros_coche == 4) { //Si llegó a 4 tiros, pasa a lanzamientos normales
+                lanzamientos++;
+            }
+        } else {
+            lanzamientos++; //Aumenta el contador de lanzamientos normales
+        }
+
+
         System.out.println("Han salido "+dado1+" y "+dado2+"!");
     }
 //////---METODO LANZA DADOS ALEATORIOS---
@@ -271,10 +298,17 @@ public class Menu {
         dado1 = new Dado();
         dado2 = new Dado();
         
-        if (tirado) {
+        if (avatares.get(turno).esMovAvanzado() && avatares.get(turno).getTipo().equals("Coche") ) {
+            if (tiros_coche == 4) {
+                System.out.println("Ya has lanzado los dados con el coche 3 veces en este turno.");
+                return;
+            }
+        }
+        else if (tirado) {
             System.out.println("Ya has lanzado los dados en este turno.");
             return;
         }
+
     
         Jugador jugadorActual = jugadores.get(turno);
         Avatar avatarActual = avatares.get(turno);
@@ -338,8 +372,8 @@ public class Menu {
             Valor.RED+posicionActual.getNombre()+ Valor.RESET + " hasta " +Valor.GREEN+ nuevaCasilla.getNombre()+Valor.RESET);
     
         moverJugador(total);
-        
-        if(avatarActual.esMovAvanzado()){
+        //Hace la condicion el que no esté en modo avanzado o quien lo esté pero no sea Pelota
+        if(!avatares.get(turno).esMovAvanzado() || !avatares.get(turno).getTipo().equals("Pelota")){
             // Verificar si el jugador debe ser encarcelado
             if (nuevaCasilla == tablero.getPosiciones().get(3).get(0)) {
                 jugadorActual.encarcelar(tablero.getPosiciones());
@@ -441,6 +475,7 @@ public class Menu {
             }
             lanzamientos = 0;
             tirado = false;
+            tiros_coche = 0;
             System.out.println("Turno de "+ jugadores.get(turno).getNombre());}
         else System.out.println("Debes lanzar los dados antes de acabar el turno.");
     }
@@ -534,6 +569,14 @@ public class Menu {
         sleep(1000);
         moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2);
     }
+    public void estadisticas(String nombre) {
+        for (Jugador jugador : jugadores) {
+            if (jugador.getNombre().equals(nombre)) {
+                jugador.estadisticas();
+            }
+        }
+    }
+
 //////---METODO QUE LANZA DADOS UN VALOR??
     public void lanzarDados(int tiradaTotal){
         Jugador jugadorActual = jugadores.get(turno);
