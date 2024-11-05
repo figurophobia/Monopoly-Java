@@ -178,7 +178,7 @@ public class Casilla {
         //debug System.out.println("Entrando en evaluar casilla");
         if (this.esComprable(actual, banca)) {
             Scanner sc = new Scanner(System.in);
-            System.out.println("Puedes comprar la casilla "+this.nombre+" por "+this.valor+" ¿Quieres comprarla? (s/n)");
+            System.out.print("Puedes comprar la casilla "+this.nombre+" por "+this.valor+" ¿Quieres comprarla? (s/n) ");
             String respuesta = sc.nextLine();
             if (respuesta.equals("s")) {
                 this.comprarCasilla(actual, banca);
@@ -189,7 +189,7 @@ public class Casilla {
             return actual.pagarAJugador(this.duenho,calcularPago(tirada));
         }
         else if ((actual.puedeEdificar(this))){
-            System.out.println("Has caido en la casilla "+ Valor.BLUE +this.nombre+Valor.RESET +" y puedes edificar en ella");
+            System.out.println("Has caido en la casilla "+ Valor.BLUE +this.nombre+Valor.RESET +Valor.RED+".  ¡Puedes edificar!"+Valor.RESET);
         }
         else if (this.tipo.equals("Impuesto")) {
             System.out.println("Has pagado "+this.impuesto+" a la banca por caer en la casilla "+ this.nombre);
@@ -217,10 +217,8 @@ public class Casilla {
         float coste = 0;
         switch (c.tipo) {
             case "Solar":
+                calcularImpuesto();
                 coste=c.impuesto;  
-                if (c.getGrupo().esDuenhoGrupo(c.duenho)) {
-                    coste= coste*2;
-                }
                 break;
             case "Transporte":
                 coste=(c.impuesto*0.25f)*c.duenho.numTransportes();
@@ -419,25 +417,31 @@ public class Casilla {
                 maxcasa=grupo.getMiembros().size()*4;
             }else maxcasa=grupo.getMiembros().size();
             if((edificaciones.getOrDefault("casa",new ArrayList<>()).size()<4)&&(grupo.getEdificaciones().getOrDefault("casa",new ArrayList<>()).size()<maxcasa)){
-                System.out.println("Has comprado una casa por " + grupo.valor()+".");
+                System.out.println("Has comprado una"+Valor.YELLOW+" casa"+Valor.RESET+" en "+Valor.BLUE+this.nombre+Valor.RESET+" por "
+                +Valor.RED+ grupo.valor()+Valor.RESET+"€, te quedan "+Valor.RED+duenho.getFortuna()+Valor.RESET+"€.");
                 duenho.setFortuna(duenho.getFortuna()-grupo.valor());
                 edificaciones.getOrDefault("casa",new ArrayList<>()).add(new Edificacion("casa",duenho,this));
+                grupo.getEdificaciones().getOrDefault("casa",new ArrayList<>()).add(new Edificacion("casa",duenho,this));
             }else System.out.println("No puedes construir más casas");
         }else{
             System.out.println("No tienes suficiente dinero");
         }
     }
     private void comprarHotel(){
+        System.out.println("num casas grupo"+grupo.getEdificaciones().getOrDefault("casa",new ArrayList<>()).size());
         grupo.getEdificaciones().putIfAbsent("hotel", new ArrayList<>());
         edificaciones.putIfAbsent("hotel",new ArrayList<>());
-        System.out.println("num miembros grupo "+grupo.getMiembros().size());
-        System.out.println("num hoteles en el grupo "+grupo.getEdificaciones().getOrDefault("hotel",new ArrayList<>()).size());
+        //System.out.println("num miembros grupo "+grupo.getMiembros().size());
+        //System.out.println("num hoteles en el grupo "+grupo.getEdificaciones().getOrDefault("hotel",new ArrayList<>()).size());
         if(duenho.getFortuna()>=grupo.valor()){
             //si el numero de hoteles < el numero de solares del grupo
             if(edificaciones.get("casa").size()==4){
                 if(grupo.getEdificaciones().get("hotel").size()<grupo.getMiembros().size()){
                     System.out.println("Has comprado un hotel por " + grupo.valor()+".");
                     duenho.setFortuna(duenho.getFortuna()-grupo.valor());
+                    edificaciones.get("casa").clear(); 
+                    for (int i=0;i<4;i++){
+                        grupo.getEdificaciones().get("casa").remove(0);}
                     edificaciones.get("hotel").add(new Edificacion("hotel",duenho,this));
                     grupo.getEdificaciones().get("hotel").add(new Edificacion("hotel", duenho, this));
                     //eliminar las casas
@@ -446,6 +450,10 @@ public class Casilla {
         }else{
             System.out.println("No tienes suficiente dinero");
         }
+        System.out.println("num casas grupo"+grupo.getEdificaciones().getOrDefault("casa",new ArrayList<>()).size());
+        System.out.println("num casas casilla"+edificaciones.getOrDefault("casa",new ArrayList<>()).size());
+        System.out.println("num miembros grupo "+grupo.getMiembros().size());
+        System.out.println("num hoteles en el grupo "+grupo.getEdificaciones().getOrDefault("hotel",new ArrayList<>()).size());
     }
     private float calcularMultiplicadorAlquiler(int numCasas) {
         return switch (numCasas) {

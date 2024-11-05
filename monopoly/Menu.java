@@ -339,6 +339,8 @@ public class Menu {
     
         moverJugador(total);
         
+        verTablero();
+        
         if(!avatarActual.esMovAvanzado()){
             // Verificar si el jugador debe ser encarcelado
             if (nuevaCasilla == tablero.getPosiciones().get(3).get(0)) {
@@ -364,8 +366,6 @@ public class Menu {
             }
             
         }
-    
-        verTablero();
     }
 //////---METODO MUEVE AVATAR VALOR ESPECIFICO---
     private void moverJugador(int posiciones) {
