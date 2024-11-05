@@ -339,7 +339,7 @@ public class Menu {
     
         moverJugador(total);
         
-        if(avatarActual.esMovAvanzado()){
+        if(!avatarActual.esMovAvanzado()){
             // Verificar si el jugador debe ser encarcelado
             if (nuevaCasilla == tablero.getPosiciones().get(3).get(0)) {
                 jugadorActual.encarcelar(tablero.getPosiciones());
