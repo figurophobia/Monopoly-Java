@@ -29,7 +29,7 @@ public class Avatar {
     //Método que comprueba si el tipo de avatar es válido. Es static porque no necesita acceder a los atributos de la clase
     //y asi lo podemos llamar desde el main sin problemas.
     public static boolean TipoValido(String tipo){
-        if ("Sombrero".equals(tipo) || "Esfinge".equals(tipo) || 
+        if("Sombrero".equals(tipo) || "Esfinge".equals(tipo) || 
             "Pelota".equals(tipo) || "Coche".equals(tipo)) return true;
         else {
             //System.out.println("Tipo de avatar no válido, usa Sombrero, Esfinge, Pelota o Coche");

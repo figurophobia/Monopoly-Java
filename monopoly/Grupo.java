@@ -137,5 +137,4 @@ public class Grupo {
     public void setEdificaciones(HashMap<String,ArrayList<Edificacion>> edificaciones) {
         this.edificaciones = edificaciones;
     }
-
 }
