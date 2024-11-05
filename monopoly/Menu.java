@@ -25,6 +25,7 @@ public class Menu {
     }
 //////---METODO INICIA LA PARTIDA---
     private void iniciarPartida() {
+        System.out.println("6!");
         this.turno = 1;
         this.partida_ON = true;
         Scanner sc = new Scanner(System.in);
@@ -83,21 +84,10 @@ public class Menu {
             }
             case "edificar" -> {
                 if (partes.length == 2) {
-                    switch (partes[1]) {
-                        case "casa" -> {
-                        }
-                        case "hotel" -> {
-                        }
-                        case "piscina" -> {
-                        }
-                        case "pista" -> {
-                        }
-                        default -> {
-                            System.out.println("Comando no reconocido");
-                        }
-                    }
-                }else System.out.println("Comando no reconocido");
-            }
+                    jugadores.get(turno).getAvatar().getLugar().edificar(partes[1]);
+                    }else System.out.println("Comando no reconocido");
+                }
+            
             case "listar" -> {
                 if (partes.length==2) {
                     switch (partes[1]) {
@@ -344,8 +334,8 @@ public class Menu {
 //////---METODO MOVER AVATAR AL LANZAR DADOS---
     private void moverYVerTablero(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int total) {
         Casilla nuevaCasilla = tablero.getCasilla((total - 1 + posicionActual.getPosicion()) % 40);
-        System.out.println("El avatar " + avatarActual.getId() + " avanzará " + total + " posiciones. Desde " + 
-            posicionActual.getNombre() + " hasta " + nuevaCasilla.getNombre());
+        System.out.println("El avatar " + Valor.BLUE + avatarActual.getId()+ Valor.RESET + " avanzará " +Valor.BLUE + total + Valor.RESET +" posiciones. Desde " + 
+            Valor.RED+posicionActual.getNombre()+ Valor.RESET + " hasta " +Valor.GREEN+ nuevaCasilla.getNombre()+Valor.RESET);
     
         moverJugador(total);
         
@@ -477,6 +467,7 @@ public class Menu {
     public boolean tieneCasilla(Jugador jugador){
         return jugador.getAvatar().getLugar().getDuenho().equals(jugador);
     }
+//////---METODO COMPRUEBA SI JUGADOR PUEDE EDIFICAR
 ////////////////////////////////////DEBUG COMMANDS////////////////////////////////////
 //////---METODO LANZA DADOS VALORES ESPECIFICOS---
     private void lanzarDados(String dado1, String dado2) {

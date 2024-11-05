@@ -3,6 +3,7 @@ package monopoly;
 import partida.*;
 
 public class Edificacion {
+    private static int idCounter = 0;
     private String tipo;
     private float impuesto;
     private int id;
@@ -10,6 +11,14 @@ public class Edificacion {
     private Casilla casilla;
     private float ganancias;
 
+    public Edificacion(String tipo,Jugador propietario, Casilla casilla){
+        this.id = ++idCounter;
+        this.tipo = tipo;
+        this.propietario = propietario;
+        this.casilla = casilla;
+        this.ganancias = 0;
+
+    }
     /**
      * @return String return the tipo
      */
@@ -84,16 +93,5 @@ public class Edificacion {
     }
 
 ////////////////METODOS///////////////
-    public void edificar(String tipo){
-        switch (tipo) {
-            case "casa"-> {
-                
-            }
-                
-
-            default->{
-                System.out.println("Tipo de edificación no reconocido...");
-            }
-        }
-    }
+    
 }

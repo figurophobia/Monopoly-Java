@@ -2,15 +2,16 @@ package monopoly;
 
 import partida.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
-class Grupo {
+public class Grupo {
 
     //Atributos
     private ArrayList<Casilla> miembros; //Casillas miembros del grupo.
     private String colorGrupo; //Color del grupo
     private int numCasillas; //Número de casillas del grupo.
-
+    private HashMap<String,ArrayList<Edificacion>> edificaciones = new HashMap<>();
     //Constructor vacío.
     public Grupo() {
     }
@@ -90,5 +91,50 @@ class Grupo {
             }
         }
         return esDuenho; //PROVISIONAL
+    }
+    public float valor(){
+        switch (this.colorGrupo) {
+            case Valor.BLACK->{
+                return Valor.GRUPO_BLACK;
+            }
+            case Valor.BLUE->{
+                return Valor.GRUPO_BLUE;
+            }
+            case Valor.BROWN->{
+                return Valor.GRUPO_BROWN;
+            }
+            case Valor.CYAN->{
+                return Valor.GRUPO_CYAN;
+            }
+            case Valor.GREEN->{
+                return Valor.GRUPO_GREEN;
+            }case Valor.PURPLE->{
+                return Valor.GRUPO_PURPLE;
+            }
+            case Valor.RED->{
+                return Valor.GRUPO_RED;
+            }
+            case Valor.YELLOW->{
+                return Valor.GRUPO_YELLOW;
+            }
+            default ->{
+                return 0;
+            }
+        }
+    }
+
+
+    /**
+     * @return HashMap<String,ArrayList<Edificacion>> return the edificaciones
+     */
+    public HashMap<String,ArrayList<Edificacion>> getEdificaciones() {
+        return edificaciones;
+    }
+
+    /**
+     * @param edificaciones the edificaciones to set
+     */
+    public void setEdificaciones(HashMap<String,ArrayList<Edificacion>> edificaciones) {
+        this.edificaciones = edificaciones;
     }
 }
