@@ -19,8 +19,7 @@ public class Menu {
     private boolean solvente; //Booleano para comprobar si el jugador que tiene el turno es solvente, es decir, si ha pagado sus deudas.
     private boolean partida_ON; //Booleano para comprobar si la partida sigue en curso.
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
-    private int tiros_coche; //Booleano para comprobar si el jugador que tiene el turno ha tirado los dados con el avatar coche.
-
+    private int tiros_coche; //Para ver cuantos tiros lleva el coche
 
 //////---MENU---
     public Menu() {
@@ -273,45 +272,45 @@ public class Menu {
 //////---METODO SIMULA LANZAMIENTO DADOS---
     private void tiradados(int dado1, int dado2){
         System.out.print("Lanzando dados");sleep(600);System.out.print(".");sleep(600);System.out.print(".");sleep(600);System.out.println(".");sleep(400);
-        tirado = true;
-        if (avatares.get(turno).esMovAvanzado() && avatares.get(turno).getTipo().equals("Coche") ) {
-            if ((dado1 + dado2) <=4 ){
-                tiros_coche=4; //Terminan los tiros del coche
-            }
-            else if((dado1+dado2)>4){
-                tiros_coche++; //Aumenta el contador de tiros del coche
-            }
-        }
-        if (avatares.get(turno).esMovAvanzado() && avatares.get(turno).getTipo().equals("Coche")) {
-            if (tiros_coche == 4) { //Si llegó a 4 tiros, pasa a lanzamientos normales
+        Avatar avatarActual = avatares.get(turno);
+        // Verificar si el avatar tiene movimiento avanzado y es de tipo "Coche"
+        if (avatarActual.esMovAvanzado() && avatarActual.getTipo().equals("Coche")) {
+            // Verificar si es necesario cambiar la tirada
+            if (avatarActual.getUltimoTiroFueCoche() || avatarActual.getJugador().isEnCarcel()) {
+                tirado = true;
                 lanzamientos++;
             }
         } else {
-            lanzamientos++; //Aumenta el contador de lanzamientos normales
+            // Para cualquier otro caso, incrementar lanzamientos
+            lanzamientos++;
+            tirado=true;
         }
-
-
         System.out.println("Han salido "+dado1+" y "+dado2+"!");
     }
+
+
 //////---METODO LANZA DADOS ALEATORIOS---
     private void lanzarDados() {
         dado1 = new Dado();
         dado2 = new Dado();
-        
-        if (avatares.get(turno).esMovAvanzado() && avatares.get(turno).getTipo().equals("Coche") ) {
-            if (tiros_coche == 4) {
-                System.out.println("Ya has lanzado los dados con el coche 3 veces en este turno.");
-                return;
-            }
+        Avatar avatarActual = avatares.get(turno);
+        if (avatarActual.isCocheParado()) {
+            System.out.println("El coche está parado, no puede lanzar los dados en "+avatarActual.getTurnosParado() +"turnos consecutivos.");            
+            return;
         }
-        else if (tirado) {
+        if (tirado) {
             System.out.println("Ya has lanzado los dados en este turno.");
             return;
+        }
+        if (avatarActual.getTiros_extra() == 4){
+            System.out.println("Se han acabado tus tiros extra");
+            tirado=true;
+            return;
+
         }
 
     
         Jugador jugadorActual = jugadores.get(turno);
-        Avatar avatarActual = avatares.get(turno);
         Casilla posicionActual = avatarActual.getLugar();
     
         if (jugadorActual.isEnCarcel()) {
@@ -347,6 +346,7 @@ public class Menu {
     private void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) {
         int resultado1 = dado1.hacerTirada();
         int resultado2 = dado2.hacerTirada();
+
         tiradados(resultado1, resultado2);
     
         if (resultado1 == resultado2) {
@@ -358,6 +358,7 @@ public class Menu {
                 return;
             } else {
                 System.out.println("¡Dobles! Puedes tirar otra vez.");
+                System.out.println("Entra a dobles una vez");
                 tirado = false;
             }
         }
@@ -367,11 +368,13 @@ public class Menu {
     }
 //////---METODO MOVER AVATAR AL LANZAR DADOS---
     private void moverYVerTablero(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int total) {
-        Casilla nuevaCasilla = tablero.getCasilla((total - 1 + posicionActual.getPosicion()) % 40);
-        System.out.println("El avatar " + Valor.BLUE + avatarActual.getId()+ Valor.RESET + " avanzará " +Valor.BLUE + total + Valor.RESET +" posiciones. Desde " + 
-            Valor.RED+posicionActual.getNombre()+ Valor.RESET + " hasta " +Valor.GREEN+ nuevaCasilla.getNombre()+Valor.RESET);
-    
-        moverJugador(total);
+        Casilla nuevaCasilla;
+        int newposition = moverJugador(total);
+        nuevaCasilla = tablero.getCasilla(newposition);
+
+        System.out.println("El avatar " + Valor.BLUE + avatarActual.getId()+ Valor.RESET + " avanzó " +Valor.BLUE + total + Valor.RESET +" posiciones. Desde " + 
+        Valor.RED+posicionActual.getNombre()+ Valor.RESET + " hasta " +Valor.GREEN+ nuevaCasilla.getNombre()+Valor.RESET);
+
         //Hace la condicion el que no esté en modo avanzado o quien lo esté pero no sea Pelota
         if(!avatares.get(turno).esMovAvanzado() || !avatares.get(turno).getTipo().equals("Pelota")){
             // Verificar si el jugador debe ser encarcelado
@@ -402,21 +405,26 @@ public class Menu {
         verTablero();
     }
 //////---METODO MUEVE AVATAR VALOR ESPECIFICO---
-    private void moverJugador(int posiciones) {
+    private int moverJugador(int posiciones) {
         if (avatares.get(turno).esMovAvanzado()) {
             if (avatares.get(turno).getTipo().equals("Pelota")) {
-                avatares.get(turno).moverAvatarPelota(tablero.getPosiciones(), posiciones, banca);
+                return avatares.get(turno).moverAvatarPelota(tablero.getPosiciones(), posiciones, banca);
             }
             else if (avatares.get(turno).getTipo().equals("Coche")) {
-                avatares.get(turno).moverAvatarCoche(tablero.getPosiciones(), posiciones);
+                if (lanzamientos<2 && posiciones>4){
+                    System.out.println("Tienes tirada extra, puedes seguir lanzando los dados, llevas "+lanzamientos+" lanzamientos.");
+                }
+                return avatares.get(turno).moverAvatarCoche(tablero.getPosiciones(), posiciones);
                 
             }
             
         }
         else {
-            this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), posiciones);
+            return this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), posiciones);
         }
+        return 0;
     }
+    
 //////---METODO COMPRA CASILLA---
     private void comprar(String nombre) {
         Jugador jugador = jugadores.get(turno);
@@ -468,6 +476,18 @@ public class Menu {
     }
 //////---METODO ACABAR TURNO---
     private void acabarTurno() {
+        Avatar avatarActual = avatares.get(turno);
+        if (avatarActual.isCocheParado()){
+            avatarActual.reducirTurnosParado();
+            tirado = true;
+            avatarActual.setUltimoTiroFueCoche(false);
+            if (avatarActual.getTurnosParado()==0) {
+                avatarActual.setCocheParado(false);
+            }
+        }
+        avatarActual.setTiros_extra(0);
+        tiros_coche = 0;
+        avatarActual.setUltimoTiroFueCoche(false);
         if (tirado) {
             turno++;
             if (turno>(jugadores.size()-1)) {
@@ -475,7 +495,6 @@ public class Menu {
             }
             lanzamientos = 0;
             tirado = false;
-            tiros_coche = 0;
             System.out.println("Turno de "+ jugadores.get(turno).getNombre());}
         else System.out.println("Debes lanzar los dados antes de acabar el turno.");
     }
@@ -508,14 +527,25 @@ public class Menu {
     private void lanzarDados(String dado1, String dado2) {
         int dadoint1= Integer.parseInt(dado1);
         int dadoint2= Integer.parseInt(dado2);
+        Avatar avatarActual = avatares.get(turno);
+        if (avatarActual.isCocheParado()) {
+            System.out.println("El coche está parado, no puede lanzar los dados en "+avatarActual.getTurnosParado() +"turnos consecutivos.");            
+            return;
+        }
         if ((dadoint1>6)||(dadoint2>6)) System.out.println("Valor de tirada no válida");    
         if (tirado) {
             System.out.println("Ya has lanzado los dados en este turno.");
             return;
         }
-    
+        
+        if (avatarActual.getTiros_extra() == 4){
+            System.out.println("Se han acabado tus tiros extra");
+            tirado=true;
+            return;
+
+        }
+
         Jugador jugadorActual = jugadores.get(turno);
-        Avatar avatarActual = avatares.get(turno);
         Casilla posicionActual = avatarActual.getLugar();
     
         if (jugadorActual.isEnCarcel()) {

@@ -16,6 +16,19 @@ public class Avatar {
     private boolean movAvanzado; //Indica si el jugador ha activado el modo avanzado de movimiento
     private boolean modoCambiado = false; //Indica si el jugador ha cambiado el modo de movimiento
     private boolean compradoCoche = false; //Indica si el jugador ha comprado en su turno de ser coche
+    private boolean cocheParado = false; //Indica si se detiene el movimiento del coche por 2 turnos
+    private int turnosParado = 0; //Contador de turnos que lleva el coche parado
+    private boolean ultimoTiroFueCoche = false; //Indica si es el ultimo tiro de los extras de coche
+    private int tiros_extra= 0; //Contador de tiros de coche
+
+    public int getTiros_extra() {
+        return tiros_extra;
+    }
+
+    public void setTiros_extra(int tiros_extra) {
+        this.tiros_extra = tiros_extra;
+    }
+
 
     public String getId() {
         return this.id;
@@ -32,6 +45,35 @@ public class Avatar {
 
     public void setCompradoCoche(boolean compradoCoche) {
         this.compradoCoche = compradoCoche;
+    }
+
+    public boolean getUltimoTiroFueCoche() {
+        return ultimoTiroFueCoche;
+    }
+
+    public void setUltimoTiroFueCoche(boolean ultimoTiroFueCoche) {
+        this.ultimoTiroFueCoche = ultimoTiroFueCoche;
+    }
+
+    public int getTurnosParado() {
+        return turnosParado;
+    }
+
+    public void reducirTurnosParado() {
+        if (turnosParado>0) turnosParado--;
+        if (turnosParado==0) cocheParado=false;
+    }
+    public boolean isCocheParado() {
+        return cocheParado;
+    }
+
+    public void setCocheParado(boolean cocheParado) {
+        this.cocheParado = cocheParado;
+    }
+
+    public void pararCoche(){
+        this.cocheParado = true;
+        turnosParado = 3;
     }
 
     public boolean esMovAvanzado() {
@@ -110,13 +152,8 @@ public class Avatar {
         }
     }
 
-    //A continuación, tenemos otros métodos útiles para el desarrollo del juego.
-    /*Método que permite mover a un avatar a una casilla concreta. Parámetros:
-    * - Un array con las casillas del tablero. Se trata de un arrayList de arrayList de casillas (uno por lado).
-    * - Un entero que indica el numero de casillas a moverse (será el valor sacado en la tirada de los dados).
-    * EN ESTA VERSIÓN SUPONEMOS QUE valorTirada siemrpe es positivo.
-     */
-    public void moverAvatar(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
+    // Método para mover un avatar. Recibe un valor de tirada y un arraylist de casillas.
+    public int moverAvatar(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
         this.CuartaVuelta = false; //Al moverse, se reinicia el contador de cuarta vuelta, para no añadir valor cada vez que se juega en la cuarta vuelta
 
 
@@ -135,49 +172,64 @@ public class Avatar {
         Casilla newCasilla = casillas.get(newposition/10).get(newposition%10);
         newCasilla.anhadirAvatar(this);
         this.lugar = newCasilla;
+        return newposition;
     }
 
-    public void moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada, Jugador banca) {
+    public int moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada, Jugador banca) {
         CuartaVuelta = false;
         int posicion = lugar.getPosicion();
+        int newposition = 0;
     
         // Determinar dirección de movimiento
         boolean dir = valorTirada > 4; // Si el valor de la tirada es mayor a 4, avanzar, sino retroceder
     
         // Si se cruza la salida
-        if (dir &&(posicion + valorTirada > 40)) {
-            System.out.println("has dado una vuelta completa, recibes" + Valor.SUMA_VUELTA + ".");
+        if (dir && (posicion + valorTirada > 40)) {
+            System.out.println("has dado una vuelta completa, recibes " + Valor.SUMA_VUELTA + ".");
             this.jugador.sumarVueltas();
             this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
             if (jugador.getVueltas() % 4 == 0) {
                 CuartaVuelta = true;
             }
         }
-        if (dir){ // Si se avanza
-            for(int i =5; i<=valorTirada; i+=2){
-                int newposition = (posicion+i-1)%40;
-                detenerse(newposition, banca, valorTirada,this.getLugar() ,casillas);
-            }
-            if (valorTirada % 2 == 0){
-                detenerse((posicion+valorTirada-1)%40, banca, valorTirada, this.getLugar(), casillas);
-            }
-        }else{ // Si se retrocede
-            for(int i = 1; i<=valorTirada; i+=2){
-                int newposition = (posicion-i-1);
-                newposition = newposition < 0 ? (40 + newposition)%40 : newposition %40;
+    
+        if (dir) { // Si se avanza
+            for (int i = 5; i <= valorTirada; i += 2) {
+                newposition = (posicion + i - 1) % 40;
                 detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel")) {
+                    return newposition;
+                }
             }
-            if (valorTirada % 2 == 0){
-                int newposition = (posicion-valorTirada-1);
-                newposition = newposition < 0 ? (40 + newposition)%40 : newposition %40;
+            if (valorTirada % 2 == 0) {
+                newposition = (posicion + valorTirada - 1) % 40;
                 detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel")) {
+                    return newposition;
+                }
             }
-
+        } else { // Si se retrocede
+            for (int i = 1; i <= valorTirada; i += 2) {
+                newposition = (posicion - i - 1);
+                newposition = newposition < 0 ? (40 + newposition) % 40 : newposition % 40;
+                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel")) {
+                    return newposition;
+                }
+            }
+            if (valorTirada % 2 == 0) {
+                newposition = (posicion - valorTirada - 1);
+                newposition = newposition < 0 ? (40 + newposition) % 40 : newposition % 40;
+                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel")) {
+                    return newposition;
+                }
+            }
         }
-
+        return newposition;
     }
 
-    public void moverAvatarCoche(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
+    public int moverAvatarCoche(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
         this.CuartaVuelta = false; //Al moverse, se reinicia el contador de cuarta vuelta, para no añadir valor cada vez que se juega en la cuarta vuelta
 
 
@@ -196,14 +248,29 @@ public class Avatar {
                 } 
             }
             newposition = (newposition-1)%40;
+            //Sumar movimiento extra: No cuentan dobles
+            System.out.println("Tiros extra: "+tiros_extra);
+            tiros_extra++;
+            if (tiros_extra == 3){
+                System.out.println("En el siguiente tiro se aplican los dobles");
+                ultimoTiroFueCoche = true;
+            }
+
         }
         else{ // Si es menor que 4 retrocede
             newposition = posicionactual-valorTirada-1;
             newposition = newposition < 0 ? (40 + newposition)%40 : newposition %40;
+            //Paramos el coche por 2 turnos
+            System.out.println("El coche se ha detenido por 2 turnos");
+            pararCoche();
+            ultimoTiroFueCoche = true;
+            tiros_extra = 0;
+            
         }
         Casilla newCasilla = casillas.get(newposition/10).get(newposition%10);
         newCasilla.anhadirAvatar(this);
         this.lugar = newCasilla;
+        return newposition;
 
     }
 
@@ -211,7 +278,7 @@ public class Avatar {
     public void detenerse(int posicion, Jugador banca, int valorTirada, Casilla casillaActual,ArrayList<ArrayList<Casilla>> casillas) {
         casillaActual.eliminarAvatar(this);
         Casilla casillaFinal = casillas.get(posicion / 10).get(posicion % 10);
-        System.out.println("El avatar " + this.getId() + " se detiene en la casilla " + casillaFinal.getNombre());
+        System.out.println("El avatar " + this.getId() + " para en la casilla " + casillaFinal.getNombre());
 
         // Evaluar la casilla para posibles interacciones
         if (!casillaFinal.evaluarCasilla(jugador, banca, valorTirada)) {
@@ -221,6 +288,7 @@ public class Avatar {
 
         // Si la casilla es "Ir a Cárcel", mover al avatar a la cárcel y terminar el movimiento
         if (casillaFinal.getPosicion() == 31) {
+            System.out.println("El jugador " + jugador.getNombre() + " ha sido enviado a la cárcel.");
             jugador.encarcelar(casillas);
             return;
         }
@@ -228,7 +296,6 @@ public class Avatar {
 
     // Al finalizar, actualizar la posición y registrar la visita
     casillaFinal.anhadirAvatar(this);
-    //vecesCaidasCasilla[posicion]++;
     this.lugar = casillaFinal;
     }
     
