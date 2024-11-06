@@ -200,6 +200,7 @@ public class Tablero {
                     float impuesto = casilla.getImpuesto()*0.05f;
                     casilla.sumarValor(valor);
                     casilla.sumarImpuesto(impuesto);
+                    casilla.setCuatrovueltas(true);
                 }
             }
         }
