@@ -5,18 +5,22 @@ import partida.*;
 public class Edificacion {
     private static int idCounter = 0;
     private String tipo;
-    private float impuesto;
+    private float precio;
     private int id;
     private Jugador propietario;
     private Casilla casilla;
     private float ganancias;
+    private Grupo grupo;
 
-    public Edificacion(String tipo,Jugador propietario, Casilla casilla){
+    public Edificacion(String tipo,Jugador propietario, Casilla casilla, float precio){
         this.id = ++idCounter;
         this.tipo = tipo;
         this.propietario = propietario;
         this.casilla = casilla;
         this.ganancias = 0;
+        this.grupo = casilla.getGrupo();
+        this.precio = precio;
+    
 
     }
     /**
@@ -31,18 +35,7 @@ public class Edificacion {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    /**
-     * @return float return the impuesto
-     */
-    public float getImpuesto() {
-        return impuesto;
-    }
-    /**
-     * @param impuesto the impuesto to set
-     */
-    public void setImpuesto(float impuesto) {
-        this.impuesto = impuesto;
-    }
+
     /**
      * @return int return the id
      */
@@ -93,5 +86,46 @@ public class Edificacion {
     }
 
 ////////////////METODOS///////////////
-    
+    @Override 
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        str.append("""
+                {
+                id: """+tipo+" - "+id+"""
+
+                propietario: """+propietario.getNombre()+"""
+
+                casilla: """+casilla.getNombre()+"""
+
+                grupo: """+grupo.getColorGrupo()+"###"+Valor.RESET+"""
+
+                coste: """+precio+"""
+
+                }
+                """);
+        
+        return str.toString();
+    }    
+
+    /**
+     * @return float return the precio
+     */
+    public float getPrecio() {
+        return precio;
+    }
+
+    /**
+     * @param precio the precio to set
+     */
+    public void setPrecio(float precio) {
+        this.precio = precio;
+    }
+
+    /**
+     * @param grupo the grupo to set
+     */
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
 }

@@ -2,6 +2,7 @@ package monopoly;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import monopoly.Edificacion;
 import partida.*;
 
 public class Menu {
@@ -21,37 +22,41 @@ public class Menu {
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
 //////---MENU---
     public Menu() {
-        iniciarPartida();
+        try{
+            iniciarPartida();
+        }catch(Exception exception){
+            System.out.println("Error: "+exception);
+        }
     }
 //////---METODO INICIA LA PARTIDA---
     private void iniciarPartida() {
-        System.out.println("Bienvenido!");
-        this.turno = 1;
-        this.partida_ON = true;
-        Scanner sc = new Scanner(System.in);
-        this.banca = new Jugador();
-        this.avatares.add(null); //Para que el índice coincida con el número de avatar.
-        this.jugadores.add(banca); //Para que el índice coincida con el número de jugador.
-        this.tablero = new Tablero(banca);
-        System.out.println("\n\nCreamos los 2 jugadores mínimos para jugar...");
-        anadirjugador();
-        anadirjugador();
-        System.out.println("Si desea añadir más jugadores, introduzca 'crear jugador'...");
-        while (!partida_OFF) {
-            // checkear la casilla actual
-            System.out.println("\n('help' para ver los comandos disponibles | 'lanzar dados' para tirar los dados | 'acabar turno' para terminar el turno | 'end' para finalizar la partida)");
-            System.out.print("Introduce un comando: ");
-            String comando = sc.nextLine();
-            analizarComando(comando);
+        this.turno = 1; this.partida_ON = true;
+        try (Scanner sc = new Scanner(System.in)) {
+            banca = new Jugador(); avatares.add(null);jugadores.add(banca); tablero = new Tablero(banca);
+
+            System.out.println("\n\nCreamos los 2 jugadores mínimos para jugar...");
+            anadirjugador();
+            anadirjugador();
+            System.out.println("Si desea añadir más jugadores, introduzca 'crear jugador'...");
+
+            while (!partida_OFF) {
+                ayudaComandos();
+                String comando = sc.nextLine();
+                analizarComando(comando);
+            }
         }
-        sc.close();
         endGame();
 
+    }
+    private void ayudaComandos(){
+        System.out.println("\n('help' para ver los comandos disponibles | 'lanzar dados' para tirar los dados | 'acabar turno' para terminar el turno | 'end' para finalizar la partida)");
+        System.out.print("Introduce un comando: ");
     }
 //////---METODO ANALIZA CADA COMANDO INTRODUCIDO---
     private void analizarComando(String comando) {
         String[] partes = comando.split(" ");
         switch (partes[0]) {
+            // Ayuda
             case "help" -> System.out.println("""
                                               Comandos disponibles:
                                               [+] crear jugador
@@ -69,12 +74,14 @@ public class Menu {
                                               [+] cambiar modo
                                               [+] salir carcel
                                               [+] ver tablero""");
+            // Crear jugador
             case "crear" -> {
-                if (partes.length == 2 && partes[1].equals("jugador")) {
+                // Si 'crear jugador'
+                if (partes.length == 2 && partes[1].equals("jugador"))
                     anadirjugador();
-                } else {
-                    System.out.println("Comando no reconocido");
-                }
+                else
+                    System.out.println(Valor.RED+"Comando no reconocido,"+Valor.RESET+" prueba con 'crear jugador'");
+            
             }
             case "jugador" -> {
                 Jugador jugadorActual = jugadores.get(turno);
@@ -94,9 +101,13 @@ public class Menu {
                         case "jugadores" -> listarJugadores();
                         case "avatares" -> listarAvatares();
                         case "enventa" -> listarVenta();
+                        case "edificios" -> listarEdificios();
                         default -> System.out.println("Comando no reconocido");
                     }
-                } else {
+                }else if(partes.length==3 && "edificios".equals(partes[1])){
+                    listarGrupo(partes[2]);
+                } 
+                else {
                     System.out.println("Comando no reconocido");
                     
                 }
@@ -430,6 +441,22 @@ public class Menu {
             if (avatar!=null) {
                 System.out.println(avatar);
             }
+        }
+    }
+//////---METODO LISTAR EDIFICIOS---
+    private void listarEdificios() {
+        for (int i = 0; i < 40; i++) {
+            Casilla c=tablero.getCasilla(i);
+            c.mostrarEdificaciones();
+        }
+    }
+    private void listarGrupo(String grupo) {
+        try{
+            tablero.getGrupos().get(grupo).mostrarEdificaciones();
+        } catch (Exception e) {
+            System.out.println("No se ha encontrado ese grupo");
+            System.out.println("Los grupos posibles son (en orden): black, cyan, purple, yellow, red, brown, green, blue.");
+            //System.out.println(e);
         }
     }
 //////---METODO ACABAR TURNO---

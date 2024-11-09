@@ -2,6 +2,7 @@ package monopoly;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import partida.*;
 
@@ -105,6 +106,26 @@ public class Casilla {
 
     public void setAvatares(ArrayList<Avatar> avatares) {
         this.avatares = avatares;
+    }
+    /**
+     * @param edificaciones the edificaciones to set
+     */
+    public void setEdificaciones(HashMap<String,ArrayList<Edificacion>> edificaciones) {
+        this.edificaciones = edificaciones;
+    }
+
+    /**
+     * @return boolean return the cuatrovueltas
+     */
+    public boolean isCuatrovueltas() {
+        return cuatrovueltas;
+    }
+
+    /**
+     * @param cuatrovueltas the cuatrovueltas to set
+     */
+    public void setCuatrovueltas(boolean cuatrovueltas) {
+        this.cuatrovueltas = cuatrovueltas;
     }
 
     //Constructores:
@@ -394,6 +415,7 @@ public class Casilla {
         return info.toString();
     }
     
+    //// METODOS DE EDIFICAR
     public void edificar(String tipo){
         if(duenho.puedeEdificar(this)){
             switch (tipo) {
@@ -417,7 +439,7 @@ public class Casilla {
         }else System.out.println(Valor.RED + "No "+ Valor.RESET+ "puedes edificar en esta casilla.");
     }
     
-    private void calcularImpuesto() {
+    public void calcularImpuesto() {
         
         float inicial = valor * 0.1f;
         impuesto = inicial;
@@ -442,14 +464,14 @@ public class Casilla {
             }
     
             boolean puedeConstruirCasa = edificaciones.getOrDefault("casa", new ArrayList<>()).size() < 4 &&
-                                         grupo.getEdificaciones().getOrDefault("casa", new ArrayList<>()).size() < maxcasa;
+            grupo.getEdificaciones().getOrDefault("casa", new ArrayList<>()).size() < maxcasa;
     
             if (puedeConstruirCasa) {
                 System.out.println("Has comprado una" + Valor.YELLOW + " casa" + Valor.RESET + " en " + Valor.BLUE + this.nombre + Valor.RESET + " por "
                 + Valor.RED + precio + "€"+Valor.RESET +", te quedan " + Valor.RED + duenho.getFortuna()+ "€"+Valor.RESET +".");
                 duenho.setFortuna(duenho.getFortuna() - precio);
-                edificaciones.get("casa").add(new Edificacion("casa", duenho, this));
-                grupo.getEdificaciones().get("casa").add(new Edificacion("casa", duenho, this));
+                edificaciones.get("casa").add(new Edificacion("casa", duenho, this, precio));
+                grupo.getEdificaciones().get("casa").add(new Edificacion("casa", duenho, this, precio));
             } else {
                 System.out.println("No puedes construir más casas");
             }
@@ -473,8 +495,8 @@ public class Casilla {
                         grupo.getEdificaciones().get("casa").remove(0);
                     }
                     
-                    edificaciones.get("hotel").add(new Edificacion("hotel", duenho, this));
-                    grupo.getEdificaciones().get("hotel").add(new Edificacion("hotel", duenho, this));
+                    edificaciones.get("hotel").add(new Edificacion("hotel", duenho, this, precio));
+                    grupo.getEdificaciones().get("hotel").add(new Edificacion("hotel", duenho, this, precio));
                 } else {
                     System.out.println("No puedes construir más hoteles");
                 }
@@ -498,8 +520,8 @@ public class Casilla {
                     System.out.println("Has comprado una piscina por " + precio + "€.");
                     duenho.setFortuna(duenho.getFortuna() - precio);
                     
-                    edificaciones.get("piscina").add(new Edificacion("piscina", duenho, this));
-                    grupo.getEdificaciones().get("piscina").add(new Edificacion("piscina", duenho, this));
+                    edificaciones.get("piscina").add(new Edificacion("piscina", duenho, this, precio));
+                    grupo.getEdificaciones().get("piscina").add(new Edificacion("piscina", duenho, this, precio));
                 } else {
                     System.out.println("No puedes construir más piscinas");
                 }
@@ -521,8 +543,8 @@ public class Casilla {
                     System.out.println("Has comprado una pista de deporte por " + precio + "€.");
                     duenho.setFortuna(duenho.getFortuna() - precio);
                     
-                    edificaciones.get("pista").add(new Edificacion("pista", duenho, this));
-                    grupo.getEdificaciones().get("pista").add(new Edificacion("pista", duenho, this));
+                    edificaciones.get("pista").add(new Edificacion("pista", duenho, this, precio));
+                    grupo.getEdificaciones().get("pista").add(new Edificacion("pista", duenho, this, precio));
                 } else {
                     System.out.println("No puedes construir más pistas de deporte");
                 }
@@ -543,26 +565,16 @@ public class Casilla {
             default -> 1.0f;
         }; // Sin casas, el multiplicador es 1
     }
-
-    /**
-     * @param edificaciones the edificaciones to set
-     */
-    public void setEdificaciones(HashMap<String,ArrayList<Edificacion>> edificaciones) {
-        this.edificaciones = edificaciones;
-    }
-
-    /**
-     * @return boolean return the cuatrovueltas
-     */
-    public boolean isCuatrovueltas() {
-        return cuatrovueltas;
-    }
-
-    /**
-     * @param cuatrovueltas the cuatrovueltas to set
-     */
-    public void setCuatrovueltas(boolean cuatrovueltas) {
-        this.cuatrovueltas = cuatrovueltas;
+    public void mostrarEdificaciones(){
+        // Recorre todas las entradas del hashmap
+        for (Map.Entry<String, ArrayList<Edificacion>> entry : edificaciones.entrySet()) {
+            // Coge el valor de cada entrada
+            ArrayList<Edificacion> listaEdificios = entry.getValue();
+            // Y la recorre imprimiendo el edificio
+            for (Edificacion edificio : listaEdificios) {
+                System.out.print(edificio);
+            }
+        }
     }
 
 }
