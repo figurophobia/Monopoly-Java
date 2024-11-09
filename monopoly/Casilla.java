@@ -439,7 +439,7 @@ public class Casilla {
         }else System.out.println(Valor.RED + "No "+ Valor.RESET+ "puedes edificar en esta casilla.");
     }
     
-    private void calcularImpuesto() {
+    public void calcularImpuesto() {
         
         float inicial = valor * 0.1f;
         impuesto = inicial;

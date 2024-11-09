@@ -22,7 +22,11 @@ public class Menu {
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
 //////---MENU---
     public Menu() {
-        iniciarPartida();
+        try{
+            iniciarPartida();
+        }catch(Exception exception){
+            System.out.println("Error: "+exception);
+        }
     }
 //////---METODO INICIA LA PARTIDA---
     private void iniciarPartida() {
@@ -100,7 +104,10 @@ public class Menu {
                         case "edificios" -> listarEdificios();
                         default -> System.out.println("Comando no reconocido");
                     }
-                } else {
+                }else if(partes.length==3 && "edificios".equals(partes[1])){
+                    listarGrupo(partes[2]);
+                } 
+                else {
                     System.out.println("Comando no reconocido");
                     
                 }
@@ -441,6 +448,15 @@ public class Menu {
         for (int i = 0; i < 40; i++) {
             Casilla c=tablero.getCasilla(i);
             c.mostrarEdificaciones();
+        }
+    }
+    private void listarGrupo(String grupo) {
+        try{
+            tablero.getGrupos().get(grupo).mostrarEdificaciones();
+        } catch (Exception e) {
+            System.out.println("No se ha encontrado ese grupo");
+            System.out.println("Los grupos posibles son (en orden): black, cyan, purple, yellow, red, brown, green, blue.");
+            //System.out.println(e);
         }
     }
 //////---METODO ACABAR TURNO---
