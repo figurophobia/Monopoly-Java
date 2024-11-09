@@ -3,6 +3,7 @@ package monopoly;
 import partida.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class Grupo {
@@ -136,5 +137,36 @@ public class Grupo {
      */
     public void setEdificaciones(HashMap<String,ArrayList<Edificacion>> edificaciones) {
         this.edificaciones = edificaciones;
+    }
+
+    public void mostrarEdificaciones(){
+        // Recorre todas las entradas del hashmap
+        StringBuilder str = new StringBuilder();
+        for (Casilla cas : miembros){
+            cas.calcularImpuesto();
+            str.append("{\npropiedad: ").append(cas.getNombre()).append("\n");
+            int nhoteles=cas.getEdificaciones().getOrDefault("hotel", new ArrayList<>()).size();
+            str.append("hoteles (").append(nhoteles).append("): ");
+            for (Edificacion edificio : cas.getEdificaciones().getOrDefault("hotel", new ArrayList<>())){
+                str.append(edificio.getTipo()).append(" - ").append(edificio.getId()).append(", ");
+            }
+            int ncasas=cas.getEdificaciones().getOrDefault("casa", new ArrayList<>()).size();
+            str.append("\ncasas (").append(ncasas).append("): ");
+            for (Edificacion edificio : cas.getEdificaciones().getOrDefault("casa", new ArrayList<>())){
+                str.append(edificio.getTipo()).append(" - ").append(edificio.getId()).append(", ");
+            }
+            int npiscinas=cas.getEdificaciones().getOrDefault("piscina", new ArrayList<>()).size();
+            str.append("\npiscinas (").append(npiscinas).append("): ");
+            for (Edificacion edificio : cas.getEdificaciones().getOrDefault("piscina", new ArrayList<>())){
+                str.append(edificio.getTipo()).append(" - ").append(edificio.getId()).append(", ");
+            }
+            int npistas=cas.getEdificaciones().getOrDefault("pista", new ArrayList<>()).size();
+            str.append("\npistas (").append(npistas).append("): ");
+            for (Edificacion edificio : cas.getEdificaciones().getOrDefault("hotel", new ArrayList<>())){
+                str.append(edificio.getTipo()).append(" - ").append(edificio.getId()).append(", ");
+            }
+            str.append("\nalquiler: ").append(cas.getImpuesto()).append("\n");
+        }
+    System.out.println(str.toString());
     }
 }
