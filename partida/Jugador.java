@@ -16,7 +16,7 @@ public class Jugador {
     private int vueltas; //Cuenta las vueltas dadas al tablero.
     private float bote; //Bote que se va acumulando en la partida por la banca en impuesto, comunidad...
     private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
-    private HashMap<Casilla,Integer> numeroVisitas;
+    private HashMap<Casilla,Integer> numeroVisitas; //Numero de veces que ha visitado una casilla
     private ArrayList<Edificacion> edificaciones; //Edificaciones que posee el jugador.
     private int vecesEnLaCarcel =0; //Veces que ha estado en la carcel.
     private int pagoTasasEImpuestos = 0; //Dinero pagado en tasas e impuestos.

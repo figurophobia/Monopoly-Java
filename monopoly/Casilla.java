@@ -443,8 +443,11 @@ public class Casilla {
         
         float inicial = valor * 0.1f;
         impuesto = inicial;
-        if (cuatrovueltas) impuesto/=1.05f;
-        if (grupo.esDuenhoGrupo(duenho)) impuesto *= 2;
+        if (grupo.esDuenhoGrupo(duenho)){
+            impuesto *= 2;
+            
+        }
+
         impuesto += inicial * calcularMultiplicadorAlquiler(edificaciones.getOrDefault("casa", new ArrayList<>()).size());
         impuesto += inicial * edificaciones.getOrDefault("hotel", new ArrayList<>()).size() * 70;
         impuesto += inicial * edificaciones.getOrDefault("piscina", new ArrayList<>()).size() * 25;
@@ -455,7 +458,6 @@ public class Casilla {
         grupo.getEdificaciones().putIfAbsent("casa", new ArrayList<>());
         edificaciones.putIfAbsent("casa", new ArrayList<>());
         float precio=(0.6f*grupo.valor());
-        if (cuatrovueltas) precio/=1.05f;
         if (duenho.getFortuna() >= precio) {
             if (grupo.getEdificaciones().getOrDefault("hotel", new ArrayList<>()).size() < grupo.getMiembros().size()) {
                 maxcasa = grupo.getMiembros().size() * 4;
@@ -483,7 +485,6 @@ public class Casilla {
         grupo.getEdificaciones().putIfAbsent("hotel", new ArrayList<>());
         edificaciones.putIfAbsent("hotel", new ArrayList<>());
         float precio=(0.6f*grupo.valor());
-        if (cuatrovueltas) precio/=1.05f;
         if (duenho.getFortuna() >= precio) {
             if (edificaciones.getOrDefault("casa",new ArrayList<>()).size() == 4) {
                 if (grupo.getEdificaciones().get("hotel").size() < grupo.getMiembros().size()) {
@@ -511,7 +512,6 @@ public class Casilla {
         grupo.getEdificaciones().putIfAbsent("piscina", new ArrayList<>());
         edificaciones.putIfAbsent("piscina", new ArrayList<>());
         float precio=(0.4f*grupo.valor());
-        if (cuatrovueltas) precio/=1.05f;
         if (duenho.getFortuna() >= precio) {
             int numcasa = edificaciones.getOrDefault("casa",new ArrayList<>()).size();
             int numhotel=edificaciones.getOrDefault("hotel",new ArrayList<>()).size();
@@ -536,7 +536,6 @@ public class Casilla {
         grupo.getEdificaciones().putIfAbsent("pista", new ArrayList<>());
         edificaciones.putIfAbsent("pista", new ArrayList<>());
         float precio=(1.25f*grupo.valor());
-        if (cuatrovueltas) precio/=1.05f;
         if (duenho.getFortuna() >= precio) {
             if (edificaciones.getOrDefault("hotel",new ArrayList<>()).size()>=2){
                 if (grupo.getEdificaciones().getOrDefault("pista", new ArrayList<>()).size() < grupo.getMiembros().size()) {
@@ -562,8 +561,8 @@ public class Casilla {
             case 2 -> 15.0f;
             case 3 -> 35.0f;
             case 4 -> 50.0f;
-            default -> 1.0f;
-        }; // Sin casas, el multiplicador es 1
+            default -> 0.0f;
+        }; // Sin casas, el multiplicador debe ser 0
     }
     public void mostrarEdificaciones(){
         // Recorre todas las entradas del hashmap
