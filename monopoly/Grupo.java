@@ -12,6 +12,7 @@ public class Grupo {
     private ArrayList<Casilla> miembros; //Casillas miembros del grupo.
     private String colorGrupo; //Color del grupo
     private int numCasillas; //Número de casillas del grupo.
+    private float dineroGenerado=0; //Dinero generado por el grupo.
     private HashMap<String,ArrayList<Edificacion>> edificaciones = new HashMap<>();
     //Constructor vacío.
     public Grupo() {
@@ -70,6 +71,15 @@ public class Grupo {
     public void setNumCasillas(int numCasillas) {
         this.numCasillas = numCasillas;
     }
+
+    public float getDineroGenerado() {
+        return dineroGenerado;
+    }
+
+    public void setDineroGenerado(float dineroGenerado) {
+        this.dineroGenerado = dineroGenerado;
+    }
+    
 
     /* Método que añade una casilla al array de casillas miembro de un grupo.
     * Parámetro: casilla que se quiere añadir.

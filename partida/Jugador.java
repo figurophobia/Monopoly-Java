@@ -18,7 +18,8 @@ public class Jugador {
     private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
     private HashMap<Casilla,Integer> numeroVisitas; //Numero de veces que ha visitado una casilla
     private ArrayList<Edificacion> edificaciones; //Edificaciones que posee el jugador.
-    
+    private int VecesDados=0; //Veces que ha tirado los dados
+
     private float dineroInvertido = 0; //Dinero invertido en propiedades.
     private float pagoTasasEImpuestos = 0; //Dinero pagado en tasas e impuestos.
     private float pagoDeAlquileres=0; //Dinero pagado en alquileres.
@@ -178,6 +179,13 @@ public class Jugador {
         this.vecesEnLaCarcel = vecesEnLaCarcel;
     }
 
+    public int getVecesDados() {
+        return VecesDados;
+    }
+
+    public void setVecesDados(int VecesDados) {
+        this.VecesDados = VecesDados;
+    }
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {

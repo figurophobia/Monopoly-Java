@@ -1,6 +1,7 @@
 package monopoly;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 import monopoly.Edificacion;
 import partida.*;
@@ -76,6 +77,8 @@ public class Menu {
                                               [+] cambiar modo
                                               [+] salir carcel
                                               [+] estadisticas (nombre jugador)
+                                              [+] estadisticas
+                                              [+] edificar (tipo de edificio)
                                               [+] ver tablero""");
             // Crear jugador
             case "crear" -> {
@@ -197,6 +200,8 @@ public class Menu {
             case "estadisticas" -> {
                 if (partes.length == 2) {
                     estadisticas(partes[1]);
+                } else  if(partes.length == 1){
+                    estadisticasjuego();
                 } else {
                     System.out.println("Comando no reconocido");
                 }
@@ -284,6 +289,7 @@ public class Menu {
     private void tiradados(int dado1, int dado2){
         System.out.print("Lanzando dados");sleep(600);System.out.print(".");sleep(600);System.out.print(".");sleep(600);System.out.println(".");sleep(400);
         Avatar avatarActual = avatares.get(turno);
+        avatarActual.getJugador().setVecesDados(avatarActual.getJugador().getVecesDados()+1);
         // Verificar si el avatar tiene movimiento avanzado y es de tipo "Coche"
         if (avatarActual.esMovAvanzado() && avatarActual.getTipo().equals("Coche")) {
             // Verificar si es necesario cambiar la tirada
@@ -631,6 +637,83 @@ public class Menu {
             }
         }
     }
+
+    /*
+     * 
+     * $> estadisticas
+        {
+        casillaMasRentable: Solar3,
+        grupoMasRentable: Verde,
+        casillaMasFrecuentada: Solar14,
+        jugadorMasVueltas: Pedro,
+        jugadorMasVecesDados: Cristina,
+        jugadorEnCabeza: Maria
+        }
+     */
+
+
+    public void estadisticasjuego() {
+        Jugador jugadorMasVueltas = jugadores.get(1);
+        Jugador jugadorMasVecesDados = jugadores.get(1);
+        Jugador jugadorEnCabeza = jugadores.get(1);
+        Casilla casillaMasRentable = tablero.getCasilla(1);
+        Grupo grupoMasRentable = tablero.getGrupos().get("black");
+        Casilla casillaMasFrecuentada = tablero.getCasilla(1);
+        int maxFrecuencia = 0;
+        //Array de 40 enteros que guarda el número de veces que se ha visitado cada casilla
+        int[] frecuenciaCasillas = new int[40];
+    
+        // Empezamos en 1 para omitir la banca
+        for (int i = 1; i < jugadores.size(); i++) {
+            Jugador jugador = jugadores.get(i);
+            if (jugador.getVueltas() > jugadorMasVueltas.getVueltas()) {
+                jugadorMasVueltas = jugador;
+            }
+            if (jugador.getVecesDados() > jugadorMasVecesDados.getVecesDados()) {
+                jugadorMasVecesDados = jugador;
+            }
+            if (jugador.getFortuna() > jugadorEnCabeza.getFortuna()) { // PROVISIONAL, hay que añadir el valor de las propiedades y de los edificios
+                jugadorEnCabeza = jugador;
+            }
+    
+            for (Map.Entry<Casilla, Integer> entry : jugador.getNumeroVisitas().entrySet()) {
+                Casilla c = entry.getKey();
+                int frecuencia = entry.getValue();
+                frecuenciaCasillas[c.getPosicion()-1] += frecuencia;
+                }
+        }
+        
+
+        for (int j = 0; j < 40; j++) {
+            if (frecuenciaCasillas[j] > maxFrecuencia) {
+                maxFrecuencia = frecuenciaCasillas[j];
+                casillaMasFrecuentada = tablero.getCasilla(j);
+            }
+        }
+    
+        for (int i=0;i<40;i++) {
+            Casilla c = tablero.getCasilla(i);
+            if (c.getDineroGenerado() > casillaMasRentable.getDineroGenerado()) {
+                casillaMasRentable = c;
+            }
+        }
+
+        for (Grupo grupo : tablero.getGrupos().values()) {
+            if (grupo.getDineroGenerado() > grupoMasRentable.getDineroGenerado()) {
+                grupoMasRentable = grupo;
+            }
+        }
+    
+        System.out.println("{\n" +
+                "casillaMasRentable: " + casillaMasRentable.getNombre() + ",\n" +
+                "grupoMasRentable: " + grupoMasRentable.getColorGrupo() + "####" + Valor.RESET + ",\n" +
+                "casillaMasFrecuentada: " + casillaMasFrecuentada.getNombre() + ",\n" +
+                "jugadorMasVueltas: " + jugadorMasVueltas.getNombre() + ",\n" +
+                "jugadorMasVecesDados: " + jugadorMasVecesDados.getNombre() + ",\n" +
+                "jugadorEnCabeza: " + jugadorEnCabeza.getNombre() + "\n" +
+                "}");
+    }
+
 
 //////---METODO QUE LANZA DADOS UN VALOR??
     public void lanzarDados(int tiradaTotal){

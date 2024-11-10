@@ -21,6 +21,8 @@ public class Casilla {
     private ArrayList<Avatar> avatares = new ArrayList<>(); //Avatares que están situados en la casilla.
     private HashMap<String,ArrayList<Edificacion>> edificaciones = new HashMap<>();
     private boolean cuatrovueltas;
+
+    private float dineroGenerado=0; //Dinero generado por la casilla en alquileres al dueño
     //private ArrayList<Edificacion> edificaciones = new ArrayList<>();
 
     public String getNombre() {
@@ -128,6 +130,14 @@ public class Casilla {
         this.cuatrovueltas = cuatrovueltas;
     }
 
+    public float getDineroGenerado() {
+        return dineroGenerado;
+    }
+
+    public void setDineroGenerado(float dineroGenerado) {
+        this.dineroGenerado = dineroGenerado;
+    }
+
     //Constructores:
     public Casilla() {
     }//Parámetros vacíos
@@ -209,6 +219,8 @@ public class Casilla {
         }
         else if (this.duenho!=actual && this.duenho!=banca) {
             System.out.println("Has pagado "+Valor.RED+calcularPago(tirada)+"€"+Valor.RESET+" al jugador "+Valor.BLUE+this.duenho.getNombre()+Valor.RESET+" por caer en la casilla "+ Valor.BLUE+ this.nombre+Valor.RESET);   
+            this.dineroGenerado+=calcularPago(tirada);
+            this.getGrupo().setDineroGenerado(this.getGrupo().getDineroGenerado()+calcularPago(tirada));
             return actual.pagarAJugador(this.duenho,calcularPago(tirada));
         }
         else if ((actual.puedeEdificar(this))){
