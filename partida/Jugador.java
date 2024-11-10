@@ -18,13 +18,23 @@ public class Jugador {
     private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
     private HashMap<Casilla,Integer> numeroVisitas; //Numero de veces que ha visitado una casilla
     private ArrayList<Edificacion> edificaciones; //Edificaciones que posee el jugador.
-    private int vecesEnLaCarcel =0; //Veces que ha estado en la carcel.
-    private int pagoTasasEImpuestos = 0; //Dinero pagado en tasas e impuestos.
-    private int pagoDeAlquileres=0; //Dinero pagado en alquileres.
-    private int cobroDeAlquileres=0; //Dinero cobrado en alquileres.
-    private int vecespasarPorCasillaDeSalida=0; //Veces que ha pasado por la casilla de salida.
-    private int premiosInversionesOBote=0; //Dinero ganado en premios, inversiones o bote.
-
+    
+    private float dineroInvertido = 0; //Dinero invertido en propiedades.
+    private float pagoTasasEImpuestos = 0; //Dinero pagado en tasas e impuestos.
+    private float pagoDeAlquileres=0; //Dinero pagado en alquileres.
+    private float cobroDeAlquileres=0; //Dinero cobrado en alquileres.
+    private float pasarPorCasillaDeSalida=0; //Veces que ha pasado por la casilla de salida.
+    private float premiosInversionesOBote=0; //Dinero ganado en premios, inversiones o bote.
+    private int vecesEnLaCarcel=0; //Veces que ha estado en la carcel.
+    /*
+     * dineroInvertido: 8500000, //Compra de propiedades solares,servicios y transporte, edificaciones
+        pagoTasasEImpuestos: 4500000, //Impuestos, salir de la carcel, cartas de comunidad 1,5 y 6
+        pagoDeAlquileres: 3400000, //Pago de alquileres a otros jugadores
+        cobroDeAlquileres: 2300000, //Cobro de alquileres a otros jugadores
+        pasarPorCasillaDeSalida: 16000000, //Dinero ganado por pasar por la casilla de salida
+        premiosInversionesOBote: 1000000, //Caer en Parking, carta de suerte 3 y 6, carta comunidad 4
+        vecesEnLaCarcel:4 //Veces que ha estado en la carcel
+     */
 
 
     //getters y setters: aun queda especificar los setters
@@ -111,6 +121,63 @@ public class Jugador {
     public void setEdificaciones(ArrayList<Edificacion> edificaciones) {
         this.edificaciones = edificaciones;
     }
+
+    public float getDineroInvertido() {
+        return dineroInvertido;
+    }
+    
+    public void setDineroInvertido(float dineroInvertido) {
+        this.dineroInvertido = dineroInvertido;
+    }
+    
+    public float getPagoTasasEImpuestos() {
+        return this.pagoTasasEImpuestos;
+    }
+    
+    public void setPagoTasasEImpuestos(float pagoTasasEImpuestos) {
+        this.pagoTasasEImpuestos = pagoTasasEImpuestos;
+    }
+    
+    public float getPagoDeAlquileres() {
+        return pagoDeAlquileres;
+    }
+    
+    public void setPagoDeAlquileres(float pagoDeAlquileres) {
+        this.pagoDeAlquileres = pagoDeAlquileres;
+    }
+    
+    public float getCobroDeAlquileres() {
+        return cobroDeAlquileres;
+    }
+    
+    public void setCobroDeAlquileres(float cobroDeAlquileres) {
+        this.cobroDeAlquileres = cobroDeAlquileres;
+    }
+    
+    public float getPasarPorCasillaDeSalida() {
+        return pasarPorCasillaDeSalida;
+    }
+    
+    public void setPasarPorCasillaDeSalida(float pasarPorCasillaDeSalida) {
+        this.pasarPorCasillaDeSalida = pasarPorCasillaDeSalida;
+    }
+    
+    public float getPremiosInversionesOBote() {
+        return premiosInversionesOBote;
+    }
+    
+    public void setPremiosInversionesOBote(float premiosInversionesOBote) {
+        this.premiosInversionesOBote = premiosInversionesOBote;
+    }
+
+    public int getVecesEnLaCarcel() {
+        return vecesEnLaCarcel;
+    }
+
+    public void setVecesEnLaCarcel(int vecesEnLaCarcel) {
+        this.vecesEnLaCarcel = vecesEnLaCarcel;
+    }
+
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {
@@ -274,6 +341,7 @@ public class Jugador {
         this.avatar.setLugar(carcel);
         this.tiradasCarcel = 0;
         this.avatar.getLugar().anhadirAvatar(this.avatar);
+        this.vecesEnLaCarcel++;
     }
 //this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), total);
 
@@ -316,6 +384,8 @@ public class Jugador {
         this.sumarFortuna(-cantidad);
         this.sumarGastos(cantidad);
         recibidor.sumarFortuna(cantidad);
+        this.pagoDeAlquileres += cantidad;
+        recibidor.cobroDeAlquileres += cantidad;
         return true;
     }
 
@@ -327,6 +397,7 @@ public class Jugador {
         }
         this.sumarFortuna(-cantidad);
         this.sumarGastos(cantidad);
+        this.pagoTasasEImpuestos += cantidad;
         banca.sumarBote(cantidad);
         return true;
     }
@@ -339,6 +410,7 @@ public class Jugador {
         }
         this.sumarFortuna(-Valor.PAGO_CARCEL);
         this.sumarGastos(Valor.PAGO_CARCEL);
+        this.pagoTasasEImpuestos += Valor.PAGO_CARCEL;
         this.sacarCarcel();
         System.out.println("Has pagado 25% "+Valor.PAGO_CARCEL +" para salir de la carcel");
         return true;
@@ -377,13 +449,13 @@ public class Jugador {
     public void estadisticas(){
         StringBuilder str = new StringBuilder();
         str.append("{\n");
-        str.append("dineroInvertido: " + this.gastos + ",\n");
-        str.append("pagoTasasEImpuestos: " + "PROVISIONAL" + ",\n");
-        str.append("pagoDeAlquileres: " + "PROVISIONAL" + ",\n");
-        str.append("cobroDeAlquileres: " + "PROVISIONAL" + ",\n");
-        str.append("pasarPorCasillaDeSalida: " + "PROVISIONAL" + ",\n");
-        str.append("premiosInversionesOBote: " + "PROVISIONAL" + ",\n");
-        str.append("vecesEnLaCarcel: " + "PROVISIONAL" + ",\n");
+        str.append("dineroInvertido: " + this.dineroInvertido + ",\n");
+        str.append("pagoTasasEImpuestos: " + this.pagoTasasEImpuestos + ",\n");
+        str.append("pagoDeAlquileres: " + this.pagoDeAlquileres + ",\n");
+        str.append("cobroDeAlquileres: " +this.cobroDeAlquileres + ",\n");
+        str.append("pasarPorCasillaDeSalida: " + this.pasarPorCasillaDeSalida + ",\n");
+        str.append("premiosInversionesOBote: " + this.premiosInversionesOBote + ",\n");
+        str.append("vecesEnLaCarcel: " + this.vecesEnLaCarcel + ",\n");
         str.append("}\n");
         System.out.println(str.toString());
     }

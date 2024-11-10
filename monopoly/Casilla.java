@@ -220,6 +220,7 @@ public class Casilla {
             return actual.pagarImpuesto(this.impuesto, banca);
         }
         else if (this.nombre.equals("Parking")) {
+            actual.setPremiosInversionesOBote(actual.getPremiosInversionesOBote()+actual.getBote());
             actual.recibirBote(banca);
             System.out.println("Bote puesto a "+Valor.RED+banca.getBote()+"€"+Valor.RESET);
             return true;
@@ -274,6 +275,7 @@ public class Casilla {
     public void comprarCasilla(Jugador solicitante, Jugador banca) {
         if (esComprable(solicitante, banca)) {
             solicitante.sumarGastos(this.valor);
+            solicitante.setDineroInvertido(solicitante.getDineroInvertido()+this.valor);
             solicitante.setFortuna(solicitante.getFortuna()-this.valor);
             banca.sumarFortuna(this.valor);
             this.duenho = solicitante;
@@ -464,6 +466,7 @@ public class Casilla {
             } else {
                 maxcasa = grupo.getMiembros().size();
             }
+            duenho.setDineroInvertido(duenho.getDineroInvertido()+precio);
     
             boolean puedeConstruirCasa = edificaciones.getOrDefault("casa", new ArrayList<>()).size() < 4 &&
             grupo.getEdificaciones().getOrDefault("casa", new ArrayList<>()).size() < maxcasa;
