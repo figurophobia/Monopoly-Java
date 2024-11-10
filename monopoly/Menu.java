@@ -63,6 +63,8 @@ public class Menu {
                                               [+] jugador
                                               [+] listar jugadores
                                               [+] listar avatares
+                                              [+] listar edificios
+                                              [+] listar edificios (grupo)
                                               [+] lanzar dados
                                               [+] acabar turno
                                               [+] ir carcel
@@ -70,6 +72,8 @@ public class Menu {
                                               [+] dados (valor1) (valor2)
                                               [+] describir jugador/avatar (nombre/id)
                                               [+] comprar (nombre propiedad)
+                                              [+] edificar (tipo_edificio)
+                                              [+] vender (casilla) (tipo_edificio) (numero_ventas)
                                               [+] listar enventa
                                               [+] cambiar modo
                                               [+] salir carcel
@@ -153,6 +157,10 @@ public class Menu {
                 } else {
                     System.out.println("Comando no reconocido");
                 }
+            }
+            case "vender" ->{
+                if(partes.length==4)
+                    vender_edificio(partes[2],partes[1],partes[3]);
             }
             case "ver" -> {
                 if (partes.length == 2 && partes[1].equals("tablero")) {
@@ -494,7 +502,29 @@ public class Menu {
     public boolean tieneCasilla(Jugador jugador){
         return jugador.getAvatar().getLugar().getDuenho().equals(jugador);
     }
-//////---METODO COMPRUEBA SI JUGADOR PUEDE EDIFICAR
+//////---METODO VENDER EDIFICIO
+    public void vender_edificio(String casilla, String tipo,String num){
+        try{
+            int numero= Integer.parseInt(num);
+            Casilla c=buscar_Casilla(casilla);
+            if(c!=null){
+                Jugador jugadorActual = jugadores.get(turno);
+                if (c.getDuenho()==jugadorActual)
+                    c.vender_edificio(tipo,numero);
+                else System.out.println("No te pertenece esa casilla!");
+            }else System.out.println("Casilla no encontrada...");
+        }catch (NumberFormatException e){
+            System.out.println("Error: "+e);
+        }
+    }
+    private Casilla buscar_Casilla(String casilla){
+        for(int i=0;i<40;i++){
+            Casilla c=tablero.getCasilla(i);
+            if (c.getNombre().equals(casilla))
+                return c;
+        }
+        return null;
+    }
 ////////////////////////////////////DEBUG COMMANDS////////////////////////////////////
 //////---METODO LANZA DADOS VALORES ESPECIFICOS---
     private void lanzarDados(String dado1, String dado2) {
