@@ -1,5 +1,6 @@
 package monopoly;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
@@ -83,6 +84,7 @@ public class Menu {
                                               [+] estadisticas (nombre jugador)
                                               [+] estadisticas
                                               [+] edificar (tipo de edificio)
+                                              [+] bancarrota
                                               [+] ver tablero""");
             // Crear jugador
             case "crear" -> {
@@ -204,6 +206,9 @@ public class Menu {
                 } else {
                     System.out.println("Comando no reconocido");
                 }
+            }
+            case "bancarrota" -> {
+                bancarrota(jugadores.get(turno), banca);
             }
             case "estadisticas" -> {
                 if (partes.length == 2) {
@@ -395,6 +400,11 @@ public class Menu {
     private void moverYVerTablero(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int total) {
         Casilla nuevaCasilla;
         int newposition = moverJugador(total);
+        if (jugadorActual.isEnBancarrota()) {
+            bancarrota(jugadorActual, jugadorActual.getDeudor()); //Si tiene para hipotecar o vender hay que ponerlo
+            return;
+            
+        }
         nuevaCasilla = tablero.getCasilla(newposition);
 
         System.out.println("El avatar " + Valor.BLUE + avatarActual.getId()+ Valor.RESET + " avanzó " +Valor.BLUE + total + Valor.RESET +" posiciones. Desde " + 
@@ -408,8 +418,8 @@ public class Menu {
             }
             // Verificar si el jugador puede pagar sus deudas
             if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, total)) {
-                System.out.println("El jugador " + jugadorActual.getNombre() + " no tiene dinero para pagar, entra en bancarrota, acaba el juego en esta primera version!");
-                partida_OFF = true;
+                bancarrota(jugadorActual, nuevaCasilla.getDuenho()); //Si tiene para hipotecar o vender hay que ponerlo
+                return;
             }
         }
 
@@ -467,7 +477,10 @@ public class Menu {
 //////---METODO SALIR CARCEL---
     private void salirCarcel() {
         if (lanzamientos==0) { //al inicio del turno en el que esta en la carcel, puede pagar
-            jugadores.get(turno).pagarSalidaCarcel();
+            if(!jugadores.get(turno).pagarSalidaCarcel()){
+                System.out.println("No tienes suficiente dinero para salir de la cárcel.");
+                bancarrota(jugadores.get(turno), banca); //Si tiene para hipotecar o vender hay que ponerlo
+            }
         }else{ //si no ha salido en el turno anterior, sale de la carcel
             System.out.println("Solo puedes pagar la multa al inicio de un turno en el que no hayas tirado los dados.");
         }
@@ -744,6 +757,28 @@ public class Menu {
                 "}");
     }
 
+    public void bancarrota(Jugador pobre, Jugador duenho) {
+        float pasta=pobre.getFortuna();
+        duenho.setFortuna(duenho.getFortuna()+pasta);
+        System.out.println("El jugador "+pobre.getNombre()+" ha entrado en bancarrota, el jugador "+duenho.getNombre()+" se queda con su fortuna.");
+        System.out.println(duenho.getNombre()+" ha ganado"+pasta+"€ ahora tiene "+duenho.getFortuna()+"€");
+        pobre.setFortuna(0);
+        ArrayList<Casilla> propiedades = pobre.getPropiedades();
+        for (Casilla c : propiedades) {
+            if (c.getTipo().equals("Solar") && c.getEdificaciones().size()>0 &&c.getEdificaciones()!=null) {
+                c.getEdificaciones().clear();
+                
+            }
+            c.setDuenho(duenho);
+            duenho.anhadirPropiedad(c);
+        }
+        if (duenho==banca){
+            System.out.println("Las propiedades de" + pobre.getNombre() + " pueden ser compradas de nuevo.");
+        }
+        pobre.getAvatar().getLugar().eliminarAvatar(pobre.getAvatar());
+        avatares.remove(pobre.getAvatar());
+        jugadores.remove(pobre);
+    }
 
 //////---METODO QUE LANZA DADOS UN VALOR??
     public void lanzarDados(int tiradaTotal){
