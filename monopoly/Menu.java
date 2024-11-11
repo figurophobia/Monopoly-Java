@@ -551,6 +551,28 @@ public class Menu {
         else System.out.println("Debes lanzar los dados antes de acabar el turno.");
     }
 
+    private void acabarTurnoForzado(){
+        Avatar avatarActual = avatares.get(turno);
+        if (avatarActual.isCocheParado()){
+            avatarActual.reducirTurnosParado();
+            tirado = true;
+            avatarActual.setUltimoTiroFueCoche(false);
+            if (avatarActual.getTurnosParado()==0) {
+                avatarActual.setCocheParado(false);
+            }
+        }
+        avatarActual.setTiros_extra(0);
+        tiros_coche = 0;
+        avatarActual.setUltimoTiroFueCoche(false);
+        turno++;
+        if (turno>(jugadores.size()-1)) {
+            turno = 1;
+        }
+        lanzamientos = 0;
+        tirado = false;
+        System.out.println("Turno de "+ jugadores.get(turno).getNombre());
+    }
+
 //////---METODO VER TABLERO---
     private void verTablero() {
         System.out.println(tablero);
@@ -759,7 +781,7 @@ public class Menu {
     }
 
     public void bancarrota(Jugador pobre, Jugador duenho) {
-        acabarTurno();
+        acabarTurnoForzado();
         float pasta=pobre.getFortuna();
         duenho.setFortuna(duenho.getFortuna()+pasta);
         System.out.println("El jugador "+pobre.getNombre()+" ha entrado en bancarrota, el jugador "+duenho.getNombre()+" se queda con su fortuna.");
