@@ -552,6 +552,8 @@ public class Menu {
     }
 
     private void acabarTurnoForzado(){
+        System.out.println("Turno: "+turno);
+        System.out.println("Jugadores: "+jugadores.size());
         Avatar avatarActual = avatares.get(turno);
         if (avatarActual.isCocheParado()){
             avatarActual.reducirTurnosParado();
@@ -781,7 +783,6 @@ public class Menu {
     }
 
     public void bancarrota(Jugador pobre, Jugador duenho) {
-        acabarTurnoForzado();
         float pasta=pobre.getFortuna();
         duenho.setFortuna(duenho.getFortuna()+pasta);
         System.out.println("El jugador "+pobre.getNombre()+" ha entrado en bancarrota, el jugador "+duenho.getNombre()+" se queda con su fortuna.");
@@ -802,6 +803,7 @@ public class Menu {
         pobre.getAvatar().getLugar().eliminarAvatar(pobre.getAvatar());
         avatares.remove(pobre.getAvatar());
         jugadores.remove(pobre);
+        acabarTurnoForzado(); //Checkear que se haga bien
     }
 
 //////---METODO QUE LANZA DADOS UN VALOR??
