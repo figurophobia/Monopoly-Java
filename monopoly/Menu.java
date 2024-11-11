@@ -550,6 +550,7 @@ public class Menu {
             System.out.println("Turno de "+ jugadores.get(turno).getNombre());}
         else System.out.println("Debes lanzar los dados antes de acabar el turno.");
     }
+
 //////---METODO VER TABLERO---
     private void verTablero() {
         System.out.println(tablero);
@@ -758,6 +759,7 @@ public class Menu {
     }
 
     public void bancarrota(Jugador pobre, Jugador duenho) {
+        acabarTurno();
         float pasta=pobre.getFortuna();
         duenho.setFortuna(duenho.getFortuna()+pasta);
         System.out.println("El jugador "+pobre.getNombre()+" ha entrado en bancarrota, el jugador "+duenho.getNombre()+" se queda con su fortuna.");
