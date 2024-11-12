@@ -613,13 +613,14 @@ public class Casilla {
                 duenho.setFortuna(nueva_fortuna);}
             
             int properties_left=edificaciones.getOrDefault(tipo, new ArrayList<>()).size();
-            System.out.println("Has vendido con éxito "+ ((num==1) ? "tu ":"tus ") +num +" "+ tipo+((num==1) ? "":"s") +
-            " en "+nombre+". Recibes "+ganancias+"€. En la propiedad "+(properties_left==1 ? "queda ":"quedan ")+properties_left+" "+
-            tipo+((properties_left==1) ? "":"s")+". ");
+            System.out.println("Has vendido con éxito "+ ((num==1) ? "tu ":"tus ") +Valor.YELLOW+num +" "+ tipo+((num==1) ? "":"s") +
+            Valor.RESET+" en "+Valor.BLUE+nombre+Valor.RESET+". Recibes "+Valor.GREEN+ganancias+"€."+Valor.RESET+" En la propiedad "+
+            (properties_left==1 ? "queda ":"quedan ")+Valor.RED+properties_left+" "+
+            tipo+((properties_left==1) ? "":"s")+". "+Valor.RESET);
         }catch (Exception e){
             System.out.println("Error: "+e);
         }
     }
 
-}
+}//
 
