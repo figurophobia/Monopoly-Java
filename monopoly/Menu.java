@@ -557,9 +557,7 @@ public class Menu {
         else System.out.println("Debes lanzar los dados antes de acabar el turno.");
     }
 
-    private void acabarTurnoForzado(){
-        System.out.println("Turno: "+turno);
-        System.out.println("Jugadores: "+(jugadores.size()-1));
+    private void acabarTurnoBancarrota(){
         turno++;
         if (turno>(jugadores.size()-1)) {
             turno = 1;
@@ -700,6 +698,23 @@ public class Menu {
         }
     }
 
+
+    public float FortunaYValorPropEdif(Jugador jugador) {
+        float pasta=jugador.getFortuna();
+        for (Casilla c : jugador.getPropiedades()) {
+            pasta+=c.getValor();
+            if (c.getTipo().equals("Solar") && c.getEdificaciones().size()>0 &&c.getEdificaciones()!=null) {
+                for (Map.Entry<String, ArrayList<Edificacion>> entry : c.getEdificaciones().entrySet()) {
+                    for (Edificacion e : entry.getValue()) {
+                        pasta += e.getPrecio(); // Suponiendo que Edificacion tiene un método getValor() que devuelve el valor de la edificación
+                    }
+                }
+            }
+        }
+        
+        return pasta;
+    }
+
     /*
      * 
      * $> estadisticas
@@ -712,7 +727,6 @@ public class Menu {
         jugadorEnCabeza: Maria
         }
      */
-
 
     public void estadisticasjuego() {
         Jugador jugadorMasVueltas = jugadores.get(1);
@@ -734,7 +748,7 @@ public class Menu {
             if (jugador.getVecesDados() > jugadorMasVecesDados.getVecesDados()) {
                 jugadorMasVecesDados = jugador;
             }
-            if (jugador.getFortuna() > jugadorEnCabeza.getFortuna()) { // PROVISIONAL, hay que añadir el valor de las propiedades y de los edificios
+            if (FortunaYValorPropEdif(jugador) > FortunaYValorPropEdif(jugadorEnCabeza)) { // PROVISIONAL, hay que añadir el valor de las propiedades y de los edificios
                 jugadorEnCabeza = jugador;
             }
     
@@ -780,7 +794,7 @@ public class Menu {
         float pasta=pobre.getFortuna();
         duenho.setFortuna(duenho.getFortuna()+pasta);
         System.out.println("El jugador "+pobre.getNombre()+" ha entrado en bancarrota, el jugador "+duenho.getNombre()+" se queda con su fortuna.");
-        System.out.println(duenho.getNombre()+" ha ganado"+pasta+"€ ahora tiene "+duenho.getFortuna()+"€");
+        System.out.println(duenho.getNombre()+" ha ganado "+pasta+" € ahora tiene "+duenho.getFortuna()+" €");
         pobre.setFortuna(0);
         ArrayList<Casilla> propiedades = pobre.getPropiedades();
         for (Casilla c : propiedades) {
@@ -792,7 +806,7 @@ public class Menu {
             duenho.anhadirPropiedad(c);
         }
         if (duenho==banca){
-            System.out.println("Las propiedades de" + pobre.getNombre() + " pueden ser compradas de nuevo.");
+            System.out.println("Las propiedades de " + pobre.getNombre() + " pueden ser compradas de nuevo.");
         }
         turno--;
         if(turno<1){
@@ -801,7 +815,7 @@ public class Menu {
         pobre.getAvatar().getLugar().eliminarAvatar(pobre.getAvatar());
         avatares.remove(pobre.getAvatar());
         jugadores.remove(pobre);
-        acabarTurnoForzado(); //Checkear que se haga bien1
+        acabarTurnoBancarrota(); //Checkear que se haga bien1
     }
 
     /* 
