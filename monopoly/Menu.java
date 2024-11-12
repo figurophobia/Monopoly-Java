@@ -23,6 +23,7 @@ public class Menu {
     private boolean partida_ON; //Booleano para comprobar si la partida sigue en curso.
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
     private int tiros_coche; //Para ver cuantos tiros lleva el coche
+    private Cartas cartas; //Objeto de la clase Cartas
 
 //////---MENU---
     public Menu() {
@@ -35,6 +36,7 @@ public class Menu {
 //////---METODO INICIA LA PARTIDA---
     private void iniciarPartida() {
         this.turno = 1; this.partida_ON = true;
+        this.cartas = new Cartas();
         try (Scanner sc = new Scanner(System.in)) {
             banca = new Jugador(); avatares.add(null);jugadores.add(banca); tablero = new Tablero(banca);
             print_intro();
@@ -419,6 +421,9 @@ public class Menu {
             // Verificar si el jugador debe ser encarcelado
             if (nuevaCasilla == tablero.getPosiciones().get(3).get(0)) {
                 jugadorActual.encarcelar(tablero.getPosiciones());
+            }
+            if (nuevaCasilla.getTipo().equals("Comunidad") || nuevaCasilla.getTipo().equals("Suerte")) {
+                cartas.gestionCartas(avatarActual, tablero, jugadores);
             }
             // Verificar si el jugador puede pagar sus deudas
             if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, total)) {
