@@ -27,6 +27,10 @@ public class Jugador {
     private float pasarPorCasillaDeSalida=0; //Veces que ha pasado por la casilla de salida.
     private float premiosInversionesOBote=0; //Dinero ganado en premios, inversiones o bote.
     private int vecesEnLaCarcel=0; //Veces que ha estado en la carcel.
+
+    private boolean enBancarrota = false; //Bandera para saber si el jugador está en bancarrota.
+    private Jugador deudor = null; //Jugador al que se le debe dinero.
+
     /*
      * dineroInvertido: 8500000, //Compra de propiedades solares,servicios y transporte, edificaciones
         pagoTasasEImpuestos: 4500000, //Impuestos, salir de la carcel, cartas de comunidad 1,5 y 6
@@ -186,6 +190,15 @@ public class Jugador {
     public void setVecesDados(int VecesDados) {
         this.VecesDados = VecesDados;
     }
+
+    public boolean isEnBancarrota() {
+        return enBancarrota;
+    }
+
+    public Jugador getDeudor() {
+        return deudor;
+    }
+
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {
@@ -467,5 +480,11 @@ public class Jugador {
         str.append("}\n");
         System.out.println(str.toString());
     }
+
+    public void quedarBancarrota(Jugador deudor){
+        this.enBancarrota = true;
+        this.deudor = deudor;
+    }
+
 
 }

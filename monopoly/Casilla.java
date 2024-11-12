@@ -13,6 +13,7 @@ public class Casilla {
     private String nombre; //Nombre de la casilla
     private String tipo; //Tipo de casilla (Solar, Especial, Transporte, Servicios, Comunidad, Suerte y Impuesto).
     private float valor; //Valor de esa casilla (en la mayoría será valor de compra, en la casilla parking se usará como el bote).
+    private float valor_inicial; //Valor de la casilla al inicio de la partida
     private int posicion; //Posición que ocupa la casilla en el tablero (entero entre 1 y 40).
     private Jugador duenho; //Dueño de la casilla (por defecto sería la banca).
     private Grupo grupo; //Grupo al que pertenece la casilla (si es solar).
@@ -151,6 +152,7 @@ public class Casilla {
         this.nombre = nombre;
         this.tipo = tipo;
         this.valor = valor;
+        this.valor_inicial=valor;
         if (this.tipo.equals("Solar")) {
             this.impuesto= valor*0.1f; //Valor por defecto para impuesto en casillas de solar
         }

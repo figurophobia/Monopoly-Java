@@ -200,14 +200,14 @@ public class Avatar {
             for (int i = 5; i <= valorTirada; i += 2) {
                 newposition = (posicion + i - 1) % 40;
                 detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
-                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel")) {
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnBancarrota()) {
                     return newposition;
                 }
             }
             if (valorTirada % 2 == 0) {
                 newposition = (posicion + valorTirada - 1) % 40;
                 detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
-                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel")) {
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnBancarrota()) {
                     return newposition;
                 }
             }
@@ -216,7 +216,7 @@ public class Avatar {
                 newposition = (posicion - i - 1);
                 newposition = newposition < 0 ? (40 + newposition) % 40 : newposition % 40;
                 detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
-                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel")) {
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnBancarrota()) {
                     return newposition;
                 }
             }
@@ -224,7 +224,7 @@ public class Avatar {
                 newposition = (posicion - valorTirada - 1);
                 newposition = newposition < 0 ? (40 + newposition) % 40 : newposition % 40;
                 detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
-                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel")) {
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnBancarrota()) {
                     return newposition;
                 }
             }
@@ -287,6 +287,7 @@ public class Avatar {
         // Evaluar la casilla para posibles interacciones
         if (!casillaFinal.evaluarCasilla(jugador, banca, valorTirada)) {
             System.out.println("El jugador " + jugador.getNombre() + " no puede pagar sus deudas!");
+            jugador.quedarBancarrota(casillaFinal.getDuenho());
             return;
         }
 

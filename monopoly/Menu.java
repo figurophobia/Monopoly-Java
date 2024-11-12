@@ -1,5 +1,6 @@
 package monopoly;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
@@ -43,6 +44,12 @@ public class Menu {
             System.out.println("Si desea añadir más jugadores, introduzca 'crear jugador'...");
 
             while (!partida_OFF) {
+                if (jugadores.size() <3) {
+                    System.out.println("No se puede jugar con menos de 2 jugadores.");
+                    endGame();
+                }
+                else {
+                }
                 ayudaComandos();
                 String comando = sc.nextLine();
                 analizarComando(comando);
@@ -84,6 +91,7 @@ public class Menu {
                                               [+] ir carcel
                                               [+] salir carcel
                                               [+] dados [valor1] [valor2]""");
+
             // Crear jugador
             case "crear" -> {
                 // Si 'crear jugador'
@@ -204,6 +212,9 @@ public class Menu {
                 } else {
                     System.out.println("Comando no reconocido");
                 }
+            }
+            case "bancarrota" -> {
+                bancarrota(jugadores.get(turno), banca);
             }
             case "estadisticas" -> {
             switch (partes.length) {
@@ -393,6 +404,11 @@ public class Menu {
     private void moverYVerTablero(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int total) {
         Casilla nuevaCasilla;
         int newposition = moverJugador(total);
+        if (jugadorActual.isEnBancarrota()) {
+            bancarrota(jugadorActual, jugadorActual.getDeudor()); //Si tiene para hipotecar o vender hay que ponerlo
+            return;
+            
+        }
         nuevaCasilla = tablero.getCasilla(newposition);
 
         System.out.println("El avatar " + Valor.BLUE + avatarActual.getId()+ Valor.RESET + " avanzó " +Valor.BLUE + total + Valor.RESET +" posiciones. Desde " + 
@@ -406,8 +422,8 @@ public class Menu {
             }
             // Verificar si el jugador puede pagar sus deudas
             if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, total)) {
-                System.out.println("El jugador " + jugadorActual.getNombre() + " no tiene dinero para pagar, entra en bancarrota, acaba el juego en esta primera version!");
-                partida_OFF = true;
+                bancarrota(jugadorActual, nuevaCasilla.getDuenho()); //Si tiene para hipotecar o vender hay que ponerlo
+                return;
             }
         }
 
@@ -465,7 +481,10 @@ public class Menu {
 //////---METODO SALIR CARCEL---
     private void salirCarcel() {
         if (lanzamientos==0) { //al inicio del turno en el que esta en la carcel, puede pagar
-            jugadores.get(turno).pagarSalidaCarcel();
+            if(!jugadores.get(turno).pagarSalidaCarcel()){
+                System.out.println("No tienes suficiente dinero para salir de la cárcel.");
+                bancarrota(jugadores.get(turno), banca); //Si tiene para hipotecar o vender hay que ponerlo
+            }
         }else{ //si no ha salido en el turno anterior, sale de la carcel
             System.out.println("Solo puedes pagar la multa al inicio de un turno en el que no hayas tirado los dados.");
         }
@@ -535,6 +554,17 @@ public class Menu {
             System.out.println("Turno de "+ jugadores.get(turno).getNombre());}
         else System.out.println("Debes lanzar los dados antes de acabar el turno.");
     }
+
+    private void acabarTurnoBancarrota(){
+        turno++;
+        if (turno>(jugadores.size()-1)) {
+            turno = 1;
+        }
+        lanzamientos = 0;
+        tirado = false;
+        System.out.println("Turno de "+ jugadores.get(turno).getNombre());
+    }
+
 //////---METODO VER TABLERO---
     private void verTablero() {
         System.out.println(tablero);
@@ -697,6 +727,23 @@ public class Menu {
         }
     }
 
+
+    public float FortunaYValorPropEdif(Jugador jugador) {
+        float pasta=jugador.getFortuna();
+        for (Casilla c : jugador.getPropiedades()) {
+            pasta+=c.getValor();
+            if (c.getTipo().equals("Solar") && c.getEdificaciones().size()>0 &&c.getEdificaciones()!=null) {
+                for (Map.Entry<String, ArrayList<Edificacion>> entry : c.getEdificaciones().entrySet()) {
+                    for (Edificacion e : entry.getValue()) {
+                        pasta += e.getPrecio(); // Suponiendo que Edificacion tiene un método getValor() que devuelve el valor de la edificación
+                    }
+                }
+            }
+        }
+        
+        return pasta;
+    }
+
     /*
      * 
      * $> estadisticas
@@ -709,7 +756,6 @@ public class Menu {
         jugadorEnCabeza: Maria
         }
      */
-
 
     public void estadisticasjuego() {
         Jugador jugadorMasVueltas = jugadores.get(1);
@@ -731,7 +777,7 @@ public class Menu {
             if (jugador.getVecesDados() > jugadorMasVecesDados.getVecesDados()) {
                 jugadorMasVecesDados = jugador;
             }
-            if (jugador.getFortuna() > jugadorEnCabeza.getFortuna()) { // PROVISIONAL, hay que añadir el valor de las propiedades y de los edificios
+            if (FortunaYValorPropEdif(jugador) > FortunaYValorPropEdif(jugadorEnCabeza)) { // PROVISIONAL, hay que añadir el valor de las propiedades y de los edificios
                 jugadorEnCabeza = jugador;
             }
     
@@ -772,6 +818,72 @@ public class Menu {
                 "jugadorEnCabeza: " + jugadorEnCabeza.getNombre() + "\n" +
                 "}");
     }
+
+    public  void bancarrota(Jugador pobre, Jugador duenho) {
+        float pasta=pobre.getFortuna();
+        duenho.setFortuna(duenho.getFortuna()+pasta);
+        System.out.println("El jugador "+pobre.getNombre()+" ha entrado en bancarrota, el jugador "+duenho.getNombre()+" se queda con su fortuna.");
+        System.out.println(duenho.getNombre()+" ha ganado "+pasta+" € ahora tiene "+duenho.getFortuna()+" €");
+        pobre.setFortuna(0);
+        ArrayList<Casilla> propiedades = pobre.getPropiedades();
+        for (Casilla c : propiedades) {
+            if (c.getTipo().equals("Solar") && c.getEdificaciones().size()>0 &&c.getEdificaciones()!=null) {
+                c.getEdificaciones().clear();
+                
+            }
+            c.setDuenho(duenho);
+            duenho.anhadirPropiedad(c);
+        }
+        if (duenho==banca){
+            System.out.println("Las propiedades de " + pobre.getNombre() + " pueden ser compradas de nuevo.");
+        }
+        turno--;
+        if(turno<1){
+            turno=jugadores.size()-1;
+        }
+        pobre.getAvatar().getLugar().eliminarAvatar(pobre.getAvatar());
+        avatares.remove(pobre.getAvatar());
+        jugadores.remove(pobre);
+        acabarTurnoBancarrota(); //Checkear que se haga bien1
+    }
+
+    /* 
+    public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada, Casilla now) {
+        // Incrementar el valor en 1 punto para la casilla actual
+        actual.getNumeroVisitas().put(now, actual.getNumeroVisitas().getOrDefault(now, 0) + 1);
+        // debug System.out.println("Entrando en evaluar casilla");
+        if (now.esComprable(actual, banca)) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Puedes comprar la casilla " + now.getNombre() + " por " + now.getValor() + " ¿Quieres comprarla? (s/n) ");
+            String respuesta = sc.nextLine();
+            if (respuesta.equals("s")) {
+                now.comprarCasilla(actual, banca);
+            }
+        } else if (now.getDuenho() != actual && now.getDuenho() != banca) {
+            System.out.println("Has pagado " + Valor.RED + now.calcularPago(tirada) + "€" + Valor.RESET + " al jugador " + Valor.BLUE + now.getDuenho().getNombre() + Valor.RESET + " por caer en la casilla " + Valor.BLUE + now.getNombre() + Valor.RESET);
+            now.setDineroGenerado(now.getDineroGenerado() + now.calcularPago(tirada));
+            now.getGrupo().setDineroGenerado(now.getGrupo().getDineroGenerado() + now.calcularPago(tirada));
+            return actual.pagarAJugador(now.getDuenho(), now.calcularPago(tirada));
+        } else if (actual.puedeEdificar(now)) {
+            System.out.println("Has caido en la casilla " + Valor.BLUE + now.getNombre() + Valor.RESET + "." + Valor.RED + "  ¡Puedes edificar!" + Valor.RESET);
+        } else if (now.getTipo().equals("Impuesto")) {
+            System.out.println("Has pagado " + now.getImpuesto() + " a la banca por caer en la casilla " + now.getNombre());
+            System.out.println("Tu fortuna es de " + actual.getFortuna());
+            return actual.pagarImpuesto(now.getImpuesto(), banca);
+        } else if (now.getNombre().equals("Parking")) {
+            actual.setPremiosInversionesOBote(actual.getPremiosInversionesOBote() + actual.getBote());
+            actual.recibirBote(banca);
+            System.out.println("Bote puesto a " + Valor.RED + banca.getBote() + "€" + Valor.RESET);
+            return true;
+        } else if (now.getNombre().equals("Ir a Cárcel")) {
+            System.out.println(Valor.RED + "Has sido enviado a la cárcel" + Valor.RESET);
+        } else if (now.getNombre().equals("Carcel")) {
+            System.out.println("Estás en la " + Valor.BLUE + "cárcel" + Valor.RESET + ", pero de VISITA");
+        }
+        // debug System.out.println("Saliendo de evaluar casilla");
+        return true;
+    }
+        */
 
 
 //////---METODO QUE LANZA DADOS UN VALOR??
