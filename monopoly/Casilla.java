@@ -239,7 +239,7 @@ public class Casilla {
             System.out.println("Bote puesto a "+Valor.RED+banca.getBote()+"€"+Valor.RESET);
             return true;
         }
-        else if (this.nombre.equals("Ir a Cárcel")) {
+        else if (this.nombre.equals("IrCarcel")) {
             System.out.println(Valor.RED+"Has sido enviado a la cárcel"+Valor.RESET);
         }
         else if (this.nombre.equals("Carcel")) {
