@@ -84,6 +84,26 @@ public class Edificacion {
     public void setGanancias(float ganancias) {
         this.ganancias = ganancias;
     }
+    /**
+     * @return float return the precio
+     */
+    public float getPrecio() {
+        return precio;
+    }
+
+    /**
+     * @param precio the precio to set
+     */
+    public void setPrecio(float precio) {
+        this.precio = precio;
+    }
+
+    /**
+     * @param grupo the grupo to set
+     */
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
 
 ////////////////METODOS///////////////
     @Override 
@@ -106,26 +126,5 @@ public class Edificacion {
         
         return str.toString();
     }    
-
-    /**
-     * @return float return the precio
-     */
-    public float getPrecio() {
-        return precio;
-    }
-
-    /**
-     * @param precio the precio to set
-     */
-    public void setPrecio(float precio) {
-        this.precio = precio;
-    }
-
-    /**
-     * @param grupo the grupo to set
-     */
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
-    }
 
 }

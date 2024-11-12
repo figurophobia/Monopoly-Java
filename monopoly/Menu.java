@@ -36,7 +36,7 @@ public class Menu {
         this.turno = 1; this.partida_ON = true;
         try (Scanner sc = new Scanner(System.in)) {
             banca = new Jugador(); avatares.add(null);jugadores.add(banca); tablero = new Tablero(banca);
-
+            print_intro();
             System.out.println("\n\nCreamos los 2 jugadores mínimos para jugar...");
             anadirjugador();
             anadirjugador();
@@ -63,27 +63,27 @@ public class Menu {
             case "help" -> System.out.println("""
                                               Comandos disponibles:
                                               [+] crear jugador
-                                              [+] jugador
-                                              [+] listar jugadores
-                                              [+] listar avatares
-                                              [+] listar edificios
-                                              [+] listar edificios (grupo)
                                               [+] lanzar dados
                                               [+] acabar turno
-                                              [+] ir carcel
-                                              [+] describir (nombre_casilla)
-                                              [+] dados (valor1) (valor2)
-                                              [+] describir jugador/avatar (nombre/id)
-                                              [+] comprar (nombre propiedad)
-                                              [+] edificar (tipo_edificio)
-                                              [+] vender (casilla) (tipo_edificio) (numero_ventas)
-                                              [+] listar enventa
                                               [+] cambiar modo
-                                              [+] salir carcel
-                                              [+] estadisticas (nombre jugador)
+                                              [+] comprar [nombre propiedad]
+                                              [+] edificar [tipo_edificio]
+                                              [+] vender [casilla] [tipo_edificio] [numero_ventas]
+                                              [+] jugador
+                                              [+] describir [nombre_casilla]
+                                              [+] describir jugador/avatar [nombre/id]
+                                              [+] listar jugadores
+                                              [+] listar avatares
+                                              [+] listar enventa
+                                              [+] listar edificios
+                                              [+] listar edificios [grupo]
+                                              [+] estadisticas [nombre jugador]
                                               [+] estadisticas
-                                              [+] edificar (tipo de edificio)
-                                              [+] ver tablero""");
+                                              [+] ver tablero
+                                              [!] DEBUG commands:
+                                              [+] ir carcel
+                                              [+] salir carcel
+                                              [+] dados [valor1] [valor2]""");
             // Crear jugador
             case "crear" -> {
                 // Si 'crear jugador'
@@ -206,13 +206,11 @@ public class Menu {
                 }
             }
             case "estadisticas" -> {
-                if (partes.length == 2) {
-                    estadisticas(partes[1]);
-                } else  if(partes.length == 1){
-                    estadisticasjuego();
-                } else {
-                    System.out.println("Comando no reconocido");
-                }
+            switch (partes.length) {
+                case 2 -> estadisticas(partes[1]);
+                case 1 -> estadisticasjuego();
+                default -> System.out.println("Comando no reconocido");
+            }
             }
             default -> System.out.println("Comando no reconocido");
         }
@@ -399,7 +397,7 @@ public class Menu {
 
         System.out.println("El avatar " + Valor.BLUE + avatarActual.getId()+ Valor.RESET + " avanzó " +Valor.BLUE + total + Valor.RESET +" posiciones. Desde " + 
         Valor.RED+posicionActual.getNombre()+ Valor.RESET + " hasta " +Valor.GREEN+ nuevaCasilla.getNombre()+Valor.RESET);
-
+        verTablero();
         //Hace la condicion el que no esté en modo avanzado o quien lo esté pero no sea Pelota
         if(!avatares.get(turno).esMovAvanzado() || !avatares.get(turno).getTipo().equals("Pelota")){
             // Verificar si el jugador debe ser encarcelado
@@ -582,6 +580,37 @@ public class Menu {
                 return c;
         }
         return null;
+    }
+    private void print_intro(){
+        System.out.println("\n" + //
+                        "\n" + //
+                        "                                                                                                                                     \n" + //
+                        "                                                                                                                                     \n" + //
+                        "                                                                                                                                     \n" + //
+                        "    ███    █   ████   █   █   █     █   ████   █   █   █   ███       ████     █                                                      \n" + //
+                        "    █  █   █   █      ██  █    █   █    █      ██  █   █   █  █     █    █    █                                                      \n" + //
+                        "    ███    █   ███    █ █ █     █ █     ███    █ █ █   █   █   █   █      █   █                                                      \n" + //
+                        "    █  █   █   █      █  ██     █ █     █      █  ██   █   █  █     █    █                                                           \n" + //
+                        "    ███    █   ████   █   █      █      ████   █   █   █   ███       ████     █                                                      \n" + //
+                        "                                                                                                                                     \n" +Valor.RED+ //
+                        "   ██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████    \n" + //
+                        "   ██                                                                                                                           █    \n" + //
+                        "   ██  ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████  █    \n" + //
+                        "   ██ █████  ███████████  ████          █████  ███████   ████           ████        █████           ████   █████   ██████   ███ █    \n" + //
+                        "   ████████   █████████   ███    █████    ███    █████   ███    █████    ███   ███    ██    █████    ███   ██████    ███   ██████    \n" + //
+                        "   ███████     ███████    ██   █████████   ██     ████   ██   █████████   ██   ████   █   █████████   ██   ███████    █   ███████    \n" + //
+                        "   ███████      █████     █   ██████████   ██       ██   █   ██████████    █   ███        ██████████   █   █████████      ███████    \n" + //
+                        "   ███████   █   ██       █   ██████████   ██   ██       █   ██████████    █         █    ██████████   █   ██████████    ████████    \n" + //
+                        "   ███████   ██       █    █   ████████    ██   ████     ██   █████████   ██      █████   █████████   ██   █████████    █████████    \n" + //
+                        "   ███████   ███     ███   ██    █████    ███   ██████   ██    ██████    ███   █████████    █████     ██          ██   ██████████    \n" + //
+                        "   ██████    ████  █████   ████         █████   ███████  ████           ████   ██████████           ████         ██   ███████████    \n" + //
+                        "   ██████████████████████████████████████████████████████████████   █████████████████████████   █████████████████████████████████    \n" + //
+                        "   ██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████    \n" + //
+                        "   ██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████    \n" + //
+                        "                                                                                                                                     \n" + //
+                        "                                                                                                                                     \n" + //
+                        "\n" +Valor.RESET+ //
+                        "");
     }
 ////////////////////////////////////DEBUG COMMANDS////////////////////////////////////
 //////---METODO LANZA DADOS VALORES ESPECIFICOS---
