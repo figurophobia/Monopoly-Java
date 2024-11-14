@@ -31,6 +31,8 @@ public class Jugador {
     private boolean enBancarrota = false; //Bandera para saber si el jugador está en bancarrota.
     private Jugador deudor = null; //Jugador al que se le debe dinero.
 
+    private boolean CochePuedeComprar = true; //Bandera para saber si el coche puede comprar
+
     /*
      * dineroInvertido: 8500000, //Compra de propiedades solares,servicios y transporte, edificaciones
         pagoTasasEImpuestos: 4500000, //Impuestos, salir de la carcel, cartas de comunidad 1,5 y 6
@@ -199,6 +201,17 @@ public class Jugador {
         return deudor;
     }
 
+    public void setDeudor(Jugador deudor) {
+        this.deudor = deudor;
+    }
+
+    public boolean getCochePuedeComprar() {
+        return CochePuedeComprar;
+    }
+
+    public void setCochePuedeComprar(boolean CochePuedeComprar) {
+        this.CochePuedeComprar = CochePuedeComprar;
+    }
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {

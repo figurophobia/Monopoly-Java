@@ -549,6 +549,7 @@ public class Menu {
         avatarActual.setTiros_extra(0);
         tiros_coche = 0;
         avatarActual.setUltimoTiroFueCoche(false);
+        avatarActual.getJugador().setCochePuedeComprar(true);
         if (tirado) {
             turno++;
             if (turno>(jugadores.size()-1)) {

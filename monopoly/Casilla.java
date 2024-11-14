@@ -287,7 +287,7 @@ public class Casilla {
     * - Jugador que solicita la compra de la casilla.
     * - Banca del monopoly (es el dueño de las casillas no compradas aún).*/
     public void comprarCasilla(Jugador solicitante, Jugador banca) {
-        if (esComprable(solicitante, banca)) {
+        if (esComprable(solicitante, banca) && !(solicitante.getCochePuedeComprar() && solicitante.getAvatar().esMovAvanzado() && solicitante.getAvatar().getTipo().equals("Coche"))) {
             solicitante.sumarGastos(this.valor);
             solicitante.setDineroInvertido(solicitante.getDineroInvertido()+this.valor);
             solicitante.setFortuna(solicitante.getFortuna()-this.valor);
@@ -295,6 +295,7 @@ public class Casilla {
             this.duenho = solicitante;
             solicitante.anhadirPropiedad(this);
             banca.eliminarPropiedad(this);
+            solicitante.setCochePuedeComprar(false);
             if (this.tipo.equals("Solar") && this.grupo.esDuenhoGrupo(solicitante)) {
                 System.out.println("Enhorabuena "+solicitante.getNombre()+", ahora tienes todo el grupo, tus solares pasan a dar mas dinero");
             }
