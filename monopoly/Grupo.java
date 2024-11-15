@@ -179,4 +179,13 @@ public class Grupo {
         }
     System.out.println(str.toString());
     }
+
+    public boolean tieneHipotecaEnGrupo(Jugador jugador){
+        for (Casilla cas : miembros){
+            if (cas.isHipotecada() && cas.getDuenho()==jugador){
+                return true;
+            }
+        }
+        return false;
+    }
 }

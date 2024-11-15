@@ -468,6 +468,10 @@ public class Jugador {
 
     public boolean puedeEdificar(Casilla actual){
         if (avatar.getLugar().getGrupo()!=null){
+            if(actual.getGrupo().tieneHipotecaEnGrupo(this)){
+                System.out.println("No puedes edificar en un grupo en el que tienes propiedades hipotecadas");
+                return false;
+            }
             return (avatar.getLugar().getGrupo().esDuenhoGrupo(this) || ((numeroVisitas.get(actual) >= 3) && (this == actual.getDuenho())));
         }else return false;
     }
