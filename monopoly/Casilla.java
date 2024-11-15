@@ -22,6 +22,8 @@ public class Casilla {
     private ArrayList<Avatar> avatares = new ArrayList<>(); //Avatares que están situados en la casilla.
     private HashMap<String,ArrayList<Edificacion>> edificaciones = new HashMap<>();
     private boolean cuatrovueltas;
+    private boolean hipotecada=false;
+    private float valor_hipoteca;
 
     private float dineroGenerado=0; //Dinero generado por la casilla en alquileres al dueño
     //private ArrayList<Edificacion> edificaciones = new ArrayList<>();
@@ -139,6 +141,18 @@ public class Casilla {
         this.dineroGenerado = dineroGenerado;
     }
 
+    public boolean isHipotecada() {
+        return hipotecada;
+    }
+
+    public void setHipotecada(boolean hipotecada) {
+        this.hipotecada = hipotecada;
+    }
+
+    public float getValor_hipoteca() {
+        return valor_hipoteca;
+    }
+
     //Constructores:
     public Casilla() {
     }//Parámetros vacíos
@@ -153,6 +167,7 @@ public class Casilla {
         this.tipo = tipo;
         this.valor = valor;
         this.valor_inicial=valor;
+        this.hipoteca=valor/2f;
         if (this.tipo.equals("Solar")) {
             this.impuesto= valor*0.1f; //Valor por defecto para impuesto en casillas de solar
         }
@@ -220,6 +235,11 @@ public class Casilla {
             }
         }
         else if (this.duenho!=actual && this.duenho!=banca) {
+            if (hipotecada) {
+                System.out.println("La casilla "+this.nombre+" está hipotecada, no tienes que pagar nada");
+                return true;
+            }
+            
             System.out.println("Has pagado "+Valor.RED+calcularPago(tirada)+"€"+Valor.RESET+" al jugador "+Valor.BLUE+this.duenho.getNombre()+Valor.RESET+" por caer en la casilla "+ Valor.BLUE+ this.nombre+Valor.RESET);   
             this.dineroGenerado+=calcularPago(tirada);
             this.getGrupo().setDineroGenerado(this.getGrupo().getDineroGenerado()+calcularPago(tirada));
@@ -622,6 +642,59 @@ public class Casilla {
             System.out.println("Error: "+e);
         }
     }
+
+    public boolean sePuedeHipotecar(Jugador actual){
+        if (hipotecada){
+            System.out.println("La casilla ya está hipotecada...");
+            return false;
+        }
+        else if(this.duenho!=actual){
+            System.out.println("No eres el dueño de la casilla...");
+            return false;
+        }
+        else if(this.getEdificaciones().size()>0){
+            System.out.println("No puedes hipotecar una casilla con edificaciones,debes venderlos primero...");
+            return false;
+        }
+        else{return true;}
+
+    }
+
+    public boolean sePuedeDeshipotecar(Jugador actual){
+        if (!hipotecada){
+            System.out.println("La casilla no está hipotecada...");
+            return false;
+        }
+        else if(this.duenho!=actual){
+            System.out.println("No eres el dueño de la casilla...");
+            return false;
+        }
+        else if (actual.getFortuna()<valor_hipoteca*1.1f){
+            System.out.println("No tienes suficiente dinero para deshipotecar la casilla...");
+            return false;
+        }
+        else{return true;}
+    }
+
+    public void hipotecar(Jugador actual){
+        if (sePuedeHipotecar(actual)){
+            actual.setFortuna(actual.getFortuna()+hipoteca);
+            //actual.setDineroInvertido(actual.getDineroInvertido()-hipoteca);
+            valor_hipoteca=hipoteca;
+            hipotecada=true;
+            System.out.println("Has hipotecado la casilla "+nombre+" por "+hipoteca+"€, te quedan "+actual.getFortuna()+"€.");
+        }
+    }
+
+    public void deshipotecar(Jugador actual){
+        if (sePuedeDeshipotecar(actual)){
+            actual.setFortuna(actual.getFortuna()-valor_hipoteca*1.1f);
+            //actual.setDineroInvertido(actual.getDineroInvertido()+valor_hipoteca*1.1f);
+            hipotecada=false;
+            System.out.println("Has deshipotecado la casilla "+nombre+" por "+valor_hipoteca*1.1f+"€, te quedan "+actual.getFortuna()+"€.");
+        }
+    }
+    
 
 }//
 

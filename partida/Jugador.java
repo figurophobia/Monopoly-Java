@@ -293,10 +293,8 @@ public class Jugador {
         str.append("nombre: ").append(this.nombre).append(",\n");
         str.append("avatar: ").append(avatar != null ? avatar.getId() : "null").append(",\n");
         str.append("fortuna: ").append(this.fortuna).append(",\n");
-        str.append("propiedades: " + Valor.BLUE).append(this.describirPropiedades()).append(Valor.RESET+"\n");
-        str.append("""
-                   hipotecas: PROVISIONAL,
-                   """);
+        str.append("propiedades: " + Valor.BLUE).append(this.describirPropiedadesSinHipoteca()).append(Valor.RESET+"\n");
+        str.append("hipotecas: " + Valor.BLUE).append(this.describirHipotecas()).append(Valor.RESET+"\n");
 
         boolean hayCasas = false; // Bandera para rastrear si hay casas
         for (Casilla casilla : propiedades) {
@@ -358,10 +356,22 @@ public class Jugador {
     }
 
     //Método para describir las propiedades de un jugador.
-    public String describirPropiedades() {
+    public String describirPropiedadesSinHipoteca() {
         StringBuilder str = new StringBuilder();
         for (Casilla casilla : this.propiedades) {
-            str.append(casilla.getNombre() + ", ");
+            if (!casilla.isHipotecada()){
+                str.append(casilla.getNombre() + ", ");
+            }
+        }
+        return str.toString();
+    }
+
+    public String describirHipotecas(){
+        StringBuilder str = new StringBuilder();
+        for (Casilla casilla : this.propiedades) {
+            if (casilla.isHipotecada()) {
+                str.append(casilla.getNombre() + ", ");
+            }
         }
         return str.toString();
     }

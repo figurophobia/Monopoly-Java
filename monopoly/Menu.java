@@ -218,6 +218,20 @@ public class Menu {
             case "bancarrota" -> {
                 bancarrota(jugadores.get(turno), banca);
             }
+            case "hipotecar" -> {
+                if (partes.length == 2) {
+                    hipotecar(partes[1], jugadores.get(turno));
+                } else {
+                    System.out.println("Comando no reconocido");
+                }
+            }
+            case "deshipotecar" -> {
+                if (partes.length == 2) {
+                    deshipotecar(partes[1], jugadores.get(turno));
+                } else {
+                    System.out.println("Comando no reconocido");
+                }
+            }
             case "estadisticas" -> {
             switch (partes.length) {
                 case 2 -> estadisticas(partes[1]);
@@ -851,6 +865,20 @@ public class Menu {
         avatares.remove(pobre.getAvatar());
         jugadores.remove(pobre);
         acabarTurnoBancarrota(); //Checkear que se haga bien1
+    }
+
+    public void hipotecar(String nombreCasilla,Jugador actual){
+        Casilla c = tablero.casillaByName(nombreCasilla);
+        if (c!=null){
+            c.hipotecar(actual);
+        }else System.out.println("Casilla no encontrada");
+    }
+
+    public void deshipotecar(String nombreCasilla,Jugador actual){
+        Casilla c = tablero.casillaByName(nombreCasilla);
+        if (c!=null){
+            c.deshipotecar(actual);
+        }else System.out.println("Casilla no encontrada");
     }
 
     /* 
