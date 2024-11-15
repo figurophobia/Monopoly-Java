@@ -251,6 +251,7 @@ public class Casilla {
         else if (this.tipo.equals("Impuesto")) {
             System.out.println("Has pagado "+this.impuesto+" a la banca por caer en la casilla "+ this.nombre);
             System.out.println("Tu fortuna es de "+actual.getFortuna());
+            banca.sumarBote(this.impuesto);
             return actual.pagarImpuesto(this.impuesto, banca);
         }
         else if (this.nombre.equals("Parking")) {
@@ -694,7 +695,7 @@ public class Casilla {
             System.out.println("Has deshipotecado la casilla "+nombre+" por "+valor_hipoteca*1.1f+"€, te quedan "+actual.getFortuna()+"€.");
         }
     }
-    
+
 
 }//
 

@@ -195,19 +195,24 @@ public class Avatar {
                 CuartaVuelta = true;
             }
         }
+        if (!dir && (posicion - valorTirada -1< 0)) {
+            this.jugador.DevolverVuelta();
+            System.out.println("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
+            this.CuartaVuelta=false;
+        }
     
         if (dir) { // Si se avanza
             for (int i = 5; i <= valorTirada; i += 2) {
                 newposition = (posicion + i - 1) % 40;
                 detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
-                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnBancarrota()) {
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnDeuda()) {
                     return newposition;
                 }
             }
             if (valorTirada % 2 == 0) {
                 newposition = (posicion + valorTirada - 1) % 40;
                 detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
-                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnBancarrota()) {
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnDeuda()) {
                     return newposition;
                 }
             }
@@ -216,7 +221,7 @@ public class Avatar {
                 newposition = (posicion - i - 1);
                 newposition = newposition < 0 ? (40 + newposition) % 40 : newposition % 40;
                 detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
-                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnBancarrota()) {
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnDeuda()) {
                     return newposition;
                 }
             }
@@ -224,7 +229,7 @@ public class Avatar {
                 newposition = (posicion - valorTirada - 1);
                 newposition = newposition < 0 ? (40 + newposition) % 40 : newposition % 40;
                 detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
-                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnBancarrota()) {
+                if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnDeuda()) {
                     return newposition;
                 }
             }
@@ -263,6 +268,11 @@ public class Avatar {
         }
         else{ // Si es menor que 4 retrocede
             newposition = posicionactual-valorTirada-1;
+            if (newposition<0) {
+                this.jugador.DevolverVuelta();
+                System.out.println("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
+                this.CuartaVuelta=false;
+            }
             newposition = newposition < 0 ? (40 + newposition)%40 : newposition %40;
             //Paramos el coche por 2 turnos
             System.out.println("El coche se ha detenido por 2 turnos");
@@ -287,7 +297,6 @@ public class Avatar {
         // Evaluar la casilla para posibles interacciones
         if (!casillaFinal.evaluarCasilla(jugador, banca, valorTirada)) {
             System.out.println("El jugador " + jugador.getNombre() + " no puede pagar sus deudas!");
-            jugador.quedarBancarrota(casillaFinal.getDuenho());
             return;
         }
 

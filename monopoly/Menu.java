@@ -47,10 +47,11 @@ public class Menu {
 
             while (!partida_OFF) {
                 if (jugadores.size() <3) {
-                    System.out.println("No se puede jugar con menos de 2 jugadores.");
+                    System.out.println("Ganador: "+jugadores.get(1).getNombre()+ "!!!!");
                     endGame();
                 }
-                else {
+                else if (jugadores.get(turno).getFortuna()<0) {
+                    System.out.println("Tienes "+jugadores.get(turno).getFortuna() +" € Debes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
                 }
                 ayudaComandos();
                 String comando = sc.nextLine();
@@ -162,7 +163,17 @@ public class Menu {
                     System.out.println("Comando no reconocido");
                 }
             }
-            case "acabar" -> acabarTurno();
+            case "acabar" -> {
+                if (partes.length == 2 && partes[1].equals("turno")) {
+                    if (jugadores.get(turno).getFortuna()<0) {
+                        System.out.println("No puedes acabar turno. Debes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
+                    } else{
+                        acabarTurno();
+                    }
+                } else {
+                    System.out.println("Comando no reconocido");
+                }
+            }
             case "describir" -> {
                 if (partes.length == 3 && partes[1].equals("jugador")) {
                     descJugador(partes[2]);
@@ -216,7 +227,13 @@ public class Menu {
                 }
             }
             case "bancarrota" -> {
-                bancarrota(jugadores.get(turno), banca);
+                Jugador deudor = jugadores.get(turno).getDeudor();
+                if (deudor != null) {
+                    bancarrota(jugadores.get(turno), jugadores.get(turno).getDeudor());
+                }
+                else{
+                    bancarrota(jugadores.get(turno), banca);
+                }
             }
             case "hipotecar" -> {
                 if (partes.length == 2) {
@@ -420,11 +437,6 @@ public class Menu {
     private void moverYVerTablero(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int total) {
         Casilla nuevaCasilla;
         int newposition = moverJugador(total);
-        if (jugadorActual.isEnBancarrota()) {
-            bancarrota(jugadorActual, jugadorActual.getDeudor()); //Si tiene para hipotecar o vender hay que ponerlo
-            return;
-            
-        }
         nuevaCasilla = tablero.getCasilla(newposition);
 
         System.out.println("El avatar " + Valor.BLUE + avatarActual.getId()+ Valor.RESET + " avanzó " +Valor.BLUE + total + Valor.RESET +" posiciones. Desde " + 
@@ -441,7 +453,6 @@ public class Menu {
             }
             // Verificar si el jugador puede pagar sus deudas
             if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, total)) {
-                bancarrota(jugadorActual, nuevaCasilla.getDuenho()); //Si tiene para hipotecar o vender hay que ponerlo
                 return;
             }
         }
@@ -501,8 +512,6 @@ public class Menu {
     private void salirCarcel() {
         if (lanzamientos==0) { //al inicio del turno en el que esta en la carcel, puede pagar
             if(!jugadores.get(turno).pagarSalidaCarcel()){
-                System.out.println("No tienes suficiente dinero para salir de la cárcel.");
-                bancarrota(jugadores.get(turno), banca); //Si tiene para hipotecar o vender hay que ponerlo
             }
         }else{ //si no ha salido en el turno anterior, sale de la carcel
             System.out.println("Solo puedes pagar la multa al inicio de un turno en el que no hayas tirado los dados.");
@@ -841,11 +850,8 @@ public class Menu {
 
     public  void bancarrota(Jugador pobre, Jugador duenho) {
         float pasta=pobre.getFortuna();
-        duenho.setFortuna(duenho.getFortuna()+pasta);
-        System.out.println("El jugador "+pobre.getNombre()+" ha entrado en bancarrota, el jugador "+duenho.getNombre()+" se queda con su fortuna.");
-        System.out.println(duenho.getNombre()+" ha ganado "+pasta+" € ahora tiene "+duenho.getFortuna()+" €");
-        pobre.setFortuna(0);
         ArrayList<Casilla> propiedades = pobre.getPropiedades();
+        float recuperado=0;
         for (Casilla c : propiedades) {
             if (c.getTipo().equals("Solar") && c.getEdificaciones().size()>0 &&c.getEdificaciones()!=null) {
                 c.getEdificaciones().clear();
@@ -857,6 +863,14 @@ public class Menu {
         if (duenho==banca){
             System.out.println("Las propiedades de " + pobre.getNombre() + " pueden ser compradas de nuevo.");
         }
+        if (pasta<0){
+            recuperado = pobre.getDineroPreDeuda();
+            duenho.sumarFortuna(pobre.getDineroPreDeuda()); //Sumamos el dinero que tenía antes de la deuda
+        } else if (pasta>0){
+            recuperado =pasta;
+            duenho.sumarFortuna(pasta); //Sumamos el dinero actual
+        }
+        System.out.println("El jugador "+duenho.getNombre()+" ha ganado por la deuda"+recuperado+" € ahora tiene "+duenho.getFortuna()+" €");
         turno--;
         if(turno<1){
             turno=jugadores.size()-1;

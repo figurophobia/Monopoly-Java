@@ -28,8 +28,9 @@ public class Jugador {
     private float premiosInversionesOBote=0; //Dinero ganado en premios, inversiones o bote.
     private int vecesEnLaCarcel=0; //Veces que ha estado en la carcel.
 
-    private boolean enBancarrota = false; //Bandera para saber si el jugador está en bancarrota.
     private Jugador deudor = null; //Jugador al que se le debe dinero.
+    private float dineroPreDeuda = 0; //Dinero que se debe antes de la deuda.
+    private boolean enDeuda = false; //Bandera para saber si el jugador está en deuda.
 
     private boolean CochePuedeComprar = true; //Bandera para saber si el coche puede comprar
 
@@ -193,8 +194,13 @@ public class Jugador {
         this.VecesDados = VecesDados;
     }
 
-    public boolean isEnBancarrota() {
-        return enBancarrota;
+
+    public boolean isEnDeuda() {
+        return enDeuda;
+    }
+
+    public void setEnDeuda(boolean enDeuda) {
+        this.enDeuda = enDeuda;
     }
 
     public Jugador getDeudor() {
@@ -212,6 +218,12 @@ public class Jugador {
     public void setCochePuedeComprar(boolean CochePuedeComprar) {
         this.CochePuedeComprar = CochePuedeComprar;
     }
+
+    public float getDineroPreDeuda() {
+        return dineroPreDeuda;
+    }
+
+
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {
@@ -421,12 +433,16 @@ public class Jugador {
 
     //Método para pagar a otro jugador, devuelve true si se ha podido pagar y false en otro caso.
     public boolean pagarAJugador(Jugador recibidor, float cantidad){
-        if (this.getFortuna() < cantidad) {
-            System.out.println("No tienes suficiente dinero para pagar");
-            return false;
-        }
+
         this.sumarFortuna(-cantidad);
         this.sumarGastos(cantidad);
+        if (this.getFortuna() < 0) {
+            this.dineroPreDeuda= cantidad +this.getFortuna();
+            this.deudor = recibidor;
+            this.enDeuda = true;
+            System.out.println("No tienes suficiente dinero, quedas en deuda con "+recibidor.getNombre());
+            return false;
+        }
         recibidor.sumarFortuna(cantidad);
         this.pagoDeAlquileres += cantidad;
         recibidor.cobroDeAlquileres += cantidad;
@@ -435,25 +451,30 @@ public class Jugador {
 
     //Método para pagar impuesto a la banca, devuelve true si se ha podido pagar y false en otro caso.
     public boolean pagarImpuesto(float cantidad,Jugador banca){
-        if (this.getFortuna() < cantidad) {
-            System.out.println("No tienes suficiente dinero para pagar");
-            return false;
-        }
         this.sumarFortuna(-cantidad);
         this.sumarGastos(cantidad);
+        if (this.getFortuna() < 0) {
+            System.out.println("No tienes suficiente dinero para pagar. Quedas en deuda");
+            this.enDeuda=true;
+            this.deudor= null;
+            this.dineroPreDeuda= cantidad +this.getFortuna();
+            return false;
+        }
         this.pagoTasasEImpuestos += cantidad;
-        banca.sumarBote(cantidad);
         return true;
     }
 
     //Metodo para pagar la salida de la carcel, devuelve true si se ha podido pagar y false en otro caso.
     public boolean pagarSalidaCarcel(){
-        if (this.getFortuna() < Valor.PAGO_CARCEL) {
-            System.out.println("No tienes suficiente dinero para pagar");
-            return false;
-        }
         this.sumarFortuna(-Valor.PAGO_CARCEL);
         this.sumarGastos(Valor.PAGO_CARCEL);
+        if (this.getFortuna() < 0) {
+            System.out.println("No tienes suficiente dinero para pagar. Quedas en deuda");
+            this.enDeuda=true;
+            this.deudor= null;
+            this.dineroPreDeuda= Valor.PAGO_CARCEL +this.getFortuna();
+            return false;
+        }
         this.pagoTasasEImpuestos += Valor.PAGO_CARCEL;
         this.sacarCarcel();
         System.out.println("Has pagado 25% "+Valor.PAGO_CARCEL +" para salir de la carcel");
@@ -467,15 +488,19 @@ public class Jugador {
     }
 
     public boolean puedeEdificar(Casilla actual){
-        if (avatar.getLugar().getGrupo()!=null){
+        if (actual.getGrupo()!=null){
             if(actual.getGrupo().tieneHipotecaEnGrupo(this)){
                 System.out.println("No puedes edificar en un grupo en el que tienes propiedades hipotecadas");
                 return false;
             }
-            return (avatar.getLugar().getGrupo().esDuenhoGrupo(this) || ((numeroVisitas.get(actual) >= 3) && (this == actual.getDuenho())));
+            return (actual.getGrupo().esDuenhoGrupo(this) || ((numeroVisitas.get(actual) >= 3) && (this == actual.getDuenho())));
         }else return false;
     }
 
+    public void DevolverVuelta(){
+        this.vueltas--;
+        this.setFortuna(fortuna-Valor.SUMA_VUELTA);
+    }
     
 
     /**
@@ -507,11 +532,4 @@ public class Jugador {
         str.append("}\n");
         System.out.println(str.toString());
     }
-
-    public void quedarBancarrota(Jugador deudor){
-        this.enBancarrota = true;
-        this.deudor = deudor;
-    }
-
-
 }
