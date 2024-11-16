@@ -77,6 +77,9 @@ public class Cartas {
                 if(actual.getLugar().getPosicion()>5){
                     jactual.sumarFortuna(Valor.SUMA_VUELTA);
                     jactual.sumarVueltas();
+                    if (jactual.getVueltas()%4==0){
+                        jactual.getAvatar().setCuartaVuelta(true);
+                    }
 
                     //si pasa por la casilla de salida, cobra la cantidad habitual
                 }
@@ -100,6 +103,9 @@ public class Cartas {
                 if(actual.getLugar().getPosicion()>7){
                     jactual.sumarFortuna(Valor.SUMA_VUELTA);
                     jactual.sumarVueltas();
+                    if (jactual.getVueltas()%4==0){
+                        jactual.getAvatar().setCuartaVuelta(true);
+                    }
                     System.out.println("El jugador "+jactual.getNombre()+"da una vuelta, ha cobrado "+Valor.SUMA_VUELTA+"€"+ " y ahora tiene "+jactual.getFortuna()+"€");
                     //si pasa por la casilla de salida, cobra la cantidad habitual
                 }
@@ -123,6 +129,12 @@ public class Cartas {
             if(accionesCaja.get(indice-1).equals("Paga 500000€ por un fin de semana en un balneario de 5 estrellas.")){
                 //pagar 500000€
                 jactual.sumarFortuna(-500000);
+                if (jactual.getFortuna()<0){
+                    jactual.setEnDeuda(true);
+                    jactual.setDineroPreDeuda(jactual.getFortuna()+500000);
+                    jactual.setDeudor(null);
+                    jactual.setCantidadDeuda(500000);
+                }
                 System.out.println("El jugador "+jactual.getNombre()+" ha pagado 500000€"+ " y ahora tiene "+jactual.getFortuna()+"€");
             }
             else if(accionesCaja.get(indice-1).equals("Te investigan por fraude de identidad. Ve a la Cárcel. Ve directamente sin pasar por la casilla de Salida y sin cobrar la cantidad habitual.")){
@@ -136,6 +148,9 @@ public class Cartas {
                 moverEspecial(tablero, 0, actual, jugadores.get(0));
                 jactual.sumarFortuna(Valor.SUMA_VUELTA);
                 jactual.sumarVueltas();
+                if (jactual.getVueltas()%4==0){
+                    jactual.getAvatar().setCuartaVuelta(true);
+                }
                 System.out.println("El jugador "+jactual.getNombre()+" ha cobrado "+Valor.SUMA_VUELTA+"€"+ " y ahora tiene "+jactual.getFortuna()+"€");
 
 
@@ -148,14 +163,29 @@ public class Cartas {
             else if(accionesCaja.get(indice-1).equals("Paga 1000000€ por invitar a todos tus amigos a un viaje a Solar14.")){
                 //pagar 1000000€
                 jactual.sumarFortuna(-1000000);
+                if (jactual.getFortuna()<0){
+                    jactual.setEnDeuda(true);
+                    jactual.setDineroPreDeuda(jactual.getFortuna()+1000000);
+                    jactual.setDeudor(null);
+                    jactual.setCantidadDeuda(1000000);
+                }
                 System.out.println("El jugador "+jactual.getNombre()+" ha pagado 1000000€"+ " y ahora tiene "+jactual.getFortuna()+"€");
             }
             else if(accionesCaja.get(indice-1).equals("Alquilas a tus compañeros una villa en Solar7 durante una semana. Paga 200000€ a cada jugador.")){
                 //paga 200000€ a cada jugador
+                int jugadoresAPagar = jugadores.size()-2;
+                float dineroAPagar = jugadoresAPagar*200000;
+                jactual.sumarFortuna(-dineroAPagar);
+                if (jactual.getFortuna()<0){
+                    jactual.setEnDeuda(true);
+                    jactual.setDineroPreDeuda(jactual.getFortuna()+dineroAPagar);
+                    jactual.setDeudor(null);
+                    jactual.setCantidadDeuda(dineroAPagar);
+                    return;
+                }
                 for (Jugador jugador : jugadores) {
-                    if(jugador != jactual){
+                    if(jugador != jactual && jugador!=jugadores.get(0)){
                         jugador.sumarFortuna(200000);
-                        jactual.sumarFortuna(-200000);
                     }
                 }
                 System.out.println("El jugador "+jactual.getNombre()+" ha pagado 200000€ a cada jugador"+ " y ahora tiene "+jactual.getFortuna()+"€");

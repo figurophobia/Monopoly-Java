@@ -120,6 +120,10 @@ public class Avatar {
         this.lugar = lugar;
     }
     
+    public void setCuartaVuelta(boolean cuartaVuelta) {
+        CuartaVuelta = cuartaVuelta;
+    }
+
     //Constructor vacío
     public Avatar() {
     }

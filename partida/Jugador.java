@@ -31,6 +31,7 @@ public class Jugador {
     private Jugador deudor = null; //Jugador al que se le debe dinero.
     private float dineroPreDeuda = 0; //Dinero que se debe antes de la deuda.
     private boolean enDeuda = false; //Bandera para saber si el jugador está en deuda.
+    private float cantidadDeuda = 0; //Cantidad de la deuda.
 
     private boolean CochePuedeComprar = true; //Bandera para saber si el coche puede comprar
 
@@ -223,6 +224,17 @@ public class Jugador {
         return dineroPreDeuda;
     }
 
+    public void setDineroPreDeuda(float dineroPreDeuda) {
+        this.dineroPreDeuda = dineroPreDeuda;
+    }
+
+    public float getCantidadDeuda() {
+        return cantidadDeuda;
+    }
+
+    public void setCantidadDeuda(float cantidadDeuda) {
+        this.cantidadDeuda = cantidadDeuda;
+    }
 
 
     //Constructor vacío. Se usará para crear la banca.
@@ -440,6 +452,7 @@ public class Jugador {
             this.dineroPreDeuda= cantidad +this.getFortuna();
             this.deudor = recibidor;
             this.enDeuda = true;
+            this.cantidadDeuda = cantidad;
             System.out.println("No tienes suficiente dinero, quedas en deuda con "+recibidor.getNombre());
             return false;
         }
@@ -458,6 +471,7 @@ public class Jugador {
             this.enDeuda=true;
             this.deudor= null;
             this.dineroPreDeuda= cantidad +this.getFortuna();
+            this.cantidadDeuda = cantidad;
             return false;
         }
         this.pagoTasasEImpuestos += cantidad;
@@ -473,6 +487,7 @@ public class Jugador {
             this.enDeuda=true;
             this.deudor= null;
             this.dineroPreDeuda= Valor.PAGO_CARCEL +this.getFortuna();
+            this.cantidadDeuda = Valor.PAGO_CARCEL;
             return false;
         }
         this.pagoTasasEImpuestos += Valor.PAGO_CARCEL;

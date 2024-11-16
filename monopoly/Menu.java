@@ -626,6 +626,19 @@ public class Menu {
                 Jugador jugadorActual = jugadores.get(turno);
                 if (c.getDuenho()==jugadorActual)
                     c.vender_edificio(tipo,numero);
+                    if (jugadorActual.isEnDeuda() && jugadorActual.getFortuna()>0){
+                        if (jugadorActual.getDeudor()!=null){
+                            jugadorActual.getDeudor().sumarFortuna(jugadorActual.getCantidadDeuda());
+                            System.out.println("Deuda pagada");
+                            jugadorActual.setEnDeuda(false);
+                        }
+                        else{
+                            banca.sumarFortuna(jugadorActual.getCantidadDeuda());
+                            System.out.println("Deuda pagada");
+                            jugadorActual.setEnDeuda(false);
+                        }
+                        
+                    }
                 else System.out.println("No te pertenece esa casilla!");
             }else System.out.println("Casilla no encontrada...");
         }catch (NumberFormatException e){
@@ -885,6 +898,19 @@ public class Menu {
         Casilla c = tablero.casillaByName(nombreCasilla);
         if (c!=null){
             c.hipotecar(actual);
+            if (actual.isEnDeuda() && actual.getFortuna()>0){
+                if (actual.getDeudor()!=null){
+                    actual.getDeudor().sumarFortuna(actual.getCantidadDeuda());
+                    System.out.println("Deuda pagada");
+                    actual.setEnDeuda(false);
+                }
+                else{
+                    banca.sumarFortuna(actual.getCantidadDeuda());
+                    System.out.println("Deuda pagada");
+                    actual.setEnDeuda(false);
+                }
+                
+            }
         }else System.out.println("Casilla no encontrada");
     }
 
