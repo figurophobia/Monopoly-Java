@@ -477,7 +477,7 @@ public class Menu {
     private int moverJugador(int posiciones) {
         if (avatares.get(turno).esMovAvanzado()) {
             if (avatares.get(turno).getTipo().equals("Pelota")) {
-                return avatares.get(turno).moverAvatarPelota(tablero.getPosiciones(), posiciones, banca);
+                return avatares.get(turno).moverAvatarPelota(tablero.getPosiciones(), posiciones, banca, cartas, tablero, jugadores);
             }
             else if (avatares.get(turno).getTipo().equals("Coche")) {
                 if (lanzamientos<2 && posiciones>4){

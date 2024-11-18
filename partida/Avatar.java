@@ -180,7 +180,7 @@ public class Avatar {
         return newposition;
     }
 
-    public int moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada, Jugador banca) {
+    public int moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada, Jugador banca, Cartas cartas, Tablero tablero, ArrayList<Jugador> jugadores) {
         CuartaVuelta = false;
         int posicion = lugar.getPosicion();
         int newposition = 0;
@@ -204,35 +204,42 @@ public class Avatar {
             System.out.println("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
             this.CuartaVuelta=false;
         }
-    
+        
+        int valor_avanzado_previo=0;
         if (dir) { // Si se avanza
             for (int i = 5; i <= valorTirada; i += 2) {
-                newposition = (posicion + i - 1) % 40;
-                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
+                posicion= this.getLugar().getPosicion();
+                newposition = (posicion + i - valor_avanzado_previo - 1) % 40;
+                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas, cartas, tablero, jugadores);
+                valor_avanzado_previo=i;
                 if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnDeuda()) {
                     return newposition;
                 }
             }
             if (valorTirada % 2 == 0) {
-                newposition = (posicion + valorTirada - 1) % 40;
-                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
+                posicion= this.getLugar().getPosicion();
+                newposition = (posicion + valorTirada -valor_avanzado_previo - 1) % 40;
+                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas, cartas, tablero, jugadores);
                 if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnDeuda()) {
                     return newposition;
                 }
             }
         } else { // Si se retrocede
             for (int i = 1; i <= valorTirada; i += 2) {
-                newposition = (posicion - i - 1);
+                posicion= this.getLugar().getPosicion();
+                newposition = (posicion - i + valor_avanzado_previo- 1);
                 newposition = newposition < 0 ? (40 + newposition) % 40 : newposition % 40;
-                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
+                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas, cartas, tablero, jugadores);
+                valor_avanzado_previo=i;
                 if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnDeuda()) {
                     return newposition;
                 }
             }
             if (valorTirada % 2 == 0) {
-                newposition = (posicion - valorTirada - 1);
+                posicion= this.getLugar().getPosicion();
+                newposition = (posicion - valorTirada +valor_avanzado_previo - 1);
                 newposition = newposition < 0 ? (40 + newposition) % 40 : newposition % 40;
-                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas);
+                detenerse(newposition, banca, valorTirada, this.getLugar(), casillas, cartas, tablero, jugadores);
                 if (casillas.get(newposition / 10).get(newposition % 10).getNombre().equals("IrCarcel") || this.jugador.isEnDeuda()) {
                     return newposition;
                 }
@@ -293,11 +300,17 @@ public class Avatar {
     }
 
     //Detenerse en casilla
-    public void detenerse(int posicion, Jugador banca, int valorTirada, Casilla casillaActual,ArrayList<ArrayList<Casilla>> casillas) {
+    public void detenerse(int posicion, Jugador banca, int valorTirada, Casilla casillaActual,ArrayList<ArrayList<Casilla>> casillas, Cartas cartas, Tablero tablero, ArrayList<Jugador> jugadores) {
         casillaActual.eliminarAvatar(this);
         Casilla casillaFinal = casillas.get(posicion / 10).get(posicion % 10);
         System.out.println("El avatar " + this.getId() + " para en la casilla " + casillaFinal.getNombre());
-
+        // Al finalizar, actualizar la posición y registrar la visita
+        casillaFinal.anhadirAvatar(this);
+        this.lugar = casillaFinal;
+        if (casillaFinal.getTipo().equals("Comunidad") || casillaFinal.getTipo().equals("Suerte")) {
+            cartas.gestionCartas(this, tablero, jugadores);
+        }
+        
         // Evaluar la casilla para posibles interacciones
         if (!casillaFinal.evaluarCasilla(jugador, banca, valorTirada)) {
             System.out.println("El jugador " + jugador.getNombre() + " no puede pagar sus deudas!");
@@ -312,9 +325,7 @@ public class Avatar {
         }
     
 
-    // Al finalizar, actualizar la posición y registrar la visita
-    casillaFinal.anhadirAvatar(this);
-    this.lugar = casillaFinal;
+
     }
     
 
