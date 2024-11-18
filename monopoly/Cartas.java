@@ -95,6 +95,7 @@ public class Cartas {
             else if(accionesSuerte.get(indice-1).equals("Vendes tu billete de avión para Solar17 en una subasta por Internet. Cobra 500000€.")){
                 //cobrar 500000€
                 jactual.sumarFortuna(500000);
+                jactual.setPremiosInversionesOBote(jactual.getPremiosInversionesOBote()+500000);
                 System.out.println("El jugador "+jactual.getNombre()+" ha cobrado 500000€"+ " y ahora tiene "+jactual.getFortuna()+"€");
             }
             else if(accionesSuerte.get(indice-1).equals("Ve a Solar3. Si pasas por la casilla de Salida, cobra la cantidad habitual.")){
@@ -119,6 +120,7 @@ public class Cartas {
             else if(accionesSuerte.get(indice-1).equals("¡Has ganado el bote de la lotería! Recibe 1000000€.")){
                 //cobrar 1000000€
                 jactual.sumarFortuna(1000000);
+                jactual.setPremiosInversionesOBote(jactual.getPremiosInversionesOBote()+1000000);
                 System.out.println("El jugador "+jactual.getNombre()+" ha cobrado 1000000€"+ " y ahora tiene "+jactual.getFortuna()+"€");
             }
         }
@@ -129,6 +131,7 @@ public class Cartas {
             if(accionesCaja.get(indice-1).equals("Paga 500000€ por un fin de semana en un balneario de 5 estrellas.")){
                 //pagar 500000€
                 jactual.sumarFortuna(-500000);
+                jactual.setPagoTasasEImpuestos(jactual.getPagoTasasEImpuestos()+500000);
                 if (jactual.getFortuna()<0){
                     jactual.setEnDeuda(true);
                     jactual.setDineroPreDeuda(jactual.getFortuna()+500000);
@@ -158,11 +161,13 @@ public class Cartas {
             else if(accionesCaja.get(indice-1).equals("Tu compañía de Internet obtiene beneficios. Recibe 2000000€.")){
                 //cobrar 2000000€
                 jactual.sumarFortuna(2000000);
+                jactual.setPremiosInversionesOBote(jactual.getPremiosInversionesOBote()+2000000);
                 System.out.println("El jugador "+jactual.getNombre()+" ha cobrado 2000000€"+ " y ahora tiene "+jactual.getFortuna()+"€");
             }
             else if(accionesCaja.get(indice-1).equals("Paga 1000000€ por invitar a todos tus amigos a un viaje a Solar14.")){
                 //pagar 1000000€
                 jactual.sumarFortuna(-1000000);
+                jactual.setPagoTasasEImpuestos(jactual.getPagoTasasEImpuestos()+1000000);
                 if (jactual.getFortuna()<0){
                     jactual.setEnDeuda(true);
                     jactual.setDineroPreDeuda(jactual.getFortuna()+1000000);
@@ -176,6 +181,7 @@ public class Cartas {
                 int jugadoresAPagar = jugadores.size()-2;
                 float dineroAPagar = jugadoresAPagar*200000;
                 jactual.sumarFortuna(-dineroAPagar);
+                jactual.setPagoTasasEImpuestos(jactual.getPagoTasasEImpuestos()+dineroAPagar);
                 if (jactual.getFortuna()<0){
                     jactual.setEnDeuda(true);
                     jactual.setDineroPreDeuda(jactual.getFortuna()+dineroAPagar);
