@@ -29,7 +29,6 @@ public class Cartas {
     public void gestionCartas(Avatar actual, Tablero tablero, ArrayList<Jugador> jugadores){
 
         if (actual.getLugar().getTipo().equals("Suerte")){
-        //if(this.nombre.equals("Suerte")){
             //Barajar las cartas
             //barajarCartas(accionesSuerte);
     
