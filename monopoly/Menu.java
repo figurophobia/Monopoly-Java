@@ -170,6 +170,8 @@ public class Menu {
                     } else{
                         acabarTurno();
                     }
+                }else if(partes.length == 3 && partes[1].equals("turno") && partes[2].equals("force")){
+                    acabarTurnoForce();
                 } else {
                     System.out.println("Comando no reconocido");
                 }
@@ -583,6 +585,31 @@ public class Menu {
             System.out.println("Turno de "+ jugadores.get(turno).getNombre());}
         else System.out.println("Debes lanzar los dados antes de acabar el turno.");
     }
+
+
+    //////---METODO ACABAR TURNO---
+    private void acabarTurnoForce() {
+        Avatar avatarActual = avatares.get(turno);
+        if (avatarActual.isCocheParado()){
+            avatarActual.reducirTurnosParado();
+            tirado = true;
+            avatarActual.setUltimoTiroFueCoche(false);
+            if (avatarActual.getTurnosParado()==0) {
+                avatarActual.setCocheParado(false);
+            }
+        }
+        avatarActual.setTiros_extra(0);
+        tiros_coche = 0;
+        avatarActual.setUltimoTiroFueCoche(false);
+        avatarActual.getJugador().setCochePuedeComprar(true);
+        turno++;
+        if (turno>(jugadores.size()-1)) {
+            turno = 1;
+        }
+        lanzamientos = 0;
+        tirado = false;
+        System.out.println("Turno de "+ jugadores.get(turno).getNombre());
+        }
 
     private void acabarTurnoBancarrota(){
         turno++;
