@@ -76,7 +76,7 @@ public class Cartas {
                 if(actual.getLugar().getPosicion()>5){
                     jactual.sumarFortuna(Valor.SUMA_VUELTA);
                     jactual.sumarVueltas();
-                    if (jactual.getVueltas()%4==0){
+                    if (jactual.getVueltas()%4==0 && jactual.getVueltas()!=0){
                         jactual.getAvatar().setCuartaVuelta(true);
                     }
 
@@ -103,7 +103,7 @@ public class Cartas {
                 if(actual.getLugar().getPosicion()>7){
                     jactual.sumarFortuna(Valor.SUMA_VUELTA);
                     jactual.sumarVueltas();
-                    if (jactual.getVueltas()%4==0){
+                    if (jactual.getVueltas()%4==0 && jactual.getVueltas()!=0){
                         jactual.getAvatar().setCuartaVuelta(true);
                     }
                     System.out.println("El jugador "+jactual.getNombre()+"da una vuelta, ha cobrado "+Valor.SUMA_VUELTA+"€"+ " y ahora tiene "+jactual.getFortuna()+"€");
@@ -150,7 +150,7 @@ public class Cartas {
                 moverEspecial(tablero, 0, actual, jugadores.get(0));
                 jactual.sumarFortuna(Valor.SUMA_VUELTA);
                 jactual.sumarVueltas();
-                if (jactual.getVueltas()%4==0){
+                if (jactual.getVueltas()%4==0 && jactual.getVueltas()!=0){
                     jactual.getAvatar().setCuartaVuelta(true);
                 }
                 System.out.println("El jugador "+jactual.getNombre()+" ha cobrado "+Valor.SUMA_VUELTA+"€"+ " y ahora tiene "+jactual.getFortuna()+"€");

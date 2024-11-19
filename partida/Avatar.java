@@ -169,7 +169,7 @@ public class Avatar {
             this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
             this.jugador.setPasarPorCasillaDeSalida(this.jugador.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
             System.out.println("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);
-            if (this.jugador.getVueltas()%4==0) {
+            if (this.jugador.getVueltas()%4==0  && this.jugador.getVueltas()!=0) {
                 this.CuartaVuelta=true;
             } 
         }
@@ -263,7 +263,7 @@ public class Avatar {
                 this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
                 this.jugador.setPasarPorCasillaDeSalida(this.jugador.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
                 System.out.println("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);
-                if (this.jugador.getVueltas()%4==0) {
+                if (this.jugador.getVueltas()%4==0 && this.jugador.getVueltas()!=0) {
                     this.CuartaVuelta=true;
                 } 
             }
