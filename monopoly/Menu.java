@@ -1,17 +1,15 @@
 package monopoly;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
-import monopoly.Edificacion;
 import partida.*;
 
 public class Menu {
 
 //////---ATRIBUTOS CLASE MENU---
-    private ArrayList<Jugador> jugadores = new ArrayList<Jugador>(); //Jugadores de la partida.
-    private ArrayList<Avatar> avatares = new ArrayList<Avatar>(); //Avatares en la partida.
+    private ArrayList<Jugador> jugadores = new ArrayList<>(); //Jugadores de la partida.
+    private ArrayList<Avatar> avatares = new ArrayList<>(); //Avatares en la partida.
     private int turno = 0; //Índice correspondiente a la posición en el arrayList del jugador (y el avatar) que tienen el turno
     private int lanzamientos; //Variable para contar el número de lanzamientos de un jugador en un turno.
     private Tablero tablero; //Tablero en el que se juega.

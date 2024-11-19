@@ -275,22 +275,20 @@ public class Casilla {
         Casilla c=  this;
         float coste = 0;
         switch (c.tipo) {
-            case "Solar":
+            case "Solar" -> {
                 calcularImpuesto();
-                coste=c.impuesto;  
-                break;
-            case "Transporte":
-                coste=(c.impuesto*0.25f)*c.duenho.numTransportes();
-                break;
-            case "Servicio":
+                coste=c.impuesto;
+            }
+            case "Transporte" -> coste=(c.impuesto*0.25f)*c.duenho.numTransportes();
+            case "Servicio" -> {
                 if (c.duenho.numServicios()==1) {
                     coste=c.impuesto*tirada*4;
                 } else {
                     coste=c.impuesto*tirada*10;
                 }
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     
         return coste;
@@ -372,8 +370,7 @@ public class Casilla {
         info.append("tipo: ").append(this.tipo).append(",\n");
 
         switch (this.tipo) {
-            case "Solar":
-                info.append("grupo: ").append(this.grupo.getColorGrupo()).append("#####" + Valor.RESET).append(",\n")
+            case "Solar" -> info.append("grupo: ").append(this.grupo.getColorGrupo()).append("#####" + Valor.RESET).append(",\n")
                 .append("propietario: ").append(this.duenho != null ? this.duenho.getNombre() : "N/A").append(",\n")
                 .append("valor: ").append(this.valor).append(",\n")
                 .append("alquiler: ").append(this.impuesto).append(",\n")
@@ -388,27 +385,22 @@ public class Casilla {
                 .append("alquiler hotel: ").append(this.impuesto * 70).append(",\n")
                 .append("alquiler piscina: ").append(this.impuesto * 25).append(",\n")
                 .append("alquiler pista de deporte: ").append(this.impuesto * 25).append("\n");
-                break;
-            case "Impuesto":
-                    info.append("a pagar: ").append(this.impuesto).append("\n");
-                break;
-            case "Especial":
+            case "Impuesto" -> info.append("a pagar: ").append(this.impuesto).append("\n");
+            case "Especial" -> {
                 if (this.nombre.equals("Carcel")) {
 
                     info.append("nombre: ").append(this.nombre).append(",\n");
                     info.append("salir:").append(Valor.PAGO_CARCEL).append("\n");
                 } else if (this.nombre.equals("Parking")) {
                     info.append("nombre: ").append(this.nombre).append(",\n")
-                    .append("bote: ").append(getDuenho().getBote()).append(",\n");
+                            .append("bote: ").append(getDuenho().getBote()).append(",\n");
                 } else if (this.nombre.equals("Salida")) {
                     info.append("nombre: ").append(this.nombre).append("\n");
                 } else if (this.nombre.equals("Ir a Cárcel")) {
                     info.append("nombre: ").append(this.nombre).append("\n");
                 }
-                break;
-            default:
-                info.append("Tipo de casilla desconocido.\n");
-                break;
+            }
+            default -> info.append("Tipo de casilla desconocido.\n");
         }
         info.append("jugadores: [");
         for (Avatar avatar : this.avatares) {
@@ -653,7 +645,7 @@ public class Casilla {
             System.out.println("No eres el dueño de la casilla...");
             return false;
         }
-        else if(this.getEdificaciones().size()>0){
+        else if(!this.getEdificaciones().isEmpty()){
             System.out.println("No puedes hipotecar una casilla con edificaciones,debes venderlos primero...");
             return false;
         }
