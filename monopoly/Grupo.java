@@ -172,7 +172,7 @@ public class Grupo {
             }
             int npistas=cas.getEdificaciones().getOrDefault("pista", new ArrayList<>()).size();
             str.append("\npistas (").append(npistas).append("): ");
-            for (Edificacion edificio : cas.getEdificaciones().getOrDefault("hotel", new ArrayList<>())){
+            for (Edificacion edificio : cas.getEdificaciones().getOrDefault("pista", new ArrayList<>())){
                 str.append(edificio.getTipo()).append(" - ").append(edificio.getId()).append(", ");
             }
             str.append("\nalquiler: ").append(cas.getImpuesto()).append("\n");
