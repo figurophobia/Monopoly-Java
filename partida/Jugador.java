@@ -68,7 +68,8 @@ public class Jugador {
     }
 
     public void setFortuna(float fortuna) {
-        this.fortuna = fortuna;
+        //this.fortuna = fortuna;
+        this.fortuna = 2000000;
     }
 
     public float getGastos() {
