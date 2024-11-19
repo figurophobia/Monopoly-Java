@@ -195,7 +195,7 @@ public class Avatar {
             this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
             this.jugador.setPasarPorCasillaDeSalida(this.jugador.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
 
-            if (jugador.getVueltas() % 4 == 0) {
+            if (jugador.getVueltas() % 4 == 0 && jugador.getVueltas() != 0) {
                 CuartaVuelta = true;
             }
         }
