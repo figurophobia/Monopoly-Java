@@ -242,7 +242,9 @@ public class Casilla {
             
             System.out.println("Has pagado "+Valor.RED+calcularPago(tirada)+"€"+Valor.RESET+" al jugador "+Valor.BLUE+this.duenho.getNombre()+Valor.RESET+" por caer en la casilla "+ Valor.BLUE+ this.nombre+Valor.RESET);   
             this.dineroGenerado+=calcularPago(tirada);
-            this.getGrupo().setDineroGenerado(this.getGrupo().getDineroGenerado()+calcularPago(tirada));
+            if(this.getGrupo()!=null){ //Si la casilla tiene grupo (tipo Solar), se suma el dinero generado al grupo
+              this.getGrupo().setDineroGenerado(this.getGrupo().getDineroGenerado()+calcularPago(tirada));
+            }
             return actual.pagarAJugador(this.duenho,calcularPago(tirada));
         }
         else if ((actual.puedeEdificar(this))){
