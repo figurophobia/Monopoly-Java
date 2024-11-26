@@ -5,3 +5,5 @@ entrega_parte2.zip
 *.pdf
 /bin/
 Test.java
+*.log
+*.sh
