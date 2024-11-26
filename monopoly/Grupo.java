@@ -177,7 +177,7 @@ public class Grupo {
             }
             str.append("\nalquiler: ").append(cas.getImpuesto()).append("\n");
         }
-    System.out.println(str.toString());
+    Juego.consola.imprimir(str.toString());
     }
 
     public boolean tieneHipotecaEnGrupo(Jugador jugador){

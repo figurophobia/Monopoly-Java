@@ -68,8 +68,7 @@ public class Jugador {
     }
 
     public void setFortuna(float fortuna) {
-        //this.fortuna = fortuna;
-        this.fortuna = 2000000;
+        this.fortuna = fortuna;
     }
 
     public float getGastos() {
@@ -419,7 +418,7 @@ public class Jugador {
         float cantidad = banca.getBote();
         this.sumarFortuna(cantidad);
         banca.ReiniciarBote();
-        System.out.println("El jugador "+this.getNombre()+" ha recibido el bote de " +cantidad+"€");
+        Juego.consola.imprimir("El jugador "+this.getNombre()+" ha recibido el bote de " +cantidad+"€");
     }
 
     //Método para saber cuántos transportes tiene un jugador.
@@ -454,7 +453,7 @@ public class Jugador {
             this.deudor = recibidor;
             this.enDeuda = true;
             this.cantidadDeuda = cantidad;
-            System.out.println("No tienes suficiente dinero, quedas en deuda con "+recibidor.getNombre());
+            Juego.consola.imprimir("No tienes suficiente dinero, quedas en deuda con "+recibidor.getNombre());
             return false;
         }
         recibidor.sumarFortuna(cantidad);
@@ -468,7 +467,7 @@ public class Jugador {
         this.sumarFortuna(-cantidad);
         this.sumarGastos(cantidad);
         if (this.getFortuna() < 0) {
-            System.out.println("No tienes suficiente dinero para pagar. Quedas en deuda");
+            Juego.consola.imprimir("No tienes suficiente dinero para pagar. Quedas en deuda");
             this.enDeuda=true;
             this.deudor= null;
             this.dineroPreDeuda= cantidad +this.getFortuna();
@@ -484,7 +483,7 @@ public class Jugador {
         this.sumarFortuna(-Valor.PAGO_CARCEL);
         this.sumarGastos(Valor.PAGO_CARCEL);
         if (this.getFortuna() < 0) {
-            System.out.println("No tienes suficiente dinero para pagar. Quedas en deuda");
+            Juego.consola.imprimir("No tienes suficiente dinero para pagar. Quedas en deuda");
             this.enDeuda=true;
             this.deudor= null;
             this.dineroPreDeuda= Valor.PAGO_CARCEL +this.getFortuna();
@@ -493,7 +492,7 @@ public class Jugador {
         }
         this.pagoTasasEImpuestos += Valor.PAGO_CARCEL;
         this.sacarCarcel();
-        System.out.println("Has pagado 25% "+Valor.PAGO_CARCEL +" para salir de la carcel");
+        Juego.consola.imprimir("Has pagado 25% "+Valor.PAGO_CARCEL +" para salir de la carcel");
         return true;
     }
 
@@ -506,7 +505,7 @@ public class Jugador {
     public boolean puedeEdificar(Casilla actual){
         if (actual.getGrupo()!=null){
             if(actual.getGrupo().tieneHipotecaEnGrupo(this)){
-                System.out.println("No puedes edificar en un grupo en el que tienes propiedades hipotecadas");
+                Juego.consola.imprimir("No puedes edificar en un grupo en el que tienes propiedades hipotecadas");
                 return false;
             }
             return (actual.getGrupo().esDuenhoGrupo(this) || ((numeroVisitas.get(actual) >= 3) && (this == actual.getDuenho())));
@@ -546,6 +545,6 @@ public class Jugador {
         str.append("premiosInversionesOBote: " + this.premiosInversionesOBote + ",\n");
         str.append("vecesEnLaCarcel: " + this.vecesEnLaCarcel + ",\n");
         str.append("}\n");
-        System.out.println(str.toString());
+        Juego.consola.imprimir(str.toString());
     }
 }
