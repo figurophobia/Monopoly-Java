@@ -22,7 +22,6 @@ public class Juego {
     private boolean solvente; //Booleano para comprobar si el jugador que tiene el turno es solvente, es decir, si ha pagado sus deudas.
     private boolean partida_ON; //Booleano para comprobar si la partida sigue en curso.
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
-    private int tiros_coche; //Para ver cuantos tiros lleva el coche
     private Cartas cartas = new Cartas(); //Objeto de la clase Cartas
 
 //////---CONSTRUCTOR JUEGO---
