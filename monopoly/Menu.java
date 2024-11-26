@@ -25,6 +25,9 @@ public class Menu {
     private int tiros_coche; //Para ver cuantos tiros lleva el coche
     private Cartas cartas; //Objeto de la clase Cartas
 
+    //instanciar consola en menu
+    public Consola consola = new ConsolaNormal();
+
 //////---MENU---
     public Menu() {
         try{
@@ -40,7 +43,7 @@ public class Menu {
         try (Scanner sc = new Scanner(System.in)) {
             banca = new Jugador(); avatares.add(null);jugadores.add(banca); tablero = new Tablero(banca);
             print_intro();
-            System.out.println("\n\nCreamos los 2 jugadores mínimos para jugar...");
+            consola.imprimirMensaje("Creamos los 2 jugadores mínimos para jugar...");
             anadirjugador();
             anadirjugador();
             System.out.println("Si desea añadir más jugadores, introduzca 'crear jugador'...");
