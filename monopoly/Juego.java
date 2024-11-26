@@ -459,7 +459,6 @@ public class Juego {
             }
         }
         avatarActual.setTiros_extra(0);
-        tiros_coche = 0;
         avatarActual.setUltimoTiroFueCoche(false);
         avatarActual.getJugador().setCochePuedeComprar(true);
         if (tirado) {
@@ -486,7 +485,6 @@ public class Juego {
             }
         }
         avatarActual.setTiros_extra(0);
-        tiros_coche = 0;
         avatarActual.setUltimoTiroFueCoche(false);
         avatarActual.getJugador().setCochePuedeComprar(true);
         turno++;
