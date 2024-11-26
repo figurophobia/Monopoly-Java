@@ -25,6 +25,7 @@ public class Menu {
     private int tiros_coche; //Para ver cuantos tiros lleva el coche
     private Cartas cartas; //Objeto de la clase Cartas
 
+    //instanciar consola en menu
     public Consola consola = new ConsolaNormal();
 
 //////---MENU---
