@@ -251,6 +251,13 @@ public class Menu {
                     System.out.println("Comando no reconocido");
                 }
             }
+            case "avanzar" -> {
+                if (partes.length == 1) {
+                    avanzar();
+                } else {
+                    System.out.println("Comando no reconocido");
+                }
+            }
             case "estadisticas" -> {
             switch (partes.length) {
                 case 2 -> estadisticas(partes[1]);
@@ -403,7 +410,7 @@ public class Menu {
                 System.out.println("¡Dobles! Sales de la cárcel.");
                 jugadorActual.sacarCarcel();
                 sleep(1000);
-                moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2);
+                moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2,false);
             } else {
                 System.out.println("No has sacado dobles, sigues en la cárcel.");
                 jugadorActual.setTiradasCarcel(jugadorActual.getTiradasCarcel() + 1);
@@ -433,10 +440,10 @@ public class Menu {
         }
     
         sleep(1000);
-        moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2);
+        moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2,false);
     }
 //////---METODO MOVER AVATAR AL LANZAR DADOS---
-    private void moverYVerTablero(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int total) {
+    private void moverYVerTablero(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int total, boolean avanzar) {
         Casilla nuevaCasilla;
         int newposition = moverJugador(total);
         nuevaCasilla = tablero.getCasilla(newposition);
@@ -444,20 +451,24 @@ public class Menu {
         System.out.println("El avatar " + Valor.BLUE + avatarActual.getId()+ Valor.RESET + " avanzó " +Valor.BLUE + total + Valor.RESET +" posiciones. Desde " + 
         Valor.RED+posicionActual.getNombre()+ Valor.RESET + " hasta " +Valor.GREEN+ nuevaCasilla.getNombre()+Valor.RESET);
         verTablero();
-        //Hace la condicion el que no esté en modo avanzado o quien lo esté pero no sea Pelota
-        if(!avatares.get(turno).esMovAvanzado() || !avatares.get(turno).getTipo().equals("Pelota")){
-            // Verificar si el jugador debe ser encarcelado
-            if (nuevaCasilla == tablero.getPosiciones().get(3).get(0)) {
-                jugadorActual.encarcelar(tablero.getPosiciones());
-            }
-            if (nuevaCasilla.getTipo().equals("Comunidad") || nuevaCasilla.getTipo().equals("Suerte")) {
-                cartas.gestionCartas(avatarActual, tablero, jugadores);
-            }
+        // Verificar si el jugador debe ser encarcelado
+        if (nuevaCasilla == tablero.getPosiciones().get(3).get(0)) {
+            jugadorActual.encarcelar(tablero.getPosiciones());
+        }
+        if (nuevaCasilla.getTipo().equals("Comunidad") || nuevaCasilla.getTipo().equals("Suerte")) {
+            cartas.gestionCartas(avatarActual, tablero, jugadores);
+        }
+        if (avanzar){
             // Verificar si el jugador puede pagar sus deudas
+            if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, avatarActual.getValorTotalTirada())) {
+                return;
+            }
+        }else{
             if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, total)) {
                 return;
             }
         }
+        
 
         if (avatarActual.DarCuartaVuelta()) {
             boolean todosHanDado4Vueltas= true;
@@ -473,11 +484,14 @@ public class Menu {
             
         }
     }
+
+
+    
 //////---METODO MUEVE AVATAR VALOR ESPECIFICO---
     private int moverJugador(int posiciones) {
         if (avatares.get(turno).esMovAvanzado()) {
             if (avatares.get(turno).getTipo().equals("Pelota")) {
-                return avatares.get(turno).moverAvatarPelota(tablero.getPosiciones(), posiciones, banca, cartas, tablero, jugadores);
+                return avatares.get(turno).moverAvatarPelota(tablero.getPosiciones(), posiciones);
             }
             else if (avatares.get(turno).getTipo().equals("Coche")) {
                 if (lanzamientos<2 && posiciones>4){
@@ -758,7 +772,7 @@ public class Menu {
                 System.out.println("¡Dobles! Sales de la cárcel.");
                 jugadorActual.sacarCarcel();
                 sleep(1000);
-                moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2);
+                moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2,false);
             } else {
                 System.out.println("No has sacado dobles, sigues en la cárcel.");
                 jugadorActual.setTiradasCarcel(jugadorActual.getTiradasCarcel() + 1);
@@ -786,7 +800,7 @@ public class Menu {
         }
 
         sleep(1000);
-        moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2);
+        moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2,false);
     }
     public void estadisticas(String nombre) {
         for (Jugador jugador : jugadores) {
@@ -948,6 +962,22 @@ public class Menu {
         }else System.out.println("Casilla no encontrada");
     }
 
+    public void avanzar(){
+        Avatar avatarActual = avatares.get(turno);
+        if (avatarActual.puedeAvanzar()){
+            Jugador jugadorActual = jugadores.get(turno);
+            Casilla posicionActual = avatarActual.getLugar();
+            int valor = avatarActual.nextPelota(true);
+            System.out.println("Avanzamos "+valor+" posiciones");
+
+            moverYVerTablero(jugadorActual, avatarActual, posicionActual, valor,true);
+            if(avatarActual.nextPelota(false)==0){
+                avatarActual.limpiarMovPelota();
+                System.out.println("Limpiando movimientos de pelota");
+            }
+        }
+    }
+
     /* 
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada, Casilla now) {
         // Incrementar el valor en 1 punto para la casilla actual
@@ -992,7 +1022,7 @@ public class Menu {
         Jugador jugadorActual = jugadores.get(turno);
         Avatar avatarActual = avatares.get(turno);
         Casilla posicionActual = avatarActual.getLugar();
-        moverYVerTablero(jugadorActual, avatarActual, posicionActual, tiradaTotal);
+        moverYVerTablero(jugadorActual, avatarActual, posicionActual, tiradaTotal,false);
     }
 //////---METODO CAMBIA FORTUNA
     public void fortunaManual(float cantidad){

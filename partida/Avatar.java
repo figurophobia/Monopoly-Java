@@ -14,12 +14,14 @@ public class Avatar {
     private Casilla lugar; //Los avatares se sitúan en casillas del tablero.
     private boolean CuartaVuelta; //Indica si el jugador acaba de hacer una vuelta completa multiplo de 4.
     private boolean movAvanzado; //Indica si el jugador ha activado el modo avanzado de movimiento
-    private boolean modoCambiado = false; //Indica si el jugador ha cambiado el modo de movimiento
     private boolean compradoCoche = false; //Indica si el jugador ha comprado en su turno de ser coche
     private boolean cocheParado = false; //Indica si se detiene el movimiento del coche por 2 turnos
     private int turnosParado = 0; //Contador de turnos que lleva el coche parado
     private boolean ultimoTiroFueCoche = false; //Indica si es el ultimo tiro de los extras de coche
     private int tiros_extra= 0; //Contador de tiros de coche
+    private int valorTotalTirada = 0; //Valor total de la tirada de la pelota
+    private int[] movimientosPelota = new int[5]; //Movimientos de la pelota
+    private boolean primerMovPelota = true; //Indica si es el primer movimiento de la pelota
 
     public int getTiros_extra() {
         return tiros_extra;
@@ -124,6 +126,14 @@ public class Avatar {
         CuartaVuelta = cuartaVuelta;
     }
 
+    public int getValorTotalTirada() {
+        return valorTotalTirada;
+    }
+
+    public void setValorTotalTirada(int valorTotalTirada) {
+        this.valorTotalTirada = valorTotalTirada;
+    }
+
     //Constructor vacío
     public Avatar() {
     }
@@ -142,17 +152,12 @@ public class Avatar {
 
     public void cambiarModo(){
         if (this.movAvanzado){
-            if (!this.modoCambiado) {
-                this.movAvanzado=false;
-                System.out.println("Modo avanzado desactivado");               
-            }
-            else System.out.println("Ya has cambiado el modo de movimiento");
+            this.movAvanzado=false;
+            System.out.println("Modo avanzado desactivado");               
         }
         else{
             this.movAvanzado=true;
-            this.modoCambiado=true;
             System.out.println("Modo avanzado activado");
-
         }
     }
 
@@ -180,6 +185,122 @@ public class Avatar {
         return newposition;
     }
 
+    public void limpiarMovPelota(){
+        for (int i = 0; i < movimientosPelota.length; i++) {
+            movimientosPelota[i] = 0;
+        }
+        this.primerMovPelota = true;
+    }
+    
+    public boolean puedeAvanzar(){
+        if(this.getJugador().isEnDeuda()||this.getJugador().isEnCarcel()){
+            System.out.println("No puedes avanzar, estás en deuda o en la cárcel");
+            return false;
+        }
+        if (!this.esMovAvanzado()){
+            System.out.println("No puedes avanzar, el modo avanzado no está activado");
+            return false;
+        }
+        if (!this.getTipo().equals("Pelota")){
+            System.out.println("No puedes avanzar, no eres una pelota");
+            return false;
+        }
+        if (this.nextPelota(false)==0){
+            limpiarMovPelota();
+            System.out.println("No puedes avanzar, no te quedan movimientos");
+            
+            return false;
+
+        }
+        return true;
+    }
+
+    //Devolvemos el siguiente movimiento de la pelota, y lo eliminamos del array si borrar es true
+    public int nextPelota(boolean borrar){
+        for (int i = 0; i < movimientosPelota.length; i++) {
+            if (movimientosPelota[i]!=0){
+                int mov = movimientosPelota[i];
+                if (borrar) movimientosPelota[i] = 0;
+                return mov;
+            }
+        }
+        return 0;
+    }
+
+    public int moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
+        CuartaVuelta = false;
+        int posicion = lugar.getPosicion();
+        int newposition = 0;
+        Casilla casillaActual = lugar;
+        casillaActual.eliminarAvatar(this);
+        // Determinar dirección de movimiento
+        boolean dir = valorTirada>=0; // SI la tirada es positiva, avanzar, sino retroceder
+        
+        if (this.primerMovPelota) {
+            int i = 0;
+            this.valorTotalTirada = valorTirada; //Guardamos el valor total de la tirada, para el evaluar casilla
+            if (valorTirada > 4) {
+                movimientosPelota[i++] = 5;
+                valorTirada -= 5;
+                while (valorTirada > 1) {
+                    movimientosPelota[i++] = 2;
+                    valorTirada -= 2;
+                }
+            } else {
+                movimientosPelota[i++] = -1;
+                valorTirada = -valorTirada + 1;
+                while (valorTirada < -1) {
+                    movimientosPelota[i++] = -2;
+                    valorTirada += 2;
+                }
+            }
+        
+            if (valorTirada != 0) {
+                movimientosPelota[i] = valorTirada;
+            }
+
+            valorTirada = this.nextPelota(true);
+            this.primerMovPelota = false;
+
+        }
+        valorTirada = Math.abs(valorTirada);  // Valor absoluto de la tirada
+
+        // Si se cruza la salida
+        if (dir && (posicion + valorTirada > 40)) {
+            System.out.println("has dado una vuelta completa, recibes " + Valor.SUMA_VUELTA + ".");
+            this.jugador.sumarVueltas();
+            this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
+            this.jugador.setPasarPorCasillaDeSalida(this.jugador.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
+
+            if (jugador.getVueltas() % 4 == 0 && jugador.getVueltas() != 0) {
+                CuartaVuelta = true;
+            }
+        }
+        if (!dir && (posicion - valorTirada -1< 0) && this.getJugador().getVueltas()>=1) {
+            this.jugador.DevolverVuelta();
+            System.out.println("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
+            this.CuartaVuelta=false;
+        }
+        
+        if (dir) { // Si se avanza
+            newposition = (posicion + valorTirada - 1) % 40;
+            Casilla newCasilla = casillas.get(newposition / 10).get(newposition % 10);
+            newCasilla.anhadirAvatar(this);
+            this.lugar = newCasilla;
+            return newposition;
+        } else { // Si se retrocede
+            System.out.println("Retrocediendo");
+            newposition = (posicion - valorTirada - 1);
+            newposition = newposition < 0 ? (40 + newposition) % 40 : newposition % 40;
+            Casilla newCasilla = casillas.get(newposition / 10).get(newposition % 10);
+            newCasilla.anhadirAvatar(this);
+            this.lugar = newCasilla;
+            return newposition;
+            
+        }
+    }
+
+
     public int moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada, Jugador banca, Cartas cartas, Tablero tablero, ArrayList<Jugador> jugadores) {
         CuartaVuelta = false;
         int posicion = lugar.getPosicion();
@@ -199,7 +320,7 @@ public class Avatar {
                 CuartaVuelta = true;
             }
         }
-        if (!dir && (posicion - valorTirada -1< 0)) {
+        if (!dir && (posicion - valorTirada -1< 0) && this.getJugador().getVueltas()>=1) {
             this.jugador.DevolverVuelta();
             System.out.println("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
             this.CuartaVuelta=false;
@@ -279,7 +400,7 @@ public class Avatar {
         }
         else{ // Si es menor que 4 retrocede
             newposition = posicionactual-valorTirada-1;
-            if (newposition<0) {
+            if (newposition<0 && this.jugador.getVueltas()>=1) { //Si se pasa por salida al revés
                 this.jugador.DevolverVuelta();
                 System.out.println("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
                 this.CuartaVuelta=false;
