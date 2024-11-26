@@ -71,7 +71,7 @@ public class Grupo {
     public void setNumCasillas(int numCasillas) {
         this.numCasillas = numCasillas;
     }
-
+  
     public float getDineroGenerado() {
         return dineroGenerado;
     }
