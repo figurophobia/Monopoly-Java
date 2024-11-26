@@ -1,3 +1,0 @@
-cd Escritorio/monopoly_terminal
-javac monopoly/MonopolyETSE.java
-java monopoly.MonopolyETSE 
