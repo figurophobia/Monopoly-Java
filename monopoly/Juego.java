@@ -130,7 +130,11 @@ public class Juego {
  */
 
     public void edificar(String tipo){
-        jugadores.get(turno).getAvatar().getLugar().edificar(tipo);
+        try{
+            jugadores.get(turno).getAvatar().getLugar().edificar(tipo);
+        } catch (Exception e){
+            System.out.println(e);
+        }
     }
 
 
