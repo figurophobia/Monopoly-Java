@@ -41,6 +41,12 @@ public class Casilla {
         visitante.getNumeroVisitas().put(this, visitante.getNumeroVisitas().getOrDefault(this, 0) + 1);
     }
 
+    //TODO: frecuenciaVisita
+    public boolean estaAvatar(Avatar avatar){
+        Casilla casillaAvatar = avatar.getLugar();
+        return (casillaAvatar == this);
+    }
+
     public boolean evaluarCasilla(Jugador jugador, Jugador banca, int tirada){
         return true;
     }
@@ -52,6 +58,8 @@ public class Casilla {
     public String infoCasilla(){
         return ("Aún en desarrollo");
     }
+
+    //TODO: String toString
 
 
 }

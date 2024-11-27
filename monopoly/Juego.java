@@ -835,16 +835,23 @@ public class Juego {
     }
 
     public  void bancarrota(Jugador pobre, Jugador duenho) {
-        float pasta=pobre.getFortuna();
+
+        float pasta = pobre.getFortuna();
+
         ArrayList<Casilla> propiedades = pobre.getPropiedades();
+
         float recuperado=0;
+
         for (Casilla c : propiedades) {
-            if (c.getTipo().equals("Solar") && c.getEdificaciones().size()>0 &&c.getEdificaciones()!=null) {
-                c.getEdificaciones().clear();
-                
-            }
-            c.setDuenho(duenho);
-            duenho.anhadirPropiedad(c);
+
+            if (!(c instanceof Propiedad propiedad))
+                continue;
+            
+            if (propiedad instanceof Solar solar)
+                solar.getEdificaciones().clear();
+
+            propiedad.setDuenho(duenho);
+            duenho.anhadirPropiedad(propiedad);
         }
         if (duenho==banca){
             System.out.println("Las propiedades de " + pobre.getNombre() + " pueden ser compradas de nuevo.");
@@ -868,9 +875,11 @@ public class Juego {
     }
 
     public void hipotecar(String nombreCasilla,Jugador actual){
+
         Casilla c = tablero.casillaByName(nombreCasilla);
-        if (c!=null){
-            c.hipotecar(actual);
+
+        if (c != null && c instanceof Propiedad propiedad){
+            propiedad.hipotecar(actual);
             if (actual.isEnDeuda() && actual.getFortuna()>0){
                 if (actual.getDeudor()!=null){
                     actual.getDeudor().sumarFortuna(actual.getCantidadDeuda());
@@ -888,9 +897,11 @@ public class Juego {
     }
 
     public void deshipotecar(String nombreCasilla,Jugador actual){
+
         Casilla c = tablero.casillaByName(nombreCasilla);
-        if (c!=null){
-            c.deshipotecar(actual);
+
+        if (c!=null && c instanceof Propiedad propiedad){
+            propiedad.deshipotecar(actual);
         }else System.out.println("Casilla no encontrada");
     }
 

@@ -55,6 +55,8 @@ public class Propiedad extends Casilla{
 
     }
 
+    //TODO: boolean perteneceAJugador(jugador)
+
     public String casEnVenta() {
         StringBuilder info = new StringBuilder();
 
