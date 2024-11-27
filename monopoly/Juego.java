@@ -332,7 +332,10 @@ public class Juego {
         if (nuevaCasilla == tablero.getPosiciones().get(3).get(0)) {
             jugadorActual.encarcelar(tablero.getPosiciones());
         }
-        if (nuevaCasilla.getTipo().equals("Comunidad") || nuevaCasilla.getTipo().equals("Suerte")) {
+
+        String tipo = nuevaCasilla.getClass().getSuperclass().getSimpleName();
+
+        if (tipo.equals("Accion")) {
             cartas.gestionCartas(avatarActual, tablero, jugadores);
         }
         if (avanzar){
@@ -386,20 +389,30 @@ public class Juego {
     }
     
 //////---METODO COMPRA CASILLA---
-    public void comprar(String nombre) {
+    Consola consola = new ConsolaNormal();
+    public void comprar(String nombre) throws excepcionPropiedad {
         Jugador jugador = jugadores.get(turno);
-        Casilla c = jugador.getAvatar().getLugar();
-        if (c.getNombre().equals(nombre)) {
-            if (c.esComprable(jugador, banca)) {
-                c.comprarCasilla(jugador, banca);
-            }
-            else {
-                System.out.println("No puedes comprar esta casilla.");
-            }
-        } else {
-            System.out.println("No estás en esa casilla.");
-            
+        Casilla casilla = jugador.getAvatar().getLugar();
+
+        if (!(casilla instanceof Propiedad)){
+            consola.imprimirAdvertencia("No se puede comprar esta casilla");
+            throw new excepcionPropiedad("La casilla solicitada de compra no se puede comprar");
         }
+
+        if (!casilla.getNombre().equals(nombre)){
+            consola.imprimirAdvertencia("No estás en esa casilla");
+            return;
+        }
+
+        Propiedad propiedad = (Propiedad) casilla;
+
+        if (!propiedad.esComprable(jugador, banca)){
+            consola.imprimirAdvertencia("No puedes comprar esta casilla");
+            return;
+        }
+
+        propiedad.comprarCasilla(jugador, banca);
+
     }
 //////---METODO SALIR CARCEL---
     public void salirCarcel() {

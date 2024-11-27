@@ -21,12 +21,13 @@ public class Casilla {
     public boolean isCuatrovueltas() { return cuatrovueltas; }
     public void setCuatrovueltas(boolean cuatrovueltas) { this.cuatrovueltas = cuatrovueltas; }
 
-
     public Casilla (String nombre, int posicion) {
         this.nombre = nombre;
         this.posicion = posicion;
         this.cuatrovueltas = false;
     }
+
+    Consola consola = new ConsolaNormal();
 
     public void anhadirAvatar(Avatar av) {
         this.avatares.add(av);
@@ -42,6 +43,14 @@ public class Casilla {
 
     public boolean evaluarCasilla(Jugador jugador, Jugador banca, int tirada){
         return true;
+    }
+
+    public void edificar(String tipo){
+        consola.imprimirAdvertencia("No puedes edificar en esta casilla");
+    }
+
+    public String infoCasilla(){
+        return ("Aún en desarrollo");
     }
 
 

@@ -127,7 +127,7 @@ public class Solar extends Propiedad {
             default -> 0.0f;
         }; 
     }
-
+    @Override
     public void edificar(String tipo){
         if(duenho.puedeEdificar(this)){
             switch (tipo) {

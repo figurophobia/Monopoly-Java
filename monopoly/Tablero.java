@@ -45,7 +45,7 @@ public class Tablero {
     //Casillas del 1-10
     //Método para insertar las casillas del lado sur.
     private void insertarLadoSur() {
-        ArrayList<Casilla> lado = new ArrayList<Casilla>();
+        ArrayList<Casilla> lado = new ArrayList<>();
         lado.add(new Especial("Salida", 1));
         lado.add(new Solar("Solar1", 2, Valor.GRUPO_BLACK, banca));
         lado.add(new AccionComunidad("Caja", 3));
@@ -64,7 +64,7 @@ public class Tablero {
     //Casillas del 11-20
     //Método que inserta casillas del lado oeste.
     private void insertarLadoOeste() {
-        ArrayList<Casilla> lado = new ArrayList<Casilla>();
+        ArrayList<Casilla> lado = new ArrayList<>();
         lado.add(new Especial("Carcel", 11));
         lado.add(new Solar("Solar6",  12, Valor.GRUPO_PURPLE, banca));
         lado.add(new Servicio("Serv1", 13, Valor.SUMA_VUELTA*0.75f, banca));
@@ -84,7 +84,7 @@ public class Tablero {
     //Método para insertar las casillas del lado norte.
     //Casillas del 21-30
     private void insertarLadoNorte() {
-        ArrayList<Casilla> lado = new ArrayList<Casilla>();
+        ArrayList<Casilla> lado = new ArrayList<>();
         lado.add(new Especial("Parking", 21));
         lado.add(new Solar("Solar12",  22, Valor.GRUPO_RED, banca));
         lado.add(new AccionSuerte("Suerte2", 23));
@@ -105,7 +105,7 @@ public class Tablero {
     //Casillas del 31-40
     //Método que inserta las casillas del lado este.
     private void insertarLadoEste() {
-        ArrayList<Casilla> lado = new ArrayList<Casilla>();
+        ArrayList<Casilla> lado = new ArrayList<>();
         lado.add(new Especial("IrCarcel", 31));
         lado.add(new Solar("Solar18",  32, Valor.GRUPO_GREEN, banca));
         lado.add(new Solar("Solar19",  33, Valor.GRUPO_GREEN, banca));
