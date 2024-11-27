@@ -1,9 +1,7 @@
 package monopoly;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 import monopoly.Edificacion;
 import partida.*;
 
@@ -19,8 +17,6 @@ public class Juego {
     private Dado dado2;
     private Jugador banca; //El jugador banca.
     private boolean tirado; //Booleano para comprobar si el jugador que tiene el turno ha tirado o no.
-    private boolean solvente; //Booleano para comprobar si el jugador que tiene el turno es solvente, es decir, si ha pagado sus deudas.
-    private boolean partida_ON; //Booleano para comprobar si la partida sigue en curso.
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
     private Cartas cartas = new Cartas(); //Objeto de la clase Cartas
     public static Consola consola = new ConsolaNormal(); //Objeto de la clase ConsolaNormal
@@ -29,7 +25,6 @@ public class Juego {
 
     public Juego() {
         this.turno = 1;
-        this.partida_ON = true;
         this.partida_OFF = false;
     }
 
@@ -387,7 +382,6 @@ public class Juego {
     }
 
     
-    Consola consola = new ConsolaNormal();
     public void comprar(String nombre) throws Exception {
         Jugador jugador = jugadores.get(turno);
         Casilla casilla = jugador.getAvatar().getLugar();

@@ -96,7 +96,7 @@ public class Tablero {
         lado.add(new Servicio("Serv2", 29, Valor.SUMA_VUELTA * 0.75f, banca));
         lado.add(new Solar("Solar17", 30, Valor.GRUPO_BROWN, banca));
 
-        grupos.put("red", new Grupo((Solar)(Solar) lado.get(1), (Solar)(Solar) lado.get(3),(Solar)(Solar) lado.get(4), Valor.RED));
+        grupos.put("red", new Grupo((Solar) lado.get(1), (Solar) lado.get(3), (Solar) lado.get(4), Valor.RED));
         grupos.put("brown", new Grupo((Solar) lado.get(6), (Solar) lado.get(7),(Solar) lado.get(9), Valor.BROWN));
         this.posiciones.add(lado);
     }
