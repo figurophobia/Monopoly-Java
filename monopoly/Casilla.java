@@ -52,7 +52,21 @@ public class Casilla {
     }
 
     public String printOneCasilla(){
-        return "Aún por arreglar"; //FIXME:
+        String name = new String();
+        name +=getNombre() +" ";
+        if (!this.avatares.isEmpty()) {
+            name+="&";
+        }
+        for (Avatar i : this.avatares) {
+            name+=i.getId(); //Juntamos como texto de la casilla, el nombre y los avatares
+        }
+        name = String.format("%-"+Valor.width+"s", name);  // Rellena con espacios si es más corto, o lo ajusta a 16
+        if (this instanceof Solar solar){
+            return(Valor.SUBRAYADO+solar.grupo.getColorGrupo()+name+Valor.RESET); //Si tiene grupo que pille su color
+        }
+        else{
+            return(Valor.SUBRAYADO+Valor.WHITE+name+Valor.RESET); //Si no que se ponga el blanco
+        }
     }
 
     public void edificar(String tipo){

@@ -32,7 +32,7 @@ public class Solar extends Propiedad {
     @Override
     public void comprarCasilla(Jugador comprador, Jugador banca) throws dineroInsuficiente, compraCocheNoDisponible, casillaIncorrecta{
 
-        if (comprador != duenho){
+        if (comprador != duenho && duenho != banca){
             consola.imprimirAdvertencia("Esa casilla ya pertenece a " + duenho.getNombre() + "!");
             throw new casillaIncorrecta("La casilla solicitada de compra ya pertenece a otro jugador");
         }
@@ -71,7 +71,7 @@ public class Solar extends Propiedad {
         boolean esAjena = (duenho != jugador && duenho != banca);
 
         if (esComprable(jugador, banca)){
-            String answer = consola.leer("Puedes comprar esta casilla de Solar por " + valor + ". ¿Quieres comprarla? (s/n)");
+            String answer = consola.leer("Puedes comprar esta casilla de Solar por " + valor + ". ¿Quieres comprarla? (s/n): ");
             if (answer.equals("s"))
                 try {
                     comprarCasilla(jugador, banca);

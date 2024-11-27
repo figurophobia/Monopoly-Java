@@ -62,7 +62,7 @@ public class Servicio extends Propiedad {
         boolean esAjena = (duenho != jugador && duenho != banca);
 
         if (esComprable(jugador, banca)){
-            String answer = consola.leer("Puedes comprar esta casilla de servicio por " + valor + ". ¿Quieres comprarla? (s/n)");
+            String answer = consola.leer("Puedes comprar esta casilla de servicio por " + valor + ". ¿Quieres comprarla? (s/n): ");
             if (answer.equals("s"))
                 try {
                     comprarCasilla(jugador, banca);
