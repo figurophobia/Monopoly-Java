@@ -1,5 +1,6 @@
 package monopoly;
 
+import java.time.chrono.ThaiBuddhistChronology;
 import partida.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,8 +57,8 @@ public class Tablero {
         lado.add(new AccionSuerte("Suerte", 8));
         lado.add(new Solar("Solar4",  9, Valor.GRUPO_CYAN, banca));
         lado.add(new Solar("Solar5",  10, Valor.GRUPO_CYAN, banca));
-        grupos.put("black",new Grupo(lado.get(1),lado.get(3),Valor.BLACK));
-        grupos.put("cyan",new Grupo(lado.get(6),lado.get(8),lado.get(9),Valor.CYAN));
+        grupos.put("black",new Grupo((Solar) lado.get(1),(Solar) lado.get(3),Valor.BLACK));
+        grupos.put("cyan",new Grupo((Solar) lado.get(6),(Solar) lado.get(8),(Solar) lado.get(9),Valor.CYAN));
 
         posiciones.add(lado);
     }
@@ -75,12 +76,11 @@ public class Tablero {
         lado.add(new AccionComunidad("Caja", 18));
         lado.add(new Solar("Solar10",  19, Valor.GRUPO_YELLOW, banca));
         lado.add(new Solar("Solar11",  20, Valor.GRUPO_YELLOW, banca));
-        grupos.put("purple", new Grupo(lado.get(1),lado.get(3),lado.get(4),Valor.PURPLE));
-        grupos.put("yellow", new Grupo(lado.get(6),lado.get(8),lado.get(9),Valor.YELLOW));
+        grupos.put("purple", new Grupo((Solar) lado.get(1),(Solar) lado.get(3),(Solar) lado.get(4),Valor.PURPLE));
+        grupos.put("yellow", new Grupo((Solar) lado.get(6),(Solar) lado.get(8),(Solar) lado.get(9),Valor.YELLOW));
 
         posiciones.add(lado);
     }
-
     //Método para insertar las casillas del lado norte.
     //Casillas del 21-30
     private void insertarLadoNorte() {
@@ -96,8 +96,8 @@ public class Tablero {
         lado.add(new Servicio("Serv2", 29, Valor.SUMA_VUELTA * 0.75f, banca));
         lado.add(new Solar("Solar17", 30, Valor.GRUPO_BROWN, banca));
 
-        grupos.put("red", new Grupo(lado.get(1), lado.get(3),lado.get(4), Valor.RED));
-        grupos.put("brown", new Grupo(lado.get(6), lado.get(7),lado.get(9), Valor.BROWN));
+        grupos.put("red", new Grupo((Solar)(Solar) lado.get(1), (Solar)(Solar) lado.get(3),(Solar)(Solar) lado.get(4), Valor.RED));
+        grupos.put("brown", new Grupo((Solar) lado.get(6), (Solar) lado.get(7),(Solar) lado.get(9), Valor.BROWN));
         this.posiciones.add(lado);
     }
     
@@ -116,8 +116,8 @@ public class Tablero {
         lado.add(new Solar("Solar21",  38, Valor.GRUPO_BLUE, banca));
         lado.add(new Impuesto("Imp2", 39, (Valor.SUMA_VUELTA)/2));
         lado.add(new Solar("Solar22",  40, Valor.GRUPO_BLUE, banca));
-        grupos.put("green", new Grupo(lado.get(1),lado.get(2),lado.get(4),Valor.GREEN));
-        grupos.put("blue",new Grupo(lado.get(7),lado.get(9),Valor.BLUE));
+        grupos.put("green", new Grupo((Solar) lado.get(1),(Solar) lado.get(2),(Solar) lado.get(4),Valor.GREEN));
+        grupos.put("blue",new Grupo((Solar) lado.get(7),(Solar) lado.get(9),Valor.BLUE));
 
         posiciones.add(lado);
     }
