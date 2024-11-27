@@ -40,6 +40,7 @@ public class Transporte extends Propiedad {
         duenho = comprador;
         banca.eliminarPropiedad(this);
         comprador.setCochePuedeComprar(false);
+        comprador.anhadirPropiedad(this);
 
         String mensaje = "El jugador " + comprador.getNombre() + " ha comprado al casilla " + nombre + " por " + valor + "€. ";
         consola.imprimirMensaje(mensaje);

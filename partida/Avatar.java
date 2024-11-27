@@ -175,6 +175,7 @@ public class Avatar {
             this.jugador.setPasarPorCasillaDeSalida(this.jugador.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
             Juego.consola.imprimir("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);
             if (this.jugador.getVueltas()%4==0  && this.jugador.getVueltas()!=0) {
+                Juego.consola.imprimir("Vuelta múltiplo de 4");
                 this.CuartaVuelta=true;
             } 
         }
