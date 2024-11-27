@@ -193,15 +193,21 @@ public class Tablero {
     No se considera una vuelta si el avatar va a la casilla de Cárcel.
      */
     public void subirPrecio4Vueltas(){
+
         for (ArrayList<Casilla> lado : posiciones) {
+
             for (Casilla casilla : lado) {
-                if (casilla.getTipo().equals("Solar") && casilla.getDuenho().equals(banca)) {
-                    float valor = casilla.getValor()*0.05f;
-                    float impuesto = casilla.getImpuesto()*0.05f;
-                    casilla.sumarValor(valor);
-                    casilla.sumarImpuesto(impuesto);
-                    casilla.setCuatrovueltas(true);
-                }
+                if (!(casilla instanceof Solar solar))
+                    continue;
+                if (!solar.getDuenho().equals(banca))
+                    continue;
+                
+                float valor = solar.getValor()*0.05f;
+                float precioAlquiler = solar.getPrecioAlquiler()*0.05f;
+                solar.sumarValor(valor);
+                solar.sumarPrecioAlquiler(precioAlquiler);
+                solar.setCuatrovueltas(true);
+
             }
         }
         System.out.println("Todos los jugadores han dado 4 vueltas.");

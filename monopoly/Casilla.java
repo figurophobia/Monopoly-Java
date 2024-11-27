@@ -51,6 +51,10 @@ public class Casilla {
         return true;
     }
 
+    public String printOneCasilla(){
+        return "Aún por arreglar"; //FIXME:
+    }
+
     public void edificar(String tipo){
         consola.imprimirAdvertencia("No puedes edificar en esta casilla");
     }

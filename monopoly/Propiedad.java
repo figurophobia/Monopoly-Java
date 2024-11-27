@@ -28,7 +28,7 @@ public class Propiedad extends Casilla{
     public float getValorHipoteca() {return valorHipoteca;}
     public void setValorHipoteca(float valorHipoteca) {this.valorHipoteca = valorHipoteca;}
 
-    public boolean isEsHipotecada() {return esHipotecada;}
+    public boolean esHipotecada() {return esHipotecada;}
     public void setEsHipotecada(boolean esHipotecada) {this.esHipotecada = esHipotecada;}
 
     public float getDineroGenerado() {return dineroGenerado;}
@@ -53,6 +53,10 @@ public class Propiedad extends Casilla{
 
     public void comprarCasilla(Jugador comprador, Jugador banca) throws excepcionPropiedad{
 
+    }
+
+    public void sumarValor(float suma) {
+        this.valor +=suma;
     }
 
     //TODO: boolean perteneceAJugador(jugador)
@@ -117,6 +121,10 @@ public class Propiedad extends Casilla{
             esHipotecada=false;
             System.out.println("Has deshipotecado la casilla "+nombre+" por "+valorHipoteca*1.1f+"€, te quedan "+actual.getFortuna()+"€.");
         }
+    }
+
+    public void sumarPrecioAlquiler(float suma) {
+        this.precioAlquiler += suma;
     }
 
     

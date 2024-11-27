@@ -1,10 +1,7 @@
 package monopoly;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Scanner;
-import monopoly.Edificacion;
 import partida.*;
 
 public class Menu {
@@ -121,7 +118,11 @@ public class Menu {
             }
             case "comprar" -> {
                 if (partes.length == 2){
-                    juego.comprar(partes[1]);
+                    try {
+                        juego.comprar(partes[1]);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     System.out.println("Comando no reconocido");
                 }

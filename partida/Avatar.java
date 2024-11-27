@@ -428,7 +428,7 @@ public class Avatar {
         // Al finalizar, actualizar la posición y registrar la visita
         casillaFinal.anhadirAvatar(this);
         this.lugar = casillaFinal;
-        if (casillaFinal.getTipo().equals("Comunidad") || casillaFinal.getTipo().equals("Suerte")) {
+        if (casillaFinal instanceof Accion) {
             cartas.gestionCartas(this, tablero, jugadores);
         }
         
