@@ -1,5 +1,6 @@
 package monopoly;
 
+import java.time.chrono.ThaiBuddhistChronology;
 import partida.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,59 +46,58 @@ public class Tablero {
     //Casillas del 1-10
     //Método para insertar las casillas del lado sur.
     private void insertarLadoSur() {
-        ArrayList<Casilla> lado = new ArrayList<Casilla>();
-        lado.add(new Casilla("Salida", "Especial", 1, banca));
-        lado.add(new Casilla("Solar1", "Solar", 2, Valor.GRUPO_BLACK, banca));
-        lado.add(new Casilla("Caja", "Comunidad", 3, banca));
-        lado.add(new Casilla("Solar2", "Solar", 4, Valor.GRUPO_BLACK, banca));
-        lado.add(new Casilla("Imp1", 5, banca,Valor.SUMA_VUELTA));
-        lado.add(new Casilla("Trans1", "Transporte", 6, Valor.SUMA_VUELTA, banca));
-        lado.add(new Casilla("Solar3", "Solar", 7, Valor.GRUPO_CYAN, banca));
-        lado.add(new Casilla("Suerte", "Suerte", 8, banca));
-        lado.add(new Casilla("Solar4", "Solar", 9, Valor.GRUPO_CYAN, banca));
-        lado.add(new Casilla("Solar5", "Solar", 10, Valor.GRUPO_CYAN, banca));
-        grupos.put("black",new Grupo(lado.get(1),lado.get(3),Valor.BLACK));
-        grupos.put("cyan",new Grupo(lado.get(6),lado.get(8),lado.get(9),Valor.CYAN));
+        ArrayList<Casilla> lado = new ArrayList<>();
+        lado.add(new Especial("Salida", 1));
+        lado.add(new Solar("Solar1", 2, Valor.GRUPO_BLACK, banca));
+        lado.add(new AccionComunidad("Caja", 3));
+        lado.add(new Solar("Solar2",  4, Valor.GRUPO_BLACK, banca));
+        lado.add(new Impuesto("Imp1", 5, Valor.SUMA_VUELTA));
+        lado.add(new Transporte("Trans1", 6, Valor.SUMA_VUELTA, banca));
+        lado.add(new Solar("Solar3",  7, Valor.GRUPO_CYAN, banca));
+        lado.add(new AccionSuerte("Suerte", 8));
+        lado.add(new Solar("Solar4",  9, Valor.GRUPO_CYAN, banca));
+        lado.add(new Solar("Solar5",  10, Valor.GRUPO_CYAN, banca));
+        grupos.put("black",new Grupo((Solar) lado.get(1),(Solar) lado.get(3),Valor.BLACK));
+        grupos.put("cyan",new Grupo((Solar) lado.get(6),(Solar) lado.get(8),(Solar) lado.get(9),Valor.CYAN));
 
         posiciones.add(lado);
     }
     //Casillas del 11-20
     //Método que inserta casillas del lado oeste.
     private void insertarLadoOeste() {
-        ArrayList<Casilla> lado = new ArrayList<Casilla>();
-        lado.add(new Casilla("Carcel", "Especial", 11, banca));
-        lado.add(new Casilla("Solar6", "Solar", 12, Valor.GRUPO_PURPLE, banca));
-        lado.add(new Casilla("Serv1", "Servicio", 13, Valor.SUMA_VUELTA*0.75f, banca));
-        lado.add(new Casilla("Solar7", "Solar", 14, Valor.GRUPO_PURPLE, banca));
-        lado.add(new Casilla("Solar8", "Solar", 15, Valor.GRUPO_PURPLE, banca));
-        lado.add(new Casilla("Trans2", "Transporte", 16, Valor.SUMA_VUELTA, banca));
-        lado.add(new Casilla("Solar9", "Solar", 17, Valor.GRUPO_YELLOW, banca));
-        lado.add(new Casilla("Caja", "Comunidad", 18, banca));
-        lado.add(new Casilla("Solar10", "Solar", 19, Valor.GRUPO_YELLOW, banca));
-        lado.add(new Casilla("Solar11", "Solar", 20, Valor.GRUPO_YELLOW, banca));
-        grupos.put("purple", new Grupo(lado.get(1),lado.get(3),lado.get(4),Valor.PURPLE));
-        grupos.put("yellow", new Grupo(lado.get(6),lado.get(8),lado.get(9),Valor.YELLOW));
+        ArrayList<Casilla> lado = new ArrayList<>();
+        lado.add(new Especial("Carcel", 11));
+        lado.add(new Solar("Solar6",  12, Valor.GRUPO_PURPLE, banca));
+        lado.add(new Servicio("Serv1", 13, Valor.SUMA_VUELTA*0.75f, banca));
+        lado.add(new Solar("Solar7",  14, Valor.GRUPO_PURPLE, banca));
+        lado.add(new Solar("Solar8",  15, Valor.GRUPO_PURPLE, banca));
+        lado.add(new Transporte("Trans2", 16, Valor.SUMA_VUELTA, banca));
+        lado.add(new Solar("Solar9",  17, Valor.GRUPO_YELLOW, banca));
+        lado.add(new AccionComunidad("Caja", 18));
+        lado.add(new Solar("Solar10",  19, Valor.GRUPO_YELLOW, banca));
+        lado.add(new Solar("Solar11",  20, Valor.GRUPO_YELLOW, banca));
+        grupos.put("purple", new Grupo((Solar) lado.get(1),(Solar) lado.get(3),(Solar) lado.get(4),Valor.PURPLE));
+        grupos.put("yellow", new Grupo((Solar) lado.get(6),(Solar) lado.get(8),(Solar) lado.get(9),Valor.YELLOW));
 
         posiciones.add(lado);
     }
-
     //Método para insertar las casillas del lado norte.
     //Casillas del 21-30
     private void insertarLadoNorte() {
-        ArrayList<Casilla> lado = new ArrayList<Casilla>();
-        lado.add(new Casilla("Parking", "Especial", 21, banca));
-        lado.add(new Casilla("Solar12", "Solar", 22, Valor.GRUPO_RED, banca));
-        lado.add(new Casilla("Suerte2", "Suerte", 23, banca));
-        lado.add(new Casilla("Solar13", "Solar", 24, Valor.GRUPO_RED, banca));
-        lado.add(new Casilla("Solar14", "Solar", 25, Valor.GRUPO_RED, banca));
-        lado.add(new Casilla("Trans3", "Transporte", 26, Valor.SUMA_VUELTA, banca));
-        lado.add(new Casilla("Solar15", "Solar", 27, Valor.GRUPO_BROWN, banca));
-        lado.add(new Casilla("Solar16", "Solar", 28, Valor.GRUPO_BROWN, banca));
-        lado.add(new Casilla("Serv2", "Servicio", 29, Valor.SUMA_VUELTA * 0.75f, banca));
-        lado.add(new Casilla("Solar17", "Solar",30, Valor.GRUPO_BROWN, banca));
+        ArrayList<Casilla> lado = new ArrayList<>();
+        lado.add(new Especial("Parking", 21));
+        lado.add(new Solar("Solar12",  22, Valor.GRUPO_RED, banca));
+        lado.add(new AccionSuerte("Suerte2", 23));
+        lado.add(new Solar("Solar13",  24, Valor.GRUPO_RED, banca));
+        lado.add(new Solar("Solar14",  25, Valor.GRUPO_RED, banca));
+        lado.add(new Transporte("Trans3", 26, Valor.SUMA_VUELTA, banca));
+        lado.add(new Solar("Solar15",  27, Valor.GRUPO_BROWN, banca));
+        lado.add(new Solar("Solar16",  28, Valor.GRUPO_BROWN, banca));
+        lado.add(new Servicio("Serv2", 29, Valor.SUMA_VUELTA * 0.75f, banca));
+        lado.add(new Solar("Solar17", 30, Valor.GRUPO_BROWN, banca));
 
-        grupos.put("red", new Grupo(lado.get(1), lado.get(3),lado.get(4), Valor.RED));
-        grupos.put("brown", new Grupo(lado.get(6), lado.get(7),lado.get(9), Valor.BROWN));
+        grupos.put("red", new Grupo((Solar)(Solar) lado.get(1), (Solar)(Solar) lado.get(3),(Solar)(Solar) lado.get(4), Valor.RED));
+        grupos.put("brown", new Grupo((Solar) lado.get(6), (Solar) lado.get(7),(Solar) lado.get(9), Valor.BROWN));
         this.posiciones.add(lado);
     }
     
@@ -105,19 +105,19 @@ public class Tablero {
     //Casillas del 31-40
     //Método que inserta las casillas del lado este.
     private void insertarLadoEste() {
-        ArrayList<Casilla> lado = new ArrayList<Casilla>();
-        lado.add(new Casilla("IrCarcel", "Especial", 31, banca));
-        lado.add(new Casilla("Solar18", "Solar", 32, Valor.GRUPO_GREEN, banca));
-        lado.add(new Casilla("Solar19", "Solar", 33, Valor.GRUPO_GREEN, banca));
-        lado.add(new Casilla("Caja", "Comunidad", 34, banca));
-        lado.add(new Casilla("Solar20", "Solar", 35, Valor.GRUPO_GREEN, banca));
-        lado.add(new Casilla("Trans4", "Transporte", 36, Valor.SUMA_VUELTA, banca));
-        lado.add(new Casilla("Suerte3", "Suerte", 37, banca));
-        lado.add(new Casilla("Solar21", "Solar", 38, Valor.GRUPO_BLUE, banca));
-        lado.add(new Casilla("Imp2", 39, banca, (Valor.SUMA_VUELTA)/2));
-        lado.add(new Casilla("Solar22", "Solar", 40, Valor.GRUPO_BLUE, banca));
-        grupos.put("green", new Grupo(lado.get(1),lado.get(2),lado.get(4),Valor.GREEN));
-        grupos.put("blue",new Grupo(lado.get(7),lado.get(9),Valor.BLUE));
+        ArrayList<Casilla> lado = new ArrayList<>();
+        lado.add(new Especial("IrCarcel", 31));
+        lado.add(new Solar("Solar18",  32, Valor.GRUPO_GREEN, banca));
+        lado.add(new Solar("Solar19",  33, Valor.GRUPO_GREEN, banca));
+        lado.add(new AccionComunidad("Caja", 34));
+        lado.add(new Solar("Solar20",  35, Valor.GRUPO_GREEN, banca));
+        lado.add(new Transporte("Trans4", 36, Valor.SUMA_VUELTA, banca));
+        lado.add(new AccionSuerte("Suerte3", 37));
+        lado.add(new Solar("Solar21",  38, Valor.GRUPO_BLUE, banca));
+        lado.add(new Impuesto("Imp2", 39, (Valor.SUMA_VUELTA)/2));
+        lado.add(new Solar("Solar22",  40, Valor.GRUPO_BLUE, banca));
+        grupos.put("green", new Grupo((Solar) lado.get(1),(Solar) lado.get(2),(Solar) lado.get(4),Valor.GREEN));
+        grupos.put("blue",new Grupo((Solar) lado.get(7),(Solar) lado.get(9),Valor.BLUE));
 
         posiciones.add(lado);
     }
@@ -193,15 +193,21 @@ public class Tablero {
     No se considera una vuelta si el avatar va a la casilla de Cárcel.
      */
     public void subirPrecio4Vueltas(){
+
         for (ArrayList<Casilla> lado : posiciones) {
+
             for (Casilla casilla : lado) {
-                if (casilla.getTipo().equals("Solar") && casilla.getDuenho().equals(banca)) {
-                    float valor = casilla.getValor()*0.05f;
-                    float impuesto = casilla.getImpuesto()*0.05f;
-                    casilla.sumarValor(valor);
-                    casilla.sumarImpuesto(impuesto);
-                    casilla.setCuatrovueltas(true);
-                }
+                if (!(casilla instanceof Solar solar))
+                    continue;
+                if (!solar.getDuenho().equals(banca))
+                    continue;
+                
+                float valor = solar.getValor()*0.05f;
+                float precioAlquiler = solar.getPrecioAlquiler()*0.05f;
+                solar.sumarValor(valor);
+                solar.sumarPrecioAlquiler(precioAlquiler);
+                solar.setCuatrovueltas(true);
+
             }
         }
         Juego.consola.imprimir("Todos los jugadores han dado 4 vueltas.");

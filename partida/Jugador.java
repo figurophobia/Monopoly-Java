@@ -322,7 +322,9 @@ public class Jugador {
 
         boolean hayCasas = false; // Bandera para rastrear si hay casas
         for (Casilla casilla : propiedades) {
-            int num = casilla.getEdificaciones().getOrDefault("casa", new ArrayList<>()).size();
+            if (!(casilla instanceof Solar solar))
+                continue;
+            int num = solar.getEdificaciones().getOrDefault("casa", new ArrayList<>()).size();
             if (num != 0) {
                 if (!hayCasas) {
                     str.append("Casas:"); // Imprimir "Casas:" solo una vez
@@ -336,7 +338,9 @@ public class Jugador {
         
         boolean hayHoteles = false; // Bandera para rastrear si hay casas
         for (Casilla casilla : propiedades) {
-            int num = casilla.getEdificaciones().getOrDefault("hotel", new ArrayList<>()).size();
+            if (!(casilla instanceof Solar solar))
+                continue;
+            int num = solar.getEdificaciones().getOrDefault("hotel", new ArrayList<>()).size();
             if (num != 0) {
                 if (!hayHoteles) {
                     str.append("Hoteles:"); // Imprimir "Casas:" solo una vez
@@ -350,7 +354,9 @@ public class Jugador {
         
         boolean hayPiscinas = false; // Bandera para rastrear si hay casas
         for (Casilla casilla : propiedades) {
-            int num = casilla.getEdificaciones().getOrDefault("piscina", new ArrayList<>()).size();
+            if (!(casilla instanceof Solar solar))
+                continue;
+            int num = solar.getEdificaciones().getOrDefault("piscina", new ArrayList<>()).size();
             if (num != 0) {
                 if (!hayPiscinas) {
                     str.append("Piscinas:"); // Imprimir "Casas:" solo una vez
@@ -363,7 +369,9 @@ public class Jugador {
         }
         boolean hayPistas = false; // Bandera para rastrear si hay casas
         for (Casilla casilla : propiedades) {
-            int num = casilla.getEdificaciones().getOrDefault("pista", new ArrayList<>()).size();
+            if (!(casilla instanceof Solar solar))
+                continue;
+            int num = solar.getEdificaciones().getOrDefault("pista", new ArrayList<>()).size();
             if (num != 0) {
                 if (!hayPistas) {
                     str.append("Pistas:"); // Imprimir "Casas:" solo una vez
@@ -383,8 +391,10 @@ public class Jugador {
     public String describirPropiedadesSinHipoteca() {
         StringBuilder str = new StringBuilder();
         for (Casilla casilla : this.propiedades) {
-            if (!casilla.isHipotecada()){
-                str.append(casilla.getNombre() + ", ");
+            if (!(casilla instanceof Propiedad propiedad))
+                continue;
+            if (!propiedad.esHipotecada()){
+                str.append(propiedad.getNombre()).append(", ");
             }
         }
         return str.toString();
@@ -393,8 +403,10 @@ public class Jugador {
     public String describirHipotecas(){
         StringBuilder str = new StringBuilder();
         for (Casilla casilla : this.propiedades) {
-            if (casilla.isHipotecada()) {
-                str.append(casilla.getNombre() + ", ");
+            if (!(casilla instanceof Propiedad propiedad))
+                continue;
+            if (propiedad.esHipotecada()) {
+                str.append(propiedad.getNombre()).append(", ");
             }
         }
         return str.toString();
@@ -425,9 +437,8 @@ public class Jugador {
     public int numTransportes(){
         int num = 0;
         for (Casilla casilla : this.getPropiedades()) {
-            if (casilla.getTipo().equals("Transporte")) {
+            if (casilla instanceof Transporte)
                 num++;
-            }
         }
         return num;
     }
@@ -436,9 +447,8 @@ public class Jugador {
     public int numServicios(){
         int num = 0;
         for (Casilla casilla : this.getPropiedades()) {
-            if (casilla.getTipo().equals("Servicio")) {
+            if (casilla instanceof Servicio)
                 num++;
-            }
         }
         return num;
     }
@@ -503,12 +513,16 @@ public class Jugador {
     }
 
     public boolean puedeEdificar(Casilla actual){
-        if (actual.getGrupo()!=null){
-            if(actual.getGrupo().tieneHipotecaEnGrupo(this)){
-                Juego.consola.imprimir("No puedes edificar en un grupo en el que tienes propiedades hipotecadas");
+
+        if (!(actual instanceof Solar solar))
+            return false;
+
+        if (solar.getGrupo()!=null){
+            if(solar.getGrupo().tieneHipotecaEnGrupo(this)){
+                System.out.println("No puedes edificar en un grupo en el que tienes propiedades hipotecadas");
                 return false;
             }
-            return (actual.getGrupo().esDuenhoGrupo(this) || ((numeroVisitas.get(actual) >= 3) && (this == actual.getDuenho())));
+            return (solar.getGrupo().esDuenhoGrupo(this) || ((numeroVisitas.get(solar) >= 3) && (this == solar.getDuenho())));
         }else return false;
     }
 

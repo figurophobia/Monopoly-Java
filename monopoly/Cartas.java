@@ -28,7 +28,7 @@ public class Cartas {
 
     public void gestionCartas(Avatar actual, Tablero tablero, ArrayList<Jugador> jugadores){
 
-        if (actual.getLugar().getTipo().equals("Suerte")){
+        if (actual.getLugar() instanceof AccionSuerte){
             //Barajar las cartas
             //barajarCartas(accionesSuerte);
     
@@ -72,8 +72,10 @@ public class Cartas {
     
         Jugador jactual = actual.getJugador();
 
-        if((actual.getLugar().getTipo().equals("Suerte"))){
-            Juego.consola.imprimir("Accion: "+accionesSuerte.get(indice-1));
+
+        if(actual.getLugar() instanceof AccionSuerte){
+            System.out.println("Accion: "+accionesSuerte.get(indice-1));
+
             if(accionesSuerte.get(indice-1).equals("Ve al Transportes1 y coge un avión. Si pasas por la casilla de Salida, cobra la cantidad habitual.")){
                 //mover al jugador a la casilla de Transportes1
                 if(actual.getLugar().getPosicion()>5){
