@@ -55,6 +55,21 @@ public class Propiedad extends Casilla{
 
     }
 
+    public String casEnVenta() {
+        StringBuilder info = new StringBuilder();
+
+        String tipo = getClass().getSimpleName();
+
+        info.append("{\ntipo: ").append(tipo).append(",\n");
+        info.append("nombre: ").append(nombre).append(",\n");
+
+        if(this instanceof Solar solar)
+            info.append("grupo: ").append(solar.grupo.getColorGrupo()).append("#####" + Valor.RESET).append(",\n");
+        
+        info.append("valor: ").append(valor).append(",\n");
+        return info.toString();
+    }
+
     public boolean sePuedeHipotecar(Jugador actual){
         if (esHipotecada){
             System.out.println("La casilla ya está hipotecada...");

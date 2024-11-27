@@ -20,6 +20,8 @@ public class Solar extends Propiedad {
     public Grupo getGrupo() {return grupo;}
     public void setGrupo(Grupo grupo) {this.grupo = grupo;}
 
+    public HashMap<String,ArrayList<Edificacion>> getEdificaciones(){ return edificaciones; }
+
     Consola consola = new ConsolaNormal();
     
     public float calcularPago(int tirada) {
