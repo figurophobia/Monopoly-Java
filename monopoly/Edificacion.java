@@ -17,7 +17,8 @@ public class Edificacion {
         this.id = ++id_counter;
         this.propietario = propietario;
         this.casilla = casilla;
-        this.grupo = casilla.getGrupo();
+        if (casilla instanceof Solar solar)
+            this.grupo = solar.getGrupo();
         this.precio = precio;
         this.ganancias = 0;
     }
