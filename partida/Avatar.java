@@ -38,7 +38,7 @@ public class Avatar {
 
     public void setId(String id) {
         if (id.matches("[A-Z]")) this.id=id;
-        else System.out.println("Id inválido");
+        else Juego.consola.imprimir("Id inválido");
     }
 
     public boolean isCompradoCoche() {
@@ -95,7 +95,7 @@ public class Avatar {
         if("Sombrero".equals(tipo) || "Esfinge".equals(tipo) || 
             "Pelota".equals(tipo) || "Coche".equals(tipo)) return true;
         else {
-            //System.out.println("Tipo de avatar no válido, usa Sombrero, Esfinge, Pelota o Coche");
+            //Juego.consola.imprimir("Tipo de avatar no válido, usa Sombrero, Esfinge, Pelota o Coche");
             return false;
         }
     }
@@ -103,7 +103,7 @@ public class Avatar {
         if (TipoValido(tipo)) {
             this.tipo = tipo; // Asigna el valor si es válido
         }    
-        else System.out.println("Tipo no válido");
+        else Juego.consola.imprimir("Tipo no válido");
     }
 
     public Jugador getJugador() {
@@ -153,11 +153,11 @@ public class Avatar {
     public void cambiarModo(){
         if (this.movAvanzado){
             this.movAvanzado=false;
-            System.out.println("Modo avanzado desactivado");               
+            Juego.consola.imprimir("Modo avanzado desactivado");               
         }
         else{
             this.movAvanzado=true;
-            System.out.println("Modo avanzado activado");
+            Juego.consola.imprimir("Modo avanzado activado");
         }
     }
 
@@ -173,7 +173,7 @@ public class Avatar {
             this.jugador.sumarVueltas();
             this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
             this.jugador.setPasarPorCasillaDeSalida(this.jugador.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
-            System.out.println("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);
+            Juego.consola.imprimir("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);
             if (this.jugador.getVueltas()%4==0  && this.jugador.getVueltas()!=0) {
                 this.CuartaVuelta=true;
             } 
@@ -194,20 +194,20 @@ public class Avatar {
     
     public boolean puedeAvanzar(){
         if(this.getJugador().isEnDeuda()||this.getJugador().isEnCarcel()){
-            System.out.println("No puedes avanzar, estás en deuda o en la cárcel");
+            Juego.consola.imprimir("No puedes avanzar, estás en deuda o en la cárcel");
             return false;
         }
         if (!this.esMovAvanzado()){
-            System.out.println("No puedes avanzar, el modo avanzado no está activado");
+            Juego.consola.imprimir("No puedes avanzar, el modo avanzado no está activado");
             return false;
         }
         if (!this.getTipo().equals("Pelota")){
-            System.out.println("No puedes avanzar, no eres una pelota");
+            Juego.consola.imprimir("No puedes avanzar, no eres una pelota");
             return false;
         }
         if (this.nextPelota(false)==0){
             limpiarMovPelota();
-            System.out.println("No puedes avanzar, no te quedan movimientos");
+            Juego.consola.imprimir("No puedes avanzar, no te quedan movimientos");
             
             return false;
 
@@ -267,7 +267,7 @@ public class Avatar {
 
         // Si se cruza la salida
         if (dir && (posicion + valorTirada > 40)) {
-            System.out.println("has dado una vuelta completa, recibes " + Valor.SUMA_VUELTA + ".");
+            Juego.consola.imprimir("has dado una vuelta completa, recibes " + Valor.SUMA_VUELTA + ".");
             this.jugador.sumarVueltas();
             this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
             this.jugador.setPasarPorCasillaDeSalida(this.jugador.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
@@ -278,7 +278,7 @@ public class Avatar {
         }
         if (!dir && (posicion - valorTirada -1< 0) && this.getJugador().getVueltas()>=1) {
             this.jugador.DevolverVuelta();
-            System.out.println("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
+            Juego.consola.imprimir("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
             this.CuartaVuelta=false;
         }
         
@@ -289,7 +289,7 @@ public class Avatar {
             this.lugar = newCasilla;
             return newposition;
         } else { // Si se retrocede
-            System.out.println("Retrocediendo");
+            Juego.consola.imprimir("Retrocediendo");
             newposition = (posicion - valorTirada - 1);
             newposition = newposition < 0 ? (40 + newposition) % 40 : newposition % 40;
             Casilla newCasilla = casillas.get(newposition / 10).get(newposition % 10);
@@ -300,7 +300,7 @@ public class Avatar {
         }
     }
 
-
+/*
     public int moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada, Jugador banca, Cartas cartas, Tablero tablero, ArrayList<Jugador> jugadores) {
         CuartaVuelta = false;
         int posicion = lugar.getPosicion();
@@ -311,7 +311,7 @@ public class Avatar {
     
         // Si se cruza la salida
         if (dir && (posicion + valorTirada > 40)) {
-            System.out.println("has dado una vuelta completa, recibes " + Valor.SUMA_VUELTA + ".");
+            Juego.consola.imprimir("has dado una vuelta completa, recibes " + Valor.SUMA_VUELTA + ".");
             this.jugador.sumarVueltas();
             this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
             this.jugador.setPasarPorCasillaDeSalida(this.jugador.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
@@ -322,7 +322,7 @@ public class Avatar {
         }
         if (!dir && (posicion - valorTirada -1< 0) && this.getJugador().getVueltas()>=1) {
             this.jugador.DevolverVuelta();
-            System.out.println("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
+            Juego.consola.imprimir("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
             this.CuartaVuelta=false;
         }
         
@@ -368,7 +368,8 @@ public class Avatar {
         }
         return newposition;
     }
-
+    */
+    
     public int moverAvatarCoche(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
         this.CuartaVuelta = false; //Al moverse, se reinicia el contador de cuarta vuelta, para no añadir valor cada vez que se juega en la cuarta vuelta
 
@@ -383,17 +384,17 @@ public class Avatar {
                 this.jugador.sumarVueltas();
                 this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
                 this.jugador.setPasarPorCasillaDeSalida(this.jugador.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
-                System.out.println("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);
+                Juego.consola.imprimir("Has dado una vuelta completa, recibes "+Valor.SUMA_VUELTA);
                 if (this.jugador.getVueltas()%4==0 && this.jugador.getVueltas()!=0) {
                     this.CuartaVuelta=true;
                 } 
             }
             newposition = (newposition-1)%40;
             //Sumar movimiento extra: No cuentan dobles
-            System.out.println("Tiros extra: "+tiros_extra);
+            Juego.consola.imprimir("Tiros extra: "+tiros_extra);
             tiros_extra++;
             if (tiros_extra == 3){
-                System.out.println("En el siguiente tiro se aplican los dobles");
+                Juego.consola.imprimir("En el siguiente tiro se aplican los dobles");
                 ultimoTiroFueCoche = true;
             }
 
@@ -402,12 +403,12 @@ public class Avatar {
             newposition = posicionactual-valorTirada-1;
             if (newposition<0 && this.jugador.getVueltas()>=1) { //Si se pasa por salida al revés
                 this.jugador.DevolverVuelta();
-                System.out.println("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
+                Juego.consola.imprimir("Pasas por Salida al reves, pierdes "+Valor.SUMA_VUELTA+" € te quedan: "+jugador.getFortuna());
                 this.CuartaVuelta=false;
             }
             newposition = newposition < 0 ? (40 + newposition)%40 : newposition %40;
             //Paramos el coche por 2 turnos
-            System.out.println("El coche se ha detenido por 2 turnos");
+            Juego.consola.imprimir("El coche se ha detenido por 2 turnos");
             pararCoche();
             ultimoTiroFueCoche = true;
             tiros_extra = 0;
@@ -424,7 +425,7 @@ public class Avatar {
     public void detenerse(int posicion, Jugador banca, int valorTirada, Casilla casillaActual,ArrayList<ArrayList<Casilla>> casillas, Cartas cartas, Tablero tablero, ArrayList<Jugador> jugadores) {
         casillaActual.eliminarAvatar(this);
         Casilla casillaFinal = casillas.get(posicion / 10).get(posicion % 10);
-        System.out.println("El avatar " + this.getId() + " para en la casilla " + casillaFinal.getNombre());
+        Juego.consola.imprimir("El avatar " + this.getId() + " para en la casilla " + casillaFinal.getNombre());
         // Al finalizar, actualizar la posición y registrar la visita
         casillaFinal.anhadirAvatar(this);
         this.lugar = casillaFinal;
@@ -434,13 +435,13 @@ public class Avatar {
         
         // Evaluar la casilla para posibles interacciones
         if (!casillaFinal.evaluarCasilla(jugador, banca, valorTirada)) {
-            System.out.println("El jugador " + jugador.getNombre() + " no puede pagar sus deudas!");
+            Juego.consola.imprimir("El jugador " + jugador.getNombre() + " no puede pagar sus deudas!");
             return;
         }
 
         // Si la casilla es "Ir a Cárcel", mover al avatar a la cárcel y terminar el movimiento
         if (casillaFinal.getPosicion() == 31) {
-            System.out.println("El jugador " + jugador.getNombre() + " ha sido enviado a la cárcel.");
+            Juego.consola.imprimir("El jugador " + jugador.getNombre() + " ha sido enviado a la cárcel.");
             jugador.encarcelar(casillas);
             return;
         }

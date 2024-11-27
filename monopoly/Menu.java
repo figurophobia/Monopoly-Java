@@ -23,25 +23,23 @@ public class Menu {
 
     ///---Bucle principal de la partida---
     private void bucle() {
-        try (Scanner sc = new Scanner(System.in)) {
-            while (!juego.partidaApagada()) {
-                ArrayList<Jugador> jugadores = juego.getJugadores();            
-                if (jugadores.size() < 3) {
-                    System.out.println("Ganador: " + jugadores.get(1).getNombre() + "!!!!");
-                    juego.endGame();
-                } else if (jugadores.get(juego.getTurno()).getFortuna() < 0) {
-                    System.out.println("Tienes " + jugadores.get(juego.getTurno()).getFortuna() + " € Debes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
-                }
-                ayudaComandos();
-                String comando = sc.nextLine();
-                analizarComando(comando);
+        while (!juego.partidaApagada()) {
+            ArrayList<Jugador> jugadores = juego.getJugadores();            
+            if (jugadores.size() < 3) {
+                Juego.consola.imprimir("Ganador: " + jugadores.get(1).getNombre() + "!!!!");
+                juego.endGame();
+            } else if (jugadores.get(juego.getTurno()).getFortuna() < 0) {
+                Juego.consola.imprimir("Tienes " + jugadores.get(juego.getTurno()).getFortuna() + " € Debes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
             }
+            ayudaComandos();
+            String comando = Juego.consola.leer("");
+            analizarComando(comando);
         }
     }
 
 
     private void ayudaComandos(){
-        System.out.println("\n('help' para ver los comandos disponibles | 'lanzar dados' para tirar los dados | 'acabar turno' para terminar el turno | 'end' para finalizar la partida)");
+        Juego.consola.imprimir("\n('help' para ver los comandos disponibles | 'lanzar dados' para tirar los dados | 'acabar turno' para terminar el turno | 'end' para finalizar la partida)");
         System.out.print("Introduce un comando: ");
     }
 //////---METODO ANALIZA CADA COMANDO INTRODUCIDO---
@@ -49,7 +47,7 @@ public class Menu {
         String[] partes = comando.split(" ");
         switch (partes[0]) {
             // Ayuda
-            case "help" -> System.out.println("""
+            case "help" -> Juego.consola.imprimir("""
                                               Comandos disponibles:
                                               [+] crear jugador
                                               [+] lanzar dados
@@ -80,7 +78,7 @@ public class Menu {
                 if (partes.length == 2 && partes[1].equals("jugador"))
                     juego.anadirjugador();
                 else
-                    System.out.println(Valor.RED+"Comando no reconocido,"+Valor.RESET+" prueba con 'crear jugador'");
+                    Juego.consola.imprimir(Valor.RED+"Comando no reconocido,"+Valor.RESET+" prueba con 'crear jugador'");
             
             }
             case "jugador" -> {
@@ -89,7 +87,7 @@ public class Menu {
             case "edificar" -> {
                 if (partes.length == 2) {
                     juego.edificar(partes[1]);
-                }else System.out.println("Comando no reconocido");
+                }else Juego.consola.imprimir("Comando no reconocido");
                 }
             
             case "listar" -> {
@@ -99,13 +97,13 @@ public class Menu {
                         case "avatares" -> juego.listarAvatares();
                         case "enventa" -> juego.listarVenta();
                         case "edificios" -> juego.listarEdificios();
-                        default -> System.out.println("Comando no reconocido");
+                        default -> Juego.consola.imprimir("Comando no reconocido");
                     }
                 }else if(partes.length==3 && "edificios".equals(partes[1])){
                     juego.listarGrupo(partes[2]);
                 } 
                 else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                     
                 }
             }
@@ -113,7 +111,7 @@ public class Menu {
                 if (partes.length == 2) {
                     juego.lanzarDados();
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "comprar" -> {
@@ -124,16 +122,16 @@ public class Menu {
                         e.printStackTrace();
                     }
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
 
             /*case "ir" -> {
                 if (partes.length == 2) {
-                    System.out.println("Jugador enviado a la cárcel.");
+                    Juego.consola.imprimir("Jugador enviado a la cárcel.");
                     jugadores.get(turno).encarcelar(tablero.getPosiciones());
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                     
                 }
             }
@@ -142,7 +140,7 @@ public class Menu {
                 if (partes.length == 2 && partes[1].equals("carcel")) {
                     juego.salirCarcel();
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "acabar" -> {
@@ -151,7 +149,7 @@ public class Menu {
                 }else if(partes.length == 3 && partes[1].equals("turno") && partes[2].equals("force")){
                     juego.acabarTurnoForce();
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "describir" -> {
@@ -162,7 +160,7 @@ public class Menu {
                 } else if (partes.length == 2 ) {
                     juego.descCasilla(partes[1]);
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "vender" ->{
@@ -173,7 +171,7 @@ public class Menu {
                 if (partes.length == 2 && partes[1].equals("tablero")) {
                     juego.verTablero();
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "end" -> juego.endGame();
@@ -186,59 +184,59 @@ public class Menu {
                 if (partes.length == 2) {
                     juego.lanzarDados(Integer.parseInt(partes[1]));
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "fortuna" -> {
                 if (partes.length == 2) {
                     juego.fortunaManual(Float.parseFloat(partes[1]));
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "cambiar" -> {
                 if (partes.length == 2 && partes[1].equals("modo")) {
                     juego.cambiarModo();
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "bancarrota" -> {
                 if (partes.length == 1) {
                     juego.bancarrota();
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "hipotecar" -> {
                 if (partes.length == 2) {
                     juego.hipotecar(partes[1]);
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "deshipotecar" -> {
                 if (partes.length == 2) {
                     juego.deshipotecar(partes[1]);
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "avanzar" -> {
                 if (partes.length == 1) {
                     juego.avanzar();
                 } else {
-                    System.out.println("Comando no reconocido");
+                    Juego.consola.imprimir("Comando no reconocido");
                 }
             }
             case "estadisticas" -> {
             switch (partes.length) {
                 case 2 -> juego.estadisticas(partes[1]);
                 case 1 -> juego.estadisticasjuego();
-                default -> System.out.println("Comando no reconocido");
+                default -> Juego.consola.imprimir("Comando no reconocido");
             }
             }
-            default -> System.out.println("Comando no reconocido");
+            default -> Juego.consola.imprimir("Comando no reconocido");
         }
         //---COMANDOS DEBUG---
             }

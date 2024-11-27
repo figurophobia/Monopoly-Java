@@ -16,7 +16,7 @@ public class ConsolaNormal implements Consola {
 
     @Override
     public void imprimir(String cadena) {
-        System.out.print(cadena);
+        System.out.println(cadena);
     }
     @Override
     public void imprimirMensaje(String mensaje) {

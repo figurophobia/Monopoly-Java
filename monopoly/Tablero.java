@@ -210,8 +210,8 @@ public class Tablero {
 
             }
         }
-        System.out.println("Todos los jugadores han dado 4 vueltas.");
-        System.out.println("Los precios de los solares no comprados han subido un 5%.");
+        Juego.consola.imprimir("Todos los jugadores han dado 4 vueltas.");
+        Juego.consola.imprimir("Los precios de los solares no comprados han subido un 5%.");
     }
 
     

@@ -185,7 +185,7 @@ public class Grupo {
             }
             str.append("\nalquiler: ").append(cas.getPrecioAlquiler()).append("\n");
         }
-    System.out.println(str.toString());
+    Juego.consola.imprimir(str.toString());
     }
 
     public boolean tieneHipotecaEnGrupo(Jugador jugador){
