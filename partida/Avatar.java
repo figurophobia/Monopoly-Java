@@ -20,7 +20,7 @@ public class Avatar {
     private boolean ultimoTiroFueCoche = false; //Indica si es el ultimo tiro de los extras de coche
     private int tiros_extra= 0; //Contador de tiros de coche
     private int valorTotalTirada = 0; //Valor total de la tirada de la pelota
-    private int[] movimientosPelota = new int[5]; //Movimientos de la pelota
+    private int[] ArrayMovPelota = new int[5]; //Movimientos de la pelota
     private boolean primerMovPelota = true; //Indica si es el primer movimiento de la pelota
 
     public int getTiros_extra() {
@@ -187,8 +187,8 @@ public class Avatar {
     }
 
     public void limpiarMovPelota(){
-        for (int i = 0; i < movimientosPelota.length; i++) {
-            movimientosPelota[i] = 0;
+        for (int i = 0; i < ArrayMovPelota.length; i++) {
+            ArrayMovPelota[i] = 0;
         }
         this.primerMovPelota = true;
     }
@@ -218,10 +218,10 @@ public class Avatar {
 
     //Devolvemos el siguiente movimiento de la pelota, y lo eliminamos del array si borrar es true
     public int nextPelota(boolean borrar){
-        for (int i = 0; i < movimientosPelota.length; i++) {
-            if (movimientosPelota[i]!=0){
-                int mov = movimientosPelota[i];
-                if (borrar) movimientosPelota[i] = 0;
+        for (int i = 0; i < ArrayMovPelota.length; i++) {
+            if (ArrayMovPelota[i]!=0){
+                int mov = ArrayMovPelota[i];
+                if (borrar) ArrayMovPelota[i] = 0;
                 return mov;
             }
         }
@@ -241,23 +241,23 @@ public class Avatar {
             int i = 0;
             this.valorTotalTirada = valorTirada; //Guardamos el valor total de la tirada, para el evaluar casilla
             if (valorTirada > 4) {
-                movimientosPelota[i++] = 5;
+                ArrayMovPelota[i++] = 5;
                 valorTirada -= 5;
                 while (valorTirada > 1) {
-                    movimientosPelota[i++] = 2;
+                    ArrayMovPelota[i++] = 2;
                     valorTirada -= 2;
                 }
             } else {
-                movimientosPelota[i++] = -1;
+                ArrayMovPelota[i++] = -1;
                 valorTirada = -valorTirada + 1;
                 while (valorTirada < -1) {
-                    movimientosPelota[i++] = -2;
+                    ArrayMovPelota[i++] = -2;
                     valorTirada += 2;
                 }
             }
         
             if (valorTirada != 0) {
-                movimientosPelota[i] = valorTirada;
+                ArrayMovPelota[i] = valorTirada;
             }
 
             valorTirada = this.nextPelota(true);
