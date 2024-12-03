@@ -381,7 +381,6 @@ public class Juego {
         }
         return 0;
     }
-
     
     public void comprar(String nombre) throws Exception {
         Jugador jugador = jugadores.get(turno);

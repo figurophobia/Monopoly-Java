@@ -284,11 +284,11 @@ public class Solar extends Propiedad {
         try{
             int ganancias=0;
             for(int i=0;i<num;i++){
-                float precio_compra=edificaciones.get(tipo).getLast().getPrecio();
+                float precio_compra=edificaciones.get(tipo).get(edificaciones.get(tipo).size() - 1).getPrecio();
                 ganancias+=precio_compra/2;
                 float nueva_fortuna=duenho.getFortuna()+precio_compra/2;
-                edificaciones.get(tipo).removeLast();
-                grupo.getEdificaciones().get(tipo).removeLast();
+                edificaciones.get(tipo).remove(edificaciones.get(tipo).size() - 1);
+                grupo.getEdificaciones().get(tipo).remove(grupo.getEdificaciones().get(tipo).size() - 1);
                 duenho.setFortuna(nueva_fortuna);}
             
             int properties_left=edificaciones.getOrDefault(tipo, new ArrayList<>()).size();
