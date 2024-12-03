@@ -67,6 +67,7 @@ public class Tratos {
                 try {
                     dinero1 = Float.parseFloat(campos.get(1));
                     // cambiar (SolarX, cantidad)
+                    System.out.println("TRATO 1");
                     for (Casilla casilla : jugador1.getPropiedades()) {
                         if(casilla.getNombre().equals(casilla1.getNombre())) anadirTrato(trato, jugador1, jugador2);
                     }
@@ -74,7 +75,8 @@ public class Tratos {
                     //    anadirTrato(trato, jugador1, jugador2);
                     //
                 } catch (NumberFormatException e) {
-                    // cambiar (SolarX, SolarY)
+                    // cambiar (SolarX, SolarY)ç
+                    System.out.println("TRATO 2");
                     casilla2 = tablero.casillaByName(campos.get(1));
                     for(Casilla casillaX : jugador1.getPropiedades()){
                         for(Casilla casillaY : jugador2.getPropiedades()){
@@ -92,6 +94,7 @@ public class Tratos {
                 }
             } else if (campos.size() == 3) {
                 // cambiar (SolarX, SolarY y cantidad)
+                System.out.println("TRATO 3");
                 casilla1 = tablero.casillaByName(campos.get(0));
                 casilla2 = tablero.casillaByName(campos.get(1));
                 dinero1 = Float.parseFloat(campos.get(2));
@@ -209,30 +212,30 @@ public class Tratos {
         }
         
     }
-
+    
     public ArrayList<String> procesarLinea(String linea) {
         ArrayList<String> campos = new ArrayList<>();
         // Patrón para las tres variantes
         Pattern pattern = Pattern.compile(
             "cambiar \\(([^,]+),\\s*([^,\\)]+)(?:\\s*y\\s*([^\\)]+))?\\)");
-    
+
         Matcher matcher = pattern.matcher(linea);
-    
+
         if (matcher.find()) {
             String solarX = matcher.group(1).trim();
             String segundoCampo = matcher.group(2).trim();
             String tercerCampo = matcher.group(3) != null ? matcher.group(3).trim() : null;
-    
+
             campos.add(solarX);
             campos.add(segundoCampo);
             if (tercerCampo != null) {
                 campos.add(tercerCampo);
             }
-            return campos;
         } else {
             System.out.println("Formato incorrecto");
-            return null;
         }
+        System.out.println("numero de campos " + campos.size());
+        return campos;
     }
 
     //OBTENER JUGADOR A PARTIR DE NOMBRE
