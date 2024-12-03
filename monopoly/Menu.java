@@ -70,7 +70,10 @@ public class Menu {
                                               [!] DEBUG commands:
                                               [+] ir carcel
                                               [+] salir carcel
-                                              [+] dados [valor1] [valor2]""");
+                                              [+] dados [valor1] [valor2]
+                                              [+] tratos (ver tratos activos)
+                                              [+] proponer nombreJugador (proponer trato) 
+                                              [+] aceptar tratoID """);
 
             // Crear jugador
             case "crear" -> {
@@ -228,6 +231,20 @@ public class Menu {
                 } else {
                     Juego.consola.imprimir("Comando no reconocido");
                 }
+            }
+            case "tratos" -> {
+                if (partes.length == 1) juego.verTratos();
+                else System.out.println("Comando no reconocido");
+            }
+            case "proponer" -> {
+                if (partes.length == 2) {
+                    juego.proponerTrato(String.valueOf(partes[1]));
+                } else System.out.println("Comando no reconocido");
+            }
+            case "aceptar" -> {
+                if (partes.length == 2) {
+                    juego.aceptarTrato(partes[1]);
+                } else System.out.println("Comando no reconocido");
             }
             case "estadisticas" -> {
             switch (partes.length) {

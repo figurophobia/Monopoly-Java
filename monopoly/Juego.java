@@ -19,6 +19,7 @@ public class Juego {
     private boolean tirado; //Booleano para comprobar si el jugador que tiene el turno ha tirado o no.
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
     private Cartas cartas = new Cartas(); //Objeto de la clase Cartas
+    private Tratos tratos = new Tratos(tablero); //Objeto de la clase Tratos
     public static Consola consola = new ConsolaNormal(); //Objeto de la clase ConsolaNormal
 
 //////---CONSTRUCTOR JUEGO---
@@ -913,6 +914,20 @@ public class Juego {
         }
     }
 
+    public void verTratos(){
+        this.tratos.verTratos();
+    }
+
+    public void proponerTrato(String nombreJug){
+        Jugador jugador1= jugadores.get(turno);
+        Jugador jugador2= nombreJugador(nombreJug);
+        tratos.proponerTrato(jugador1, jugador2);
+    }
+
+    public void aceptarTrato(String id){
+        tratos.aceptarTrato(id, jugadores.get(turno), jugadores);
+    }
+
     /* 
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada, Casilla now) {
         // Incrementar el valor en 1 punto para la casilla actual
@@ -951,6 +966,15 @@ public class Juego {
     }
         */
 
+    //OBTENER JUGADOR A PARTIR DE NOMBRE
+    private Jugador nombreJugador(String nombre){
+        for (Jugador player : jugadores) {
+            if (player!=null && player.getNombre().equals(nombre)) {
+                return player;
+            }
+        }
+        return null;
+    }
 
 //////---METODO QUE LANZA DADOS UN VALOR??
     public void lanzarDados(int tiradaTotal){
