@@ -385,9 +385,7 @@ public class Juego {
         }
         return 0;
     }
-
     
-    Consola consola = new ConsolaNormal();
     public void comprar(String nombre) throws Exception {
         Jugador jugador = jugadores.get(turno);
         Casilla casilla = jugador.getAvatar().getLugar();

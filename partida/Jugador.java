@@ -274,10 +274,9 @@ public class Jugador {
     }
 
     //Método para eliminar una propiedad del arraylist de propiedades de jugador.
-    public void eliminarPropiedad(Casilla casilla) {
-        if (this.propiedades.contains(casilla)) {
-            this.propiedades.remove(casilla);
-            
+    public void eliminarPropiedad(Propiedad propiedad) {
+        if (this.propiedades.contains(propiedad)) {
+            this.propiedades.remove(propiedad);
         }
     }
 
