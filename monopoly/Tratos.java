@@ -118,66 +118,96 @@ public class Tratos {
 
     public void aceptarTrato(String tratoID, Jugador jugador2, ArrayList<Jugador> jugadores){
         //identificar trato en arraylist de tratos
-        for (String trato : tratos) {
-            if(trato.contains(tratoID)){
-                //procesar campos del trato y jugadores
-                ArrayList<String> campos = procesarLinea(trato);
-                //jugador1 sera el que propuso el trato, jugadorPropone
-                //lo sacamos del string del trato
-                String[] tratoSplit = trato.split("\n");
-                String jugadorPropone = tratoSplit[2].split(": ")[1];
-                Jugador jugador1 = nombreJugador(jugadorPropone, jugadores);
-                
-                // comprobar que tipo de trato es y asignar valores
-                if (campos.size() == 2) {
-                    // cambiar (SolarX, SolarY) o cambiar (SolarX, cantidad)
-                    casilla1 = tablero.casillaByName(campos.get(0));
-                    try {
-                        dinero1 = Float.parseFloat(campos.get(1));
-                        // cambiar (SolarX, cantidad)
-                        if (jugador1.getPropiedades().contains(casilla1) && jugador2.getFortuna() >= dinero1) {
-                            jugador1.eliminarPropiedad((Propiedad)casilla1);
+        String trato = null;
+        for (String t : tratos) {
+            if (t.contains(tratoID)) {
+                trato = t;
+                break;
+            }
+        }
+        if (trato == null) {
+            System.out.println("Trato no encontrado");
+            return;
+        }
+        Jugador jugador1 = null;
+        
+        //obtener nombre de jugador que propone el trato, y el trato
+        String[] tratoSplit = trato.split("\n");
+        String nombreJugador1 = tratoSplit[2].split(": ")[1].trim();
+        trato = tratoSplit[4].split(": ")[1].trim();
+
+        //obtener jugador que propone el trato
+        for (Jugador player : jugadores) {
+            if (player.getNombre().equals(nombreJugador1)) {
+                jugador1 = player;
+                break;
+            }
+        }
+        if (jugador1 == null) {
+            System.out.println("Jugador no encontrado");
+            return;
+        }
+        //procesar campos del trato
+        ArrayList<String> campos = procesarLinea(trato);
+        if (campos != null) {
+            if (campos.size() == 2) {
+                casilla1 = tablero.casillaByName(campos.get(0));
+                try {
+                    dinero1 = Float.parseFloat(campos.get(1));
+                    // cambiar (SolarX, cantidad)
+                    for(Casilla casilla : jugador1.getPropiedades()){
+                        if(casilla.getNombre().equals(casilla1.getNombre()) && jugador2.getFortuna() >= dinero1){
                             jugador1.setFortuna(jugador1.getFortuna() + dinero1);
                             jugador2.setFortuna(jugador2.getFortuna() - dinero1);
+                            jugador1.eliminarPropiedad((Propiedad)casilla1);
                             jugador2.anhadirPropiedad(casilla1);
-                            System.out.println("Trato realizado: " + jugador1.getNombre() + " cambia " + casilla1.getNombre() + " por " + dinero1 + " con " + jugador2.getNombre() + "\n");
-                        } else {
-                            System.out.println("El trato no es válido, el jugador debe tener esa casilla y el jugador 2 debe tener suficiente dinero\n");
+                            tratos.remove(trato);
+                            System.out.println("Trato aceptado");
+                            break;
                         }
-                    } catch (NumberFormatException e) {
-                        // cambiar (SolarX, SolarY)
-                        casilla2 = tablero.casillaByName(campos.get(1));
-                        if (jugador1.getPropiedades().contains(casilla1) && jugador2.getPropiedades().contains(casilla2)) {
+                    }
+                } catch (NumberFormatException e) {
+                    // cambiar (SolarX, SolarY)
+                    casilla2 = tablero.casillaByName(campos.get(1));
+                    for(Casilla casilla : jugador1.getPropiedades()){
+                        for(Casilla casillaY : jugador2.getPropiedades()){
+                            if(casilla.getNombre().equals(casilla1.getNombre()) && casillaY.getNombre().equals(casilla2.getNombre())){
+                                jugador1.eliminarPropiedad((Propiedad)casilla1);
+                                jugador2.eliminarPropiedad((Propiedad)casilla2);
+                                jugador1.anhadirPropiedad(casilla2);
+                                jugador2.anhadirPropiedad(casilla1);
+                                tratos.remove(trato);
+                                System.out.println("Trato aceptado");
+                                break;
+                            }
+                        }
+                    }
+                }
+            } else if (campos.size() == 3) {
+                // cambiar (SolarX, SolarY y cantidad)
+                casilla1 = tablero.casillaByName(campos.get(0));
+                casilla2 = tablero.casillaByName(campos.get(1));
+                dinero1 = Float.parseFloat(campos.get(2));
+                for(Casilla casilla : jugador1.getPropiedades()){
+                    for(Casilla casillaY : jugador2.getPropiedades()){
+                        if(casilla.getNombre().equals(casilla1.getNombre()) && casillaY.getNombre().equals(casilla2.getNombre()) && jugador2.getFortuna() >= dinero1){
+                            jugador1.setFortuna(jugador1.getFortuna() + dinero1);
+                            jugador2.setFortuna(jugador2.getFortuna() - dinero1);
                             jugador1.eliminarPropiedad((Propiedad)casilla1);
                             jugador2.eliminarPropiedad((Propiedad)casilla2);
                             jugador1.anhadirPropiedad(casilla2);
                             jugador2.anhadirPropiedad(casilla1);
-                            System.out.println("Trato realizado: " + jugador1.getNombre() + " cambia " + casilla1.getNombre() + " por " + casilla2.getNombre() + " con " + jugador2.getNombre() + "\n");
-                        } else {
-                            System.out.println("El trato no es válido, los jugadores deben tener esas casillas\n");
+                            tratos.remove(trato);
+                            System.out.println("Trato aceptado");
+                            break;
                         }
                     }
-                } else if (campos.size() == 3) {
-                    // cambiar (SolarX, SolarY y cantidad)
-                    casilla1 = tablero.casillaByName(campos.get(0));
-                    casilla2 = tablero.casillaByName(campos.get(1));
-                    dinero1 = Float.parseFloat(campos.get(2));
-                    if (jugador1.getPropiedades().contains(casilla1) && jugador2.getPropiedades().contains(casilla2) && jugador2.getFortuna() >= dinero1) {
-                        jugador1.eliminarPropiedad((Propiedad)casilla1);
-                        jugador2.eliminarPropiedad((Propiedad)casilla2);
-                        jugador1.anhadirPropiedad(casilla2);
-                        jugador2.anhadirPropiedad(casilla1);
-                        jugador1.setFortuna(jugador1.getFortuna() + dinero1);
-                        jugador2.setFortuna(jugador2.getFortuna() - dinero1);
-                        System.out.println("Trato realizado: " + jugador1.getNombre() + " cambia " + casilla1.getNombre() + " por " + casilla2.getNombre() + " y " + dinero1 + " con " + jugador2.getNombre() + "\n");
-                    } else {
-                        System.out.println("El trato no es válido, los jugadores deben tener esas casillas y el jugador 2 debe tener suficiente dinero\n");
-                    }
-                } else {
-                    System.out.println("El trato no es válido, formato incorrecto\n");
                 }
+            } else {
+                System.out.println("El trato no es válido, formato incorrecto\n");
             }
         }
+        
     }
 
     public ArrayList<String> procesarLinea(String linea) {
