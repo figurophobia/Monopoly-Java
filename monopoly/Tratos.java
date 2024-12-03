@@ -2,8 +2,6 @@ package monopoly;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import partida.*;
 
 public class Tratos {
@@ -215,36 +213,23 @@ public class Tratos {
     
     public ArrayList<String> procesarLinea(String linea) {
         ArrayList<String> campos = new ArrayList<>();
-        // Patrón para las tres variantes
-        Pattern pattern = Pattern.compile(
-            "cambiar \\(([^,]+),\\s*([^,\\)]+)(?:\\s*y\\s*([^\\)]+))?\\)");
-
-        Matcher matcher = pattern.matcher(linea);
-
-        if (matcher.find()) {
-            String solarX = matcher.group(1).trim();
-            String segundoCampo = matcher.group(2).trim();
-            String tercerCampo = matcher.group(3) != null ? matcher.group(3).trim() : null;
-
-            campos.add(solarX);
-            campos.add(segundoCampo);
-            if (tercerCampo != null) {
-                campos.add(tercerCampo);
+    
+        // Eliminar la parte inicial "cambiar (" y el paréntesis de cierre ")"
+        if (linea.startsWith("cambiar (") && linea.endsWith(")")) {
+            linea = linea.substring(9, linea.length() - 1).trim();
+    
+            // Dividir la línea en campos usando la coma y la palabra "y"
+            String[] partes = linea.split(",\\s*|\\s*y\\s*");
+    
+            for (String parte : partes) {
+                campos.add(parte.trim());
             }
         } else {
             System.out.println("Formato incorrecto");
         }
+    
         System.out.println("numero de campos " + campos.size());
         return campos;
     }
 
-    //OBTENER JUGADOR A PARTIR DE NOMBRE
-    private Jugador nombreJugador(String nombre, ArrayList<Jugador> jugadores){
-        for (Jugador player : jugadores) {
-            if (player!=null && player.getNombre().equals(nombre)) {
-                return player;
-            }
-        }
-        return null;
-    }
 }
