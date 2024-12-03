@@ -19,7 +19,7 @@ public class Juego {
     private boolean tirado; //Booleano para comprobar si el jugador que tiene el turno ha tirado o no.
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
     private Cartas cartas = new Cartas(); //Objeto de la clase Cartas
-    private Tratos tratos = new Tratos(tablero); //Objeto de la clase Tratos
+    private Tratos tratos; //Objeto de la clase Tratos
     public static Consola consola = new ConsolaNormal(); //Objeto de la clase ConsolaNormal
 
 //////---CONSTRUCTOR JUEGO---
@@ -47,6 +47,7 @@ public class Juego {
         avatares.add(null);
         jugadores.add(banca);
         tablero = new Tablero(banca);
+        this.tratos = new Tratos(tablero);
         print_intro();
         consola.imprimir("\n\nCreamos los 2 jugadores mínimos para jugar...");
         anadirjugador();
@@ -921,7 +922,7 @@ public class Juego {
     public void proponerTrato(String nombreJug){
         Jugador jugador1= jugadores.get(turno);
         Jugador jugador2= nombreJugador(nombreJug);
-        tratos.proponerTrato(jugador1, jugador2);
+        tratos.anadirTrato(nombreJug, jugador1, jugador2);
     }
 
     public void aceptarTrato(String id){

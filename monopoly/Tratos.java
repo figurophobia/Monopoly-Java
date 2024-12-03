@@ -126,6 +126,7 @@ public class Tratos {
                 //lo sacamos del string del trato
                 String[] tratoSplit = trato.split("\n");
                 String jugadorPropone = tratoSplit[2].split(": ")[1];
+                System.out.println(jugadorPropone);
                 Jugador jugador1 = nombreJugador(jugadorPropone, jugadores);
                 
                 // comprobar que tipo de trato es y asignar valores
@@ -209,6 +210,7 @@ public class Tratos {
     private Jugador nombreJugador(String nombre, ArrayList<Jugador> jugadores){
         for (Jugador player : jugadores) {
             if (player!=null && player.getNombre().equals(nombre)) {
+                System.out.println("Jugador encontrado");
                 return player;
             }
         }
