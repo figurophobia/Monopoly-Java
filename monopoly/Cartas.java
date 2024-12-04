@@ -80,6 +80,7 @@ public class Cartas {
                 if(actual.getLugar().getPosicion()>5){
                     jactual.sumarFortuna(Valor.SUMA_VUELTA);
                     jactual.sumarVueltas();
+                    jactual.setPasarPorCasillaDeSalida(jactual.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
                     if (jactual.getVueltas()%4==0 && jactual.getVueltas()!=0){
                         jactual.getAvatar().setCuartaVuelta(true);
                     }
@@ -107,6 +108,7 @@ public class Cartas {
                 if(actual.getLugar().getPosicion()>7){
                     jactual.sumarFortuna(Valor.SUMA_VUELTA);
                     jactual.sumarVueltas();
+                    jactual.setPasarPorCasillaDeSalida(jactual.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
                     if (jactual.getVueltas()%4==0 && jactual.getVueltas()!=0){
                         jactual.getAvatar().setCuartaVuelta(true);
                     }
@@ -154,6 +156,7 @@ public class Cartas {
                 moverEspecial(tablero, 0, actual, jugadores.get(0));
                 jactual.sumarFortuna(Valor.SUMA_VUELTA);
                 jactual.sumarVueltas();
+                jactual.setPasarPorCasillaDeSalida(jactual.getPasarPorCasillaDeSalida()+Valor.SUMA_VUELTA);
                 if (jactual.getVueltas()%4==0 && jactual.getVueltas()!=0){
                     jactual.getAvatar().setCuartaVuelta(true);
                 }

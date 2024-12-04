@@ -161,7 +161,7 @@ public class Grupo {
             if (!(casilla instanceof Solar cas))
                 continue;
 
-            cas.calcularImpuesto();
+            cas.calcularprecioAlquiler();
             str.append("{\npropiedad: ").append(cas.getNombre()).append("\n");
             int nhoteles=cas.getEdificaciones().getOrDefault("hotel", new ArrayList<>()).size();
             str.append("hoteles (").append(nhoteles).append("): ");

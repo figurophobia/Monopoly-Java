@@ -127,6 +127,19 @@ public class Propiedad extends Casilla{
         this.precioAlquiler += suma;
     }
 
+    @Override
+    public String infoCasilla() { 
+        StringBuilder info = new StringBuilder();
+        info.append("{\n");
+        info.append("tipo: ").append(this.getClass().getSimpleName()).append(",\n");
+        info.append("propietario: ").append(this.duenho != null ? this.duenho.getNombre() : "N/A").append(",\n")
+        .append("valor: ").append(this.valor).append(",\n")
+        .append("alquiler: ").append(this.precioAlquiler).append(",\n");
+        info.append("}");
+        
+        return info.toString();
+    }
+
     
 }
 

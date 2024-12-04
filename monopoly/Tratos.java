@@ -137,7 +137,7 @@ public class Tratos {
                         dinero1 = Float.parseFloat(campos.get(1));
                         // cambiar (SolarX, cantidad)
                         if (jugador1.getPropiedades().contains(casilla1) && jugador2.getFortuna() >= dinero1) {
-                            jugador1.eliminarPropiedad(casilla1);
+                            jugador1.eliminarPropiedad((Propiedad)casilla1);
                             jugador1.setFortuna(jugador1.getFortuna() + dinero1);
                             jugador2.setFortuna(jugador2.getFortuna() - dinero1);
                             jugador2.anhadirPropiedad(casilla1);
@@ -149,8 +149,8 @@ public class Tratos {
                         // cambiar (SolarX, SolarY)
                         casilla2 = tablero.casillaByName(campos.get(1));
                         if (jugador1.getPropiedades().contains(casilla1) && jugador2.getPropiedades().contains(casilla2)) {
-                            jugador1.eliminarPropiedad(casilla1);
-                            jugador2.eliminarPropiedad(casilla2);
+                            jugador1.eliminarPropiedad((Propiedad)casilla1);
+                            jugador2.eliminarPropiedad((Propiedad)casilla2);
                             jugador1.anhadirPropiedad(casilla2);
                             jugador2.anhadirPropiedad(casilla1);
                             System.out.println("Trato realizado: " + jugador1.getNombre() + " cambia " + casilla1.getNombre() + " por " + casilla2.getNombre() + " con " + jugador2.getNombre() + "\n");
@@ -164,8 +164,8 @@ public class Tratos {
                     casilla2 = tablero.casillaByName(campos.get(1));
                     dinero1 = Float.parseFloat(campos.get(2));
                     if (jugador1.getPropiedades().contains(casilla1) && jugador2.getPropiedades().contains(casilla2) && jugador2.getFortuna() >= dinero1) {
-                        jugador1.eliminarPropiedad(casilla1);
-                        jugador2.eliminarPropiedad(casilla2);
+                        jugador1.eliminarPropiedad((Propiedad)casilla1);
+                        jugador2.eliminarPropiedad((Propiedad)casilla2);
                         jugador1.anhadirPropiedad(casilla2);
                         jugador2.anhadirPropiedad(casilla1);
                         jugador1.setFortuna(jugador1.getFortuna() + dinero1);

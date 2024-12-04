@@ -73,11 +73,19 @@ public class Casilla {
         consola.imprimirAdvertencia("No puedes edificar en esta casilla");
     }
 
-    public String infoCasilla(){
-        return ("Aún en desarrollo");
+    public String infoCasilla() { 
+        StringBuilder info = new StringBuilder();
+        info.append("{\n");
+        info.append("tipo: ").append(this.getClass().getSimpleName()).append(",\n");
+        info.append("jugadores: [");
+        for (Avatar avatar : this.avatares) {
+            info.append(avatar.getJugador().getNombre()).append(", ");
+        }
+        if (!this.avatares.isEmpty()) {
+            info.setLength(info.length() - 2); // Eliminar la última coma y espacio
+        }
+        info.append("]\n");
+        return info.toString();
     }
-
-    //TODO: String toString
-
 
 }

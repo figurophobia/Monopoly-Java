@@ -27,6 +27,23 @@ public class Impuesto extends Casilla{
 
         return true;
     }
+    @Override
+    public String infoCasilla() { 
+        StringBuilder info = new StringBuilder();
+        info.append("{\n");
+        info.append("tipo: ").append(this.getClass()).append(",\n");
+        info.append("a pagar: ").append(this.impuesto).append("\n");
+        info.append("jugadores: [");
+        for (Avatar avatar : this.avatares) {
+            info.append(avatar.getJugador().getNombre()).append(", ");
+        }
+        if (!this.avatares.isEmpty()) {
+            info.setLength(info.length() - 2); // Eliminar la última coma y espacio
+        }
+        info.append("]\n");
+        return info.toString();
+    }
+
     
 
 

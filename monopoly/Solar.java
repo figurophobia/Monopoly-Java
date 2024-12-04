@@ -25,7 +25,7 @@ public class Solar extends Propiedad {
     Consola consola = new ConsolaNormal();
     
     public float calcularPago(int tirada) {
-        calcularImpuesto();
+        calcularprecioAlquiler();
         return precioAlquiler;
     }
 
@@ -107,7 +107,7 @@ public class Solar extends Propiedad {
 
     }
 
-    public void calcularImpuesto() {
+    public void calcularprecioAlquiler() {
         
         float inicial = valor * 0.1f;
         precioAlquiler = inicial;
@@ -151,7 +151,7 @@ public class Solar extends Propiedad {
                     System.out.println("Tipo de edificación no reconocido...");
                 }
             }
-            calcularImpuesto();
+            calcularprecioAlquiler();
         }else System.out.println(Valor.RED + "No "+ Valor.RESET+ "puedes edificar en esta casilla.");
     }
 
@@ -284,11 +284,11 @@ public class Solar extends Propiedad {
         try{
             int ganancias=0;
             for(int i=0;i<num;i++){
-                float precio_compra=edificaciones.get(tipo).getLast().getPrecio();
+                float precio_compra=edificaciones.get(tipo).get(edificaciones.get(tipo).size() - 1).getPrecio();
                 ganancias+=precio_compra/2;
                 float nueva_fortuna=duenho.getFortuna()+precio_compra/2;
-                edificaciones.get(tipo).removeLast();
-                grupo.getEdificaciones().get(tipo).removeLast();
+                edificaciones.get(tipo).remove(edificaciones.get(tipo).size() - 1);
+                grupo.getEdificaciones().get(tipo).remove(grupo.getEdificaciones().get(tipo).size() - 1);
                 duenho.setFortuna(nueva_fortuna);}
             
             int properties_left=edificaciones.getOrDefault(tipo, new ArrayList<>()).size();
@@ -316,6 +316,56 @@ public class Solar extends Propiedad {
             return false;
         }
         else{return true;}
+    }
+
+    @Override
+    public String infoCasilla() { 
+        StringBuilder info = new StringBuilder();
+        info.append("{\n");
+        info.append("tipo: ").append(this.getClass().getSimpleName()).append(",\n");
+        info.append("grupo: ").append(this.grupo.getColorGrupo()).append("#####" + Valor.RESET).append(",\n")
+        .append("propietario: ").append(this.duenho != null ? this.duenho.getNombre() : "N/A").append(",\n")
+        .append("valor: ").append(this.valor).append(",\n")
+        .append("alquiler: ").append(this.precioAlquiler).append(",\n")
+        .append("valor hotel: ").append(this.valor * 0.6f).append(",\n")
+        .append("valor casa: ").append(this.valor * 0.6f).append(",\n")
+        .append("valor piscina: ").append(this.valor * 0.4f).append(",\n")
+        .append("valor pista de deporte: ").append(this.valor * 1.25f).append(",\n")
+        .append("alquiler una casa: ").append(this.precioAlquiler * 5).append(",\n")
+        .append("alquiler dos casas: ").append(this.precioAlquiler * 15).append(",\n")
+        .append("alquiler tres casas: ").append(this.precioAlquiler * 35).append(",\n")
+        .append("alquiler cuatro casas: ").append(this.precioAlquiler * 50).append(",\n")
+        .append("alquiler hotel: ").append(this.precioAlquiler * 70).append(",\n")
+        .append("alquiler piscina: ").append(this.precioAlquiler * 25).append(",\n")
+        .append("alquiler pista de deporte: ").append(this.precioAlquiler * 25).append("\n");
+        info.append("jugadores: [");
+        for (Avatar avatar : this.avatares) {
+            info.append(avatar.getJugador().getNombre()).append(", ");
+        }
+        if (!this.avatares.isEmpty()) {
+            info.setLength(info.length() - 2); // Eliminar la última coma y espacio
+        }
+        info.append("]\n");
+        
+        int numcasa=edificaciones.getOrDefault("casa",new ArrayList<>()).size();
+        if (numcasa!=0){
+            info.append("- ").append(numcasa).append(numcasa==1 ? " casa" : " casas").append("\n");
+        }
+        int numhotel=edificaciones.getOrDefault("hotel", new ArrayList<>()).size();
+        if (numhotel!=0){
+            info.append("- ").append(numhotel).append(numhotel==1 ? " hotel" : " hoteles").append("\n");
+        }
+        int numpiscina=edificaciones.getOrDefault("piscina",new ArrayList<>()).size();
+        if (numpiscina!=0){
+            info.append("- ").append(numpiscina).append(numpiscina==1 ? " piscina" : " piscinas").append("\n");
+        }
+        int numpista=edificaciones.getOrDefault("pista",new ArrayList<>()).size();
+        if (numpista!=0){
+            info.append("- ").append(numpista).append(numpista==1 ? " pista de deporte" : " pistas de deporte").append("\n");
+        }
+        info.append("}");
+        
+        return info.toString();
     }
 
 
