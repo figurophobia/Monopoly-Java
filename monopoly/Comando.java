@@ -13,7 +13,7 @@ public interface Comando {
     void listarEdificios() ;
     void listarGrupo(String grupo);
     void lanzarDados();
-    void lanzarDados(String dado1, String dado2);
+    void lanzarDados(String dado1, String dado2) throws LanzarDado;
     void lanzarDados(int valor);
     void comprar(String nombre) throws Exception;
     void salirCarcel();

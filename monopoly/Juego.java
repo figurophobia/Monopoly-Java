@@ -663,25 +663,24 @@ public class Juego implements Comando{
 ////////////////////////////////////DEBUG COMMANDS////////////////////////////////////
 //////---METODO LANZA DADOS VALORES ESPECIFICOS---
     @Override
-    public void lanzarDados(String dado1, String dado2) {
+    public void lanzarDados(String dado1, String dado2) throws LanzarDado{
         int dadoint1= Integer.parseInt(dado1);
         int dadoint2= Integer.parseInt(dado2);
         Avatar avatarActual = avatares.get(turno);
         if (avatarActual.isCocheParado()) {
-            consola.imprimir("El coche está parado, no puede lanzar los dados en "+avatarActual.getTurnosParado() +"turnos consecutivos.");            
-            return;
+            throw new LanzarDado("El coche está parado, no puede lanzar los dados en "+avatarActual.getTurnosParado() +"turnos consecutivos.");
         }
         if ((dadoint1>6)||(dadoint2>6)) consola.imprimir("Valor de tirada no válida");    
         if (tirado) {
-            consola.imprimir("Ya has lanzado los dados en este turno.");
-            return;
+            throw new LanzarDado("Ya has lanzado los dados en este turno.");
         }
         
         if (avatarActual.getTiros_extra() == 4){
-            consola.imprimir("Se han acabado tus tiros extra");
-            tirado=true;
-            return;
+            throw new LanzarDado("Se han acabado tus tiros extra de coche");
 
+        }
+        if (avatarActual.getJugador().getFortuna()<0) {
+            throw new LanzarDado("No puedes lanzar los dados. Debes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
         }
 
         Jugador jugadorActual = jugadores.get(turno);
