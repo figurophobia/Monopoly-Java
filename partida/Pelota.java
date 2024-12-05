@@ -65,7 +65,8 @@ public class Pelota extends Avatar {
         return 0;
     }
 
-    public int moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
+    @Override
+    public int moverEnAvanzado(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
         
         this.setCuartaVuelta(false);
         int posicion = this.getLugar().getPosicion();

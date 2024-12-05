@@ -67,13 +67,19 @@ public class Menu {
                                               [+] estadisticas [nombre jugador]
                                               [+] estadisticas
                                               [+] ver tablero
+                                              [+] avanzar
+                                              [+] fortuna [cantidad]
+                                              [+] hipotecar [nombre propiedad]
+                                              [+] deshipotecar [nombre propiedad]
+                                              [+] bancarrota
+                                              [+] trato [nombreJugador1] cambiar SolarX SolarY dinero (insertar en orden)
+                                              [+] aceptar trato [idTrato]
+                                              [+] eliminar trato [idTrato]
+                                              [+] end
                                               [!] DEBUG commands:
                                               [+] ir carcel
                                               [+] salir carcel
-                                              [+] dados [valor1] [valor2]
-                                              [+] tratos (ver tratos activos)
-                                              [+] proponer nombreJugador (proponer trato) 
-                                              [+] aceptar tratoID """);
+                                              [+] dados [valor1] [valor2] """);
 
             // Crear jugador
             case "crear" -> {
@@ -236,14 +242,19 @@ public class Menu {
                 if (partes.length == 1) juego.verTratos();
                 else System.out.println("Comando no reconocido");
             }
-            case "proponer" -> {
-                if (partes.length == 2) {
-                    juego.proponerTrato(String.valueOf(partes[1]));
+            case "trato" -> {
+                if (partes.length == 5||partes.length == 7) {
+                    juego.crearTrato(partes);
                 } else System.out.println("Comando no reconocido");
             }
             case "aceptar" -> {
                 if (partes.length == 2) {
                     juego.aceptarTrato(partes[1]);
+                } else System.out.println("Comando no reconocido");
+            }
+            case "eliminar" -> {
+                if (partes.length == 2) {
+                    juego.eliminarTrato(partes[1]);
                 } else System.out.println("Comando no reconocido");
             }
             case "estadisticas" -> {

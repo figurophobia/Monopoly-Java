@@ -42,12 +42,17 @@ public class Casilla {
     }
 
     //TODO: frecuenciaVisita
+    public int frecuenciaVisita(Jugador jugador){
+        return jugador.getNumeroVisitas().getOrDefault(this, 0);
+    }
+
     public boolean estaAvatar(Avatar avatar){
         Casilla casillaAvatar = avatar.getLugar();
         return (casillaAvatar == this);
     }
 
     public boolean evaluarCasilla(Jugador jugador, Jugador banca, int tirada){
+        visitarCasilla(jugador);
         return true;
     }
 

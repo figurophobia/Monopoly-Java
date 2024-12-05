@@ -32,8 +32,10 @@ public class Jugador {
     private float dineroPreDeuda = 0; //Dinero que se debe antes de la deuda.
     private boolean enDeuda = false; //Bandera para saber si el jugador está en deuda.
     private float cantidadDeuda = 0; //Cantidad de la deuda.
-
     private boolean CochePuedeComprar = true; //Bandera para saber si el coche puede comprar
+
+    private ArrayList<Trato> tratosPropuestos = new ArrayList<Trato>();
+    private ArrayList<Trato> tratosRecibidos = new ArrayList<Trato>();
 
     /*
      * dineroInvertido: 8500000, //Compra de propiedades solares,servicios y transporte, edificaciones
@@ -236,6 +238,15 @@ public class Jugador {
         this.cantidadDeuda = cantidadDeuda;
     }
 
+    public ArrayList<Trato> getTratosPropuestos() {
+        return tratosPropuestos;
+    }
+
+    public ArrayList<Trato> getTratosRecibidos() {
+        return tratosRecibidos;
+    }
+
+
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {
@@ -256,7 +267,11 @@ public class Jugador {
 
     public Jugador(String nombre, String tipo, Casilla lugar, ArrayList<Avatar> avCreados) {
         this.nombre = nombre;
-        this.avatar = new Avatar(tipo, this, lugar, avCreados);
+        if (tipo.equals("Pelota")) {
+            this.avatar = new Pelota(tipo, this, lugar, avCreados);
+        }else if (tipo.equals("Coche")) {
+            this.avatar = new Coche(tipo, this, lugar, avCreados);
+        }else {this.avatar = new Avatar(tipo, this, lugar, avCreados);}
         this.fortuna = Valor.FORTUNA_INICIAL;
         this.gastos = 0;
         this.enCarcel = false;
@@ -559,5 +574,13 @@ public class Jugador {
         str.append("vecesEnLaCarcel: " + this.vecesEnLaCarcel + ",\n");
         str.append("}\n");
         Juego.consola.imprimir(str.toString());
+    }
+
+    public void cambiarPropiedad(Casilla propiedad, Jugador recibe){
+        if(propiedad instanceof Propiedad propiedad1){
+            propiedad1.setDuenho(recibe);
+            this.propiedades.remove(propiedad);
+            recibe.anhadirPropiedad(propiedad);
+        }
     }
 }

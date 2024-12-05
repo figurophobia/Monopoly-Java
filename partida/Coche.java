@@ -62,7 +62,8 @@ public class Coche extends Avatar {
         turnosParado = 3;
     }
 
-        public int moverAvatarCoche(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
+    @Override
+    public int moverEnAvanzado(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
         this.setCuartaVuelta(false); //Al moverse, se reinicia el contador de cuarta vuelta, para no añadir valor cada vez que se juega en la cuarta vuelta
 
 

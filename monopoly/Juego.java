@@ -5,7 +5,7 @@ import java.util.Map;
 import monopoly.Edificacion;
 import partida.*;
 
-public class Juego {
+public class Juego implements Comando{
 
 //////---ATRIBUTOS CLASE MENU---
     private ArrayList<Jugador> jugadores = new ArrayList<Jugador>(); //Jugadores de la partida.
@@ -19,7 +19,6 @@ public class Juego {
     private boolean tirado; //Booleano para comprobar si el jugador que tiene el turno ha tirado o no.
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
     private Cartas cartas = new Cartas(); //Objeto de la clase Cartas
-    private Tratos tratos; //Objeto de la clase Tratos
     public static Consola consola = new ConsolaNormal(); //Objeto de la clase ConsolaNormal
 
 //////---CONSTRUCTOR JUEGO---
@@ -47,7 +46,6 @@ public class Juego {
         avatares.add(null);
         jugadores.add(banca);
         tablero = new Tablero(banca);
-        this.tratos = new Tratos(tablero);
         print_intro();
         consola.imprimir("\n\nCreamos los 2 jugadores mínimos para jugar...");
         anadirjugador();
@@ -56,6 +54,7 @@ public class Juego {
 
     }
 //////---METODO AÑADIR JUGADOR---
+    @Override
     public void anadirjugador(){
         String nombre = Juego.consola.leer("Indica el nombre del jugador ("+jugadores.size()+"): ");
         if (nombreRepetido(nombre)){
@@ -108,7 +107,7 @@ public class Juego {
 //        "avatar: " + jugadorActual.getAvatar().getId() + "\n" +
 //                "}");
 //}
-
+    @Override
     public void jugadorInfo(){
         Jugador jugadorActual = jugadores.get(turno);
         consola.imprimir("\n{\nnombre: " + jugadorActual.getNombre() + ",\n" +
@@ -124,7 +123,7 @@ public class Juego {
                     }else consola.imprimir("Comando no reconocido");
                 }
  */
-
+    @Override
     public void edificar(String tipo){
         try{
             jugadores.get(turno).getAvatar().getLugar().edificar(tipo);
@@ -149,7 +148,7 @@ public class Juego {
                     consola.imprimir("Comando no reconocido");
                 }
   */
-
+    @Override
     public void acabar(){
         if (jugadores.get(turno).getFortuna()<0) {
             consola.imprimir("No puedes acabar turno. Debes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
@@ -159,6 +158,7 @@ public class Juego {
     }
 
     //////---Metodo para cambiar modo de movimiento:
+    @Override
     public void cambiarModo(){
         if (!tirado) {
             avatares.get(turno).cambiarModo();
@@ -167,6 +167,7 @@ public class Juego {
     }
 
     ////// ----Metodo para declarar bancarrota:
+    @Override
     public void bancarrota(){
         Jugador deudor = jugadores.get(turno).getDeudor();
         if (deudor != null) {
@@ -179,17 +180,20 @@ public class Juego {
 
 
     //////---Metodo para hipotecar propiedades:
+    @Override
     public void hipotecar(String casilla){
         hipotecar(casilla, jugadores.get(turno));
     }
 
     //////---Metodo para deshipotecar propiedades:
+    @Override
     public void deshipotecar(String casilla){
         deshipotecar(casilla, jugadores.get(turno));
     }
 
 
 //////---METODO DESCRIBE JUGADOR---
+    @Override
     public void descJugador(String nombre) {
         for (Jugador player : jugadores) {
             if (player!=null && player.getNombre().equals(nombre)) {
@@ -199,6 +203,7 @@ public class Juego {
         }
     }
 //////---METODO DESCRIBE AVATAR---
+    @Override
     public void descAvatar(String ID) {
         for (Avatar av : avatares) {
             if (av!=null && av.getId().equals(ID)) {
@@ -208,6 +213,7 @@ public class Juego {
         }
     }
 //////---METODO DESCRIBE CASILLA---
+    @Override
     public void descCasilla(String nombre) {
         Casilla casilla = this.tablero.casillaByName(nombre);
         if (casilla != null) {
@@ -238,6 +244,7 @@ public class Juego {
 
 
 //////---METODO LANZA DADOS ALEATORIOS---
+    @Override
     public void lanzarDados() {
         dado1 = new Dado();
         dado2 = new Dado();
@@ -366,23 +373,24 @@ public class Juego {
     public int moverJugador(int posiciones) {
         if (avatares.get(turno).esMovAvanzado()) {
             if (avatares.get(turno).getTipo().equals("Pelota")) {
-                return avatares.get(turno).moverAvatarPelota(tablero.getPosiciones(), posiciones);
+                return avatares.get(turno).moverEnAvanzado(tablero.getPosiciones(), posiciones);
             }
             else if (avatares.get(turno).getTipo().equals("Coche")) {
                 if (lanzamientos<2 && posiciones>4){
                     consola.imprimir("Tienes tirada extra, puedes seguir lanzando los dados, llevas "+lanzamientos+" lanzamientos.");
                 }
-                return avatares.get(turno).moverAvatarCoche(tablero.getPosiciones(), posiciones);
+                return avatares.get(turno).moverEnAvanzado(tablero.getPosiciones(), posiciones);
                 
             }
             
         }
         else {
-            return this.avatares.get(turno).moverAvatar(this.tablero.getPosiciones(), posiciones);
+            return this.avatares.get(turno).moverEnBasico(this.tablero.getPosiciones(), posiciones);
         }
         return 0;
     }
     
+    @Override
     public void comprar(String nombre) throws Exception {
         Jugador jugador = jugadores.get(turno);
         Casilla casilla = jugador.getAvatar().getLugar();
@@ -408,6 +416,7 @@ public class Juego {
 
     }
 //////---METODO SALIR CARCEL---
+    @Override
     public void salirCarcel() {
         if (lanzamientos==0) { //al inicio del turno en el que esta en la carcel, puede pagar
             if(!jugadores.get(turno).pagarSalidaCarcel()){
@@ -417,6 +426,7 @@ public class Juego {
         }
     }
 //////---METODO LISTA PROPIEDADES EN VENTA---
+    @Override
     public void listarVenta() {
         for (int i = 0; i < 40; i++) {
             Casilla c = tablero.getCasilla(i);
@@ -431,6 +441,7 @@ public class Juego {
         }
     }
 //////---METODO LISTA JUGADORES---
+    @Override
     public void listarJugadores() {
         for (Jugador jugador: jugadores){
             if (jugador.getAvatar()!=null) {
@@ -438,6 +449,7 @@ public class Juego {
             }
     }}
 //////---METODO LISTA AVATARES---
+    @Override
     public void listarAvatares() {
         for (Avatar avatar: avatares){
             if (avatar!=null) {
@@ -446,6 +458,7 @@ public class Juego {
         }
     }
 //////---METODO LISTAR EDIFICIOS---
+    @Override
     public void listarEdificios() {
         for (int i = 0; i < 40; i++) {
 
@@ -457,6 +470,8 @@ public class Juego {
             solar.mostrarEdificaciones();
         }
     }
+
+    @Override
     public void listarGrupo(String grupo) {
         try{
             tablero.getGrupos().get(grupo).mostrarEdificaciones();
@@ -493,6 +508,7 @@ public class Juego {
 
 
     //////---METODO ACABAR TURNO---
+    @Override
     public void acabarTurnoForce() {
         Avatar avatarActual = avatares.get(turno);
         if (avatarActual.isCocheParado()){
@@ -526,11 +542,13 @@ public class Juego {
     }
 
 //////---METODO VER TABLERO---
+    @Override
     public void verTablero() {
         consola.imprimir(tablero.toString());
     
     }
 //////---METODO FINALIZAR PARTIDA---
+    @Override
     public void endGame() {
         partida_OFF = true;
         System.exit(0);
@@ -555,6 +573,7 @@ public class Juego {
         return propiedad.getDuenho().equals(jugador);
     }
 //////---METODO VENDER EDIFICIO
+    @Override
     public void vender_edificio(String casilla, String tipo,String num){
 
         try{
@@ -639,6 +658,7 @@ public class Juego {
     }
 ////////////////////////////////////DEBUG COMMANDS////////////////////////////////////
 //////---METODO LANZA DADOS VALORES ESPECIFICOS---
+    @Override
     public void lanzarDados(String dado1, String dado2) {
         int dadoint1= Integer.parseInt(dado1);
         int dadoint2= Integer.parseInt(dado2);
@@ -714,6 +734,8 @@ public class Juego {
         sleep(1000);
         moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2,false);
     }
+
+    @Override
     public void estadisticas(String nombre) {
         for (Jugador jugador : jugadores) {
             if (jugador.getNombre().equals(nombre)) {
@@ -759,6 +781,7 @@ public class Juego {
         }
      */
 
+    @Override
     public void estadisticasjuego() {
         Jugador jugadorMasVueltas = jugadores.get(1);
         Jugador jugadorMasVecesDados = jugadores.get(1);
@@ -897,7 +920,7 @@ public class Juego {
             propiedad.deshipotecar(actual);
         }else System.out.println("Casilla no encontrada");
     }
-
+    @Override
     public void avanzar(){
         Avatar avatarActual = avatares.get(turno);
         if (avatarActual.puedeAvanzar()){
@@ -914,19 +937,141 @@ public class Juego {
         }
     }
 
-    public void verTratos(){
-        this.tratos.verTratos();
+    @Override
+    public void verTratos() {
+        Jugador jugadorActual = jugadores.get(turno);
+        consola.imprimir("Tratos propuestos:");
+        if (jugadorActual.getTratosPropuestos().isEmpty()) {
+            consola.imprimir("No tienes tratos propuestos.");
+        } else {
+            for (Trato trato : jugadorActual.getTratosPropuestos()) {
+                consola.imprimir(trato.toString());
+            }
+        }
+    
+        consola.imprimir("Tratos recibidos:");
+        if (jugadorActual.getTratosRecibidos().isEmpty()) {
+            consola.imprimir("No tienes tratos recibidos.");
+        } else {
+            for (Trato trato : jugadorActual.getTratosRecibidos()) {
+                consola.imprimir(trato.toString());
+            }
+        }
     }
 
-    public void proponerTrato(String nombreJug){
-        Jugador jugador1= jugadores.get(turno);
-        Jugador jugador2= nombreJugador(nombreJug);
-        tratos.anadirTrato(nombreJug, jugador1, jugador2);
+
+
+    @Override
+    public void crearTrato(String[] partes){
+        Jugador jugador1 = jugadores.get(turno);
+        Jugador jugador2 = nombreJugador(partes[1]);
+        Trato trato=null;
+        if (jugador2==null){
+            consola.imprimir("No se ha encontrado al jugador "+partes[1]);
+            return;
+        }
+        int campos=0;
+        if (partes.length==5){
+            campos=2;
+        }
+        if (partes.length==7){
+            campos=3;
+        }
+        float dinero=0;
+        Propiedad SolarX=null;
+        Propiedad SolarY=null;
+        try{
+            dinero = Float.parseFloat(partes[3]);
+        }catch (NumberFormatException e){ //Si el primero no es numero, es un Solar
+            SolarX = (Propiedad) tablero.casillaByName(partes[3]);
+        }
+
+        if (campos==2){
+            try{
+                dinero = Float.parseFloat(partes[4]); //Trato SolarX dinero
+                if (SolarX!=null){
+                    trato = new Trato(jugador1,jugador2,SolarX,dinero);
+                }
+            }catch (NumberFormatException e){ //Si el segundo no es numero, es SolarY
+                SolarY = (Propiedad) tablero.casillaByName(partes[4]);
+                if (dinero!=0){ //Trato SolarX dinero
+                    trato = new Trato(jugador1,jugador2,dinero,SolarY);
+                }
+                if (SolarX!=null && SolarY!=null){ //Trato SolarX SolarY
+                    trato = new Trato(jugador1,jugador2,SolarX,SolarY);
+                }
+                
+
+            }
+        }else if(campos==3){
+            if(partes[4].equals("y")){
+                SolarX = (Propiedad) tablero.casillaByName(partes[3]);
+                SolarY = (Propiedad) tablero.casillaByName(partes[6]);
+                dinero = Float.parseFloat(partes[5]);
+                trato = new Trato(jugador1,jugador2,SolarX,dinero,SolarY); //Trato SolarX y dinero por SolarY
+            }
+            else if (partes[5].equals("y")){
+                SolarX = (Propiedad) tablero.casillaByName(partes[3]);
+                SolarY = (Propiedad) tablero.casillaByName(partes[4]);
+                dinero = Float.parseFloat(partes[6]);
+                trato = new Trato(jugador1,jugador2,SolarX,SolarY,dinero); //Trato SolarX por SolarY y dinero
+            }
+
+        }
+
+        if (trato==null){
+            consola.imprimir("Trato no válido");
+            return;
+        }
+        if (trato.valido(true)){
+            jugador1.getTratosPropuestos().add(trato);
+            jugador2.getTratosRecibidos().add(trato);
+            consola.imprimir("Trato creado con éxito");
+            consola.imprimir(trato.toString());
+        }
     }
 
+    @Override
     public void aceptarTrato(String id){
-        tratos.aceptarTrato(id, jugadores.get(turno), jugadores);
+        Jugador jugador1 = jugadores.get(turno);
+        int ident = Integer.parseInt(id);
+        ArrayList<Trato> tratos=   jugador1.getTratosRecibidos();
+        for (Trato trato : tratos) {
+            if (trato.getid() == ident){
+                trato.aceptarTrato();
+                tratos.remove(trato);
+                return;
+            }
+        }
+
     }
+
+    //Eliminamos el trato de los dos jugadores, tanto de los tratos propuestos del jugador1, como de los recibidos del jugador2
+    @Override
+    public void eliminarTrato(String id){
+        Jugador jugador1 = jugadores.get(turno);
+        int ident = Integer.parseInt(id);
+        ArrayList<Trato> tratos=   jugador1.getTratosPropuestos();
+        Jugador jugador2 =null;
+        for (Trato trato : tratos) {
+            if (trato.getid() == ident){
+                jugador2 = trato.getjugadorAcepta();
+                tratos.remove(trato);
+                break;
+            }
+        }
+        if (jugador2!=null){
+            ArrayList<Trato> tratos2 = jugador2.getTratosRecibidos();
+            for (Trato trato : tratos2) {
+                if (trato.getid() == ident){
+                    tratos2.remove(trato);
+                    return;
+                }
+            }
+        }
+
+    }
+
 
     /* 
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada, Casilla now) {
@@ -977,6 +1122,7 @@ public class Juego {
     }
 
 //////---METODO QUE LANZA DADOS UN VALOR??
+   @Override
     public void lanzarDados(int tiradaTotal){
         Jugador jugadorActual = jugadores.get(turno);
         Avatar avatarActual = avatares.get(turno);
@@ -984,6 +1130,7 @@ public class Juego {
         moverYVerTablero(jugadorActual, avatarActual, posicionActual, tiradaTotal,false);
     }
 //////---METODO CAMBIA FORTUNA
+    @Override
     public void fortunaManual(float cantidad){
         jugadores.get(turno).setFortuna(cantidad);
         consola.imprimir("Fortuna de "+jugadores.get(turno).getNombre()+" actualizada a "+cantidad);

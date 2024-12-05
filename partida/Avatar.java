@@ -162,7 +162,7 @@ public class Avatar {
     }
 
     // Método para mover un avatar. Recibe un valor de tirada y un arraylist de casillas.
-    public int moverAvatar(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
+    public int moverEnBasico(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
         this.CuartaVuelta = false; //Al moverse, se reinicia el contador de cuarta vuelta, para no añadir valor cada vez que se juega en la cuarta vuelta
 
 
@@ -228,6 +228,11 @@ public class Avatar {
         return 0;
     }
 
+    public int moverEnAvanzado(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) { //Clase a implementar en cada avatar
+        return moverEnBasico(casillas, valorTirada);
+    }
+
+/*
     public int moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
         CuartaVuelta = false;
         int posicion = lugar.getPosicion();
@@ -300,7 +305,7 @@ public class Avatar {
             
         }
     }
-
+*/
 /*
     public int moverAvatarPelota(ArrayList<ArrayList<Casilla>> casillas, int valorTirada, Jugador banca, Cartas cartas, Tablero tablero, ArrayList<Jugador> jugadores) {
         CuartaVuelta = false;
@@ -370,7 +375,7 @@ public class Avatar {
         return newposition;
     }
     */
-    
+    /*
     public int moverAvatarCoche(ArrayList<ArrayList<Casilla>> casillas, int valorTirada){
         this.CuartaVuelta = false; //Al moverse, se reinicia el contador de cuarta vuelta, para no añadir valor cada vez que se juega en la cuarta vuelta
 
@@ -451,7 +456,7 @@ public class Avatar {
 
     }
     
-
+    */
 
 
     public boolean DarCuartaVuelta(){
