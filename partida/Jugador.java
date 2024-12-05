@@ -271,6 +271,10 @@ public class Jugador {
             this.avatar = new Pelota(tipo, this, lugar, avCreados);
         }else if (tipo.equals("Coche")) {
             this.avatar = new Coche(tipo, this, lugar, avCreados);
+        }else if (tipo.equals("Sombrero")) {
+            this.avatar = new Sombrero(tipo, this, lugar, avCreados);
+        }else if (tipo.equals("Esfinge")) {
+            this.avatar = new Esfinge(tipo, this, lugar, avCreados);
         }else {this.avatar = new Avatar(tipo, this, lugar, avCreados);}
         this.fortuna = Valor.FORTUNA_INICIAL;
         this.gastos = 0;

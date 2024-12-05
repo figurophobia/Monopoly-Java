@@ -32,7 +32,9 @@ public class Menu {
                 Juego.consola.imprimir("Tienes " + jugadores.get(juego.getTurno()).getFortuna() + " € Debes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
             }
             ayudaComandos();
+            
             String comando = Juego.consola.leer("");
+            //Hay que meter el try catch aqui, una vez implementado
             analizarComando(comando);
         }
     }
