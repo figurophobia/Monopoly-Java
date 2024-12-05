@@ -2,6 +2,11 @@ package monopoly;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import Excepciones.MalFormato.*;
+import Excepciones.Ejecucion.*;
+import Excepciones.MalUsoComando.*;
+import Excepciones.ExcepcionBase;
 import partida.*;
 
 public class Menu {
@@ -35,17 +40,20 @@ public class Menu {
             
             String comando = Juego.consola.leer("");
             //Hay que meter el try catch aqui, una vez implementado
-            analizarComando(comando);
+            try{analizarComando(comando);}
+            catch(ExcepcionBase e){
+                Juego.consola.imprimirAdvertencia(e.getMessage());
+            }
         }
     }
 
 
     private void ayudaComandos(){
         Juego.consola.imprimir("\n('help' para ver los comandos disponibles | 'lanzar dados' para tirar los dados | 'acabar turno' para terminar el turno | 'end' para finalizar la partida)");
-        System.out.print("Introduce un comando: ");
+        Juego.consola.imprimir("Introduce un comando: ");
     }
 //////---METODO ANALIZA CADA COMANDO INTRODUCIDO---
-    private void analizarComando(String comando) {
+    private void analizarComando(String comando) throws ExcepcionBase{
         String[] partes = comando.split(" ");
         switch (partes[0]) {
             // Ayuda
@@ -98,8 +106,10 @@ public class Menu {
             case "edificar" -> {
                 if (partes.length == 2) {
                     juego.edificar(partes[1]);
-                }else Juego.consola.imprimir("Comando no reconocido");
+                }else {
+                    throw new EdificarFormato();
                 }
+            }
             
             case "listar" -> {
                 if (partes.length==2) {
@@ -108,13 +118,13 @@ public class Menu {
                         case "avatares" -> juego.listarAvatares();
                         case "enventa" -> juego.listarVenta();
                         case "edificios" -> juego.listarEdificios();
-                        default -> Juego.consola.imprimir("Comando no reconocido");
+                        default -> throw new Listar();
                     }
                 }else if(partes.length==3 && "edificios".equals(partes[1])){
                     juego.listarGrupo(partes[2]);
                 } 
                 else {
-                    Juego.consola.imprimir("Comando no reconocido");
+                    throw new Listar();
                     
                 }
             }
@@ -171,12 +181,15 @@ public class Menu {
                 } else if (partes.length == 2 ) {
                     juego.descCasilla(partes[1]);
                 } else {
-                    Juego.consola.imprimir("Comando no reconocido");
+                    throw new Describir();
                 }
             }
             case "vender" ->{
                 if(partes.length==4)
                     juego.vender_edificio(partes[2],partes[1],partes[3]);
+                else{
+                    throw new VenderFormato();
+                }
             }
             case "ver" -> {
                 if (partes.length == 2 && partes[1].equals("tablero")) {
@@ -189,7 +202,7 @@ public class Menu {
             case "dados" -> {
                 if (partes.length==3){
                     juego.lanzarDados(partes[1],partes[2]);
-                }
+                } else{ throw new DadosTrucados();}
             }
             case "mover" -> {
                 if (partes.length == 2) {
@@ -242,22 +255,22 @@ public class Menu {
             }
             case "tratos" -> {
                 if (partes.length == 1) juego.verTratos();
-                else System.out.println("Comando no reconocido");
+                else Juego.consola.imprimir("Comando no reconocido");;
             }
             case "trato" -> {
                 if (partes.length == 5||partes.length == 7) {
                     juego.crearTrato(partes);
-                } else System.out.println("Comando no reconocido");
+                } else throw new TratosFormato();
             }
             case "aceptar" -> {
                 if (partes.length == 2) {
                     juego.aceptarTrato(partes[1]);
-                } else System.out.println("Comando no reconocido");
+                } else throw new AceptarTratos();
             }
             case "eliminar" -> {
                 if (partes.length == 2) {
                     juego.eliminarTrato(partes[1]);
-                } else System.out.println("Comando no reconocido");
+                } else throw new EliminarTratos();
             }
             case "estadisticas" -> {
             switch (partes.length) {

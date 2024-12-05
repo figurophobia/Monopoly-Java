@@ -1,6 +1,6 @@
-package exception.MalUsoComando;
+package Excepciones.MalUsoComando;
 
-import exception.ExcepcionBase;
+import Excepciones.ExcepcionBase;
 
 public class MalUsoComando extends ExcepcionBase {
     public MalUsoComando(String mensaje){

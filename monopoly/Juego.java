@@ -2,6 +2,10 @@ package monopoly;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import Excepciones.MalFormato.*;
+import Excepciones.Ejecucion.*;
+import Excepciones.MalUsoComando.*;
 import monopoly.Edificacion;
 import partida.*;
 
@@ -194,7 +198,7 @@ public class Juego implements Comando{
 
 //////---METODO DESCRIBE JUGADOR---
     @Override
-    public void descJugador(String nombre) {
+    public void descJugador(String nombre)  {
         for (Jugador player : jugadores) {
             if (player!=null && player.getNombre().equals(nombre)) {
                 consola.imprimir(player.toString());
@@ -204,7 +208,7 @@ public class Juego implements Comando{
     }
 //////---METODO DESCRIBE AVATAR---
     @Override
-    public void descAvatar(String ID) {
+    public void descAvatar(String ID)  {
         for (Avatar av : avatares) {
             if (av!=null && av.getId().equals(ID)) {
                 consola.imprimir(av.toString());
@@ -214,7 +218,7 @@ public class Juego implements Comando{
     }
 //////---METODO DESCRIBE CASILLA---
     @Override
-    public void descCasilla(String nombre) {
+    public void descCasilla(String nombre)  {
         Casilla casilla = this.tablero.casillaByName(nombre);
         if (casilla != null) {
             consola.imprimir(casilla.infoCasilla());
@@ -245,7 +249,7 @@ public class Juego implements Comando{
 
 //////---METODO LANZA DADOS ALEATORIOS---
     @Override
-    public void lanzarDados() {
+    public void lanzarDados(){
         dado1 = new Dado();
         dado2 = new Dado();
         Avatar avatarActual = avatares.get(turno);
@@ -427,7 +431,7 @@ public class Juego implements Comando{
     }
 //////---METODO LISTA PROPIEDADES EN VENTA---
     @Override
-    public void listarVenta() {
+    public void listarVenta()  {
         for (int i = 0; i < 40; i++) {
             Casilla c = tablero.getCasilla(i);
             if (!(c instanceof Propiedad))
@@ -459,7 +463,7 @@ public class Juego implements Comando{
     }
 //////---METODO LISTAR EDIFICIOS---
     @Override
-    public void listarEdificios() {
+    public void listarEdificios()  {
         for (int i = 0; i < 40; i++) {
 
             Casilla c = tablero.getCasilla(i);
@@ -472,7 +476,7 @@ public class Juego implements Comando{
     }
 
     @Override
-    public void listarGrupo(String grupo) {
+    public void listarGrupo(String grupo)  {
         try{
             tablero.getGrupos().get(grupo).mostrarEdificaciones();
         } catch (Exception e) {
@@ -574,7 +578,7 @@ public class Juego implements Comando{
     }
 //////---METODO VENDER EDIFICIO
     @Override
-    public void vender_edificio(String casilla, String tipo,String num){
+    public void vender_edificio(String casilla, String tipo,String num) {
 
         try{
 

@@ -1,4 +1,7 @@
 package monopoly;
+import Excepciones.MalFormato.*;
+import Excepciones.Ejecucion.*;
+import Excepciones.MalUsoComando.*;
 
 public interface Comando {
     void anadirjugador();
@@ -7,7 +10,7 @@ public interface Comando {
     void listarJugadores();
     void listarAvatares();
     void listarVenta();
-    void listarEdificios();
+    void listarEdificios() ;
     void listarGrupo(String grupo);
     void lanzarDados();
     void lanzarDados(String dado1, String dado2);

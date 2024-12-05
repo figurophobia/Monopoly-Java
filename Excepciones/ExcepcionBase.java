@@ -1,4 +1,4 @@
-package exception;
+package Excepciones;
 
 
 // Excepción base para el proyecto, tendrá 3 niveles de herencia

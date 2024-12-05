@@ -1,6 +1,6 @@
-package exception.Ejecucion;
+package Excepciones.Ejecucion;
 
-import exception.ExcepcionBase;
+import Excepciones.ExcepcionBase;
 
 public class EjecucionBase extends ExcepcionBase {
     public EjecucionBase(String mensaje){
