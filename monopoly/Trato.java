@@ -97,6 +97,14 @@ public class Trato {
                 Juego.consola.imprimir("El jugador " + jugadorAcepta.getNombre() + " no tiene suficiente dinero.");
                 return;
             }
+
+            //Recordar que si alguna propiedad está hipotecada hay que hacer una confirmación
+            if(this.SolarX != null && this.SolarX.esHipotecada()){
+                String respuesta =Juego.consola.leer("La propiedad "+this.SolarX.getNombre()+" está hipotecada, ¿quieres continuar con el trato? (s/n)");
+                if (!respuesta.equals("s")) return;{
+                    
+                }
+            }
     
             switch (type) {
                 case 1:
