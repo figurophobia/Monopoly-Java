@@ -88,60 +88,61 @@ public class Trato {
     }
 
     public void aceptarTrato() {
-        if (this.valido(false)) {
-            if ((type == 2 || type == 5) && jugadorPropone.getFortuna() < dinero) {
-                Juego.consola.imprimir("El jugador " + jugadorPropone.getNombre() + " no tiene suficiente dinero.");
+
+        if (!valido(false)) {
+            Juego.consola.imprimir("Trato no válido, alguna de las propiedades no pertenece al jugador correspondiente.");
+            return;
+        }
+
+        if ((type == 2 || type == 5) && jugadorPropone.getFortuna() < dinero) {
+            Juego.consola.imprimir("El jugador " + jugadorPropone.getNombre() + " no tiene suficiente dinero.");
+            return;
+        }
+
+        if ((type == 3 || type == 4) && jugadorAcepta.getFortuna() < dinero) {
+            Juego.consola.imprimir("El jugador " + jugadorAcepta.getNombre() + " no tiene suficiente dinero.");
+            return;
+        }
+
+        //Recordar que si alguna propiedad está hipotecada hay que hacer una confirmación
+        if(this.SolarX != null && this.SolarX.esHipotecada()) {
+            String respuesta = Juego.consola.leer("La propiedad "+this.SolarX.getNombre()+" está hipotecada, ¿quieres continuar con el trato? (s/n)");
+
+            if (!respuesta.equals("s")) 
                 return;
-            }
-            if ((type == 3 || type == 4) && jugadorAcepta.getFortuna() < dinero) {
-                Juego.consola.imprimir("El jugador " + jugadorAcepta.getNombre() + " no tiene suficiente dinero.");
-                return;
+        }
+
+        switch (type) {
+            case 1 -> {
+                jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
+                jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
             }
 
-            //Recordar que si alguna propiedad está hipotecada hay que hacer una confirmación
-            if(this.SolarX != null && this.SolarX.esHipotecada()){
-                String respuesta =Juego.consola.leer("La propiedad "+this.SolarX.getNombre()+" está hipotecada, ¿quieres continuar con el trato? (s/n)");
-                if (!respuesta.equals("s")) return;{
-                    
-                }
+            case 2 -> {
+                jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
+                jugadorAcepta.setFortuna(jugadorAcepta.getFortuna() - dinero);
             }
-    
-            switch (type) {
-                case 1:
-                    jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
-                    jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
-                    break;
-    
-                case 2:
-                    jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
-                    jugadorAcepta.setFortuna(jugadorAcepta.getFortuna() - dinero);
-                    break;
-    
-                case 3:
-                    jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
-                    jugadorAcepta.cambiarPropiedad(SolarX, jugadorPropone);
-                    break;
-    
-                case 4:
-                    jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
-                    jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
-                    jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
-                    break;
-    
-                case 5:
-                    jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
-                    jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
-                    jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
-                    break;
-    
-                default:
-                    Juego.consola.imprimir("Tipo de trato no válido."); // No debería llegar aquí, pero por si acaso
-                    break;
+
+            case 3 -> {
+                jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
+                jugadorAcepta.cambiarPropiedad(SolarX, jugadorPropone);
             }
-            Juego.consola.imprimir("Trato aceptado: "+ this.info);
-        } else{
-            Juego.consola.imprimir("Trato no válido, alguna de las propiedades no pertenece al jugador correspondiente.");
+
+            case 4 -> {
+                jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
+                jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
+                jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
+            }
+
+            case 5 -> {
+                jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
+                jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
+                jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
+            }
+
+            default -> Juego.consola.imprimir("Tipo de trato no válido."); // No debería llegar aquí, pero por si acaso
         }
+        Juego.consola.imprimir("Trato aceptado: "+ this.info);
     }
 
     /*
@@ -157,7 +158,9 @@ public class Trato {
 
     @Override
     public String toString() {
-        return "{\n" + "id: " + id + ",\n" + "jugadorAcepta: " + jugadorAcepta.getNombre() + ",\n"
+        return """
+               {
+               id: """ + id + ",\n" + "jugadorAcepta: " + jugadorAcepta.getNombre() + ",\n"
                 + "jugadorPropone: " + jugadorPropone.getNombre() + ",\n" + "trato: " + info + "\n}";
 
     }

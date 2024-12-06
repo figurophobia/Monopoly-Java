@@ -580,11 +580,21 @@ public class Jugador {
         Juego.consola.imprimir(str.toString());
     }
 
-    public void cambiarPropiedad(Casilla propiedad, Jugador recibe){
-        if(propiedad instanceof Propiedad propiedad1){
-            propiedad1.setDuenho(recibe);
-            this.propiedades.remove(propiedad);
-            recibe.anhadirPropiedad(propiedad);
+    public void cambiarPropiedad(Casilla casilla, Jugador recibe) {
+
+        if(!(casilla instanceof Propiedad propiedad))
+            return;
+
+        propiedad.setDuenho(recibe);
+        this.propiedades.remove(casilla);
+        recibe.anhadirPropiedad(casilla);
+
+        for (Edificacion edificio : edificaciones) {
+
+            if (edificio.getCasilla() != casilla)
+                continue;
+
+            edificio.setPropietario(recibe);
         }
     }
 }
