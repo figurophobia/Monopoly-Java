@@ -264,8 +264,8 @@ public class Menu {
                 } else throw new AceptarTratos();
             }
             case "eliminar" -> {
-                if (partes.length == 2) {
-                    juego.eliminarTrato(partes[1]);
+                if (partes.length == 3) {
+                    juego.eliminarTrato(partes[2]);
                 } else throw new EliminarTratos();
             }
             case "estadisticas" -> {
