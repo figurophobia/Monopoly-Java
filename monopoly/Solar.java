@@ -175,7 +175,9 @@ public class Solar extends Propiedad {
                 duenho.setFortuna(duenho.getFortuna() - precio);
                 System.out.println("Has comprado una" + Valor.YELLOW + " casa" + Valor.RESET + " en " + Valor.BLUE + this.nombre + Valor.RESET + " por "
                 + Valor.RED + precio + "€"+Valor.RESET +", te quedan " + Valor.RED + duenho.getFortuna()+ "€"+Valor.RESET +".");
-                edificaciones.get("casa").add(new Casa(duenho, this, precio));
+                
+                Edificacion casa = new Casa(duenho, this, precio);
+                edificaciones.get("casa").add(casa);
                 grupo.getEdificaciones().get("casa").add(new Casa(duenho, this, precio));
             } else {
                 System.out.println("No puedes construir más casas");
@@ -184,6 +186,7 @@ public class Solar extends Propiedad {
             System.out.println("No tienes suficiente dinero");
         }
     }
+    //FIXME: añadir las propiedades a los jugadores
     private void comprarHotel() {
         grupo.getEdificaciones().putIfAbsent("hotel", new ArrayList<>());
         edificaciones.putIfAbsent("hotel", new ArrayList<>());

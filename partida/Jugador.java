@@ -2,6 +2,8 @@ package partida;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
 import monopoly.*;
 
 public class Jugador {
@@ -17,7 +19,7 @@ public class Jugador {
     private float bote; //Bote que se va acumulando en la partida por la banca en impuesto, comunidad...
     private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
     private HashMap<Casilla,Integer> numeroVisitas; //Numero de veces que ha visitado una casilla
-    private ArrayList<Edificacion> edificaciones; //Edificaciones que posee el jugador.
+    //private ArrayList<Edificacion> edificaciones; //Edificaciones que posee el jugador.
     private int VecesDados=0; //Veces que ha tirado los dados
 
     private float dineroInvertido = 0; //Dinero invertido en propiedades.
@@ -125,6 +127,7 @@ public class Jugador {
         this.propiedades = propiedades;
     }
 
+    /*
     public ArrayList<Edificacion> getEdificaciones() {
         return edificaciones;
     }
@@ -132,7 +135,7 @@ public class Jugador {
     public void setEdificaciones(ArrayList<Edificacion> edificaciones) {
         this.edificaciones = edificaciones;
     }
-
+    */
     public float getDineroInvertido() {
         return dineroInvertido;
     }
@@ -589,12 +592,27 @@ public class Jugador {
         this.propiedades.remove(casilla);
         recibe.anhadirPropiedad(casilla);
 
-        for (Edificacion edificio : edificaciones) {
+        if (!(propiedad instanceof Solar solar))
+            return;
+        
+        HashMap<String, ArrayList<Edificacion>> edificaciones = solar.getEdificaciones();
+        
+        if (edificaciones.isEmpty())
+            return;
+        
 
-            if (edificio.getCasilla() != casilla)
-                continue;
+        for (Map.Entry<String, ArrayList<Edificacion>> entry : edificaciones.entrySet()) {
+            ArrayList<Edificacion> value = entry.getValue();
+            
+            for (Edificacion edificio : value) {
 
-            edificio.setPropietario(recibe);
+                if (edificio.getCasilla() != casilla)
+                    continue;
+    
+                edificio.setPropietario(recibe);
+            }
         }
+
+        
     }
 }
