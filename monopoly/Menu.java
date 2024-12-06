@@ -1,12 +1,8 @@
 package monopoly;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-
-import Excepciones.MalFormato.*;
-import Excepciones.Ejecucion.*;
-import Excepciones.MalUsoComando.*;
 import Excepciones.ExcepcionBase;
+import Excepciones.MalFormato.*;
+import java.util.ArrayList;
 import partida.*;
 
 public class Menu {
@@ -263,8 +259,8 @@ public class Menu {
                 } else throw new TratosFormato();
             }
             case "aceptar" -> {
-                if (partes.length == 2) {
-                    juego.aceptarTrato(partes[1]);
+                if (partes.length == 3) {
+                    juego.aceptarTrato(partes[2]);
                 } else throw new AceptarTratos();
             }
             case "eliminar" -> {
