@@ -32,7 +32,7 @@ public interface Comando {
     void avanzar() throws AvanzarSinPoder, EdificarSinPoder, DineroError, InstanciaIncorrecta ;
     void verTratos();
     void crearTrato(String[] partes) throws TratoIncompatible, JugadorNoEncontrado, CasillaNoEncontrada;
-    void aceptarTrato(String id) throws TratoIncompatible, TratoNoEncontrado;
+    void aceptarTrato(String id) throws TratoIncompatible, TratoNoEncontrado, DineroError;
     void eliminarTrato(String id) throws TratoNoEncontrado;
     void estadisticas(String nombre) throws JugadorNoEncontrado;
     void estadisticasjuego();

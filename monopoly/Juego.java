@@ -1049,7 +1049,7 @@ public class Juego implements Comando{
     }
 
     @Override
-    public void aceptarTrato(String id) throws TratoIncompatible, TratoNoEncontrado{
+    public void aceptarTrato(String id) throws TratoIncompatible, TratoNoEncontrado, DineroError{
         Jugador jugador1 = jugadores.get(turno);
         int ident = Integer.parseInt(id);
         ArrayList<Trato> tratos=   jugador1.getTratosRecibidos();
