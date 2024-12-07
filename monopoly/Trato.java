@@ -143,7 +143,6 @@ public class Trato {
         } else{
             Juego.consola.imprimir("Trato no válido, alguna de las propiedades no pertenece al jugador correspondiente."); //Tampoco deberia, tira una excepcion antes
         }
-        Juego.consola.imprimir("Trato aceptado: "+ this.info);
     }
 
     /*
