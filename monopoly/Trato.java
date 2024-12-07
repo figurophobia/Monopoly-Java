@@ -143,6 +143,7 @@ public class Trato {
         } else{
             Juego.consola.imprimir("Trato no válido, alguna de las propiedades no pertenece al jugador correspondiente."); //Tampoco deberia, tira una excepcion antes
         }
+        Juego.consola.imprimir("Trato aceptado: "+ this.info);
     }
 
     /*
@@ -158,7 +159,9 @@ public class Trato {
 
     @Override
     public String toString() {
-        return "{\n" + "id: " + id + ",\n" + "jugadorAcepta: " + jugadorAcepta.getNombre() + ",\n"
+        return """
+               {
+               id: """ + id + ",\n" + "jugadorAcepta: " + jugadorAcepta.getNombre() + ",\n"
                 + "jugadorPropone: " + jugadorPropone.getNombre() + ",\n" + "trato: " + info + "\n}";
 
     }
