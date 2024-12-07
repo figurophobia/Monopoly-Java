@@ -153,9 +153,9 @@ public class Juego implements Comando{
                 }
   */
     @Override
-    public void acabar(){
+    public void acabar() throws AcabarTurno{
         if (jugadores.get(turno).getFortuna()<0) {
-            consola.imprimir("No puedes acabar turno. Debes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
+            throw new AcabarTurno("Debes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
         } else{
             acabarTurno();
         }
@@ -185,7 +185,7 @@ public class Juego implements Comando{
 
     //////---Metodo para hipotecar propiedades:
     @Override
-    public void hipotecar(String casilla){
+    public void hipotecar(String casilla) throws HipotecaSinTener{
         hipotecar(casilla, jugadores.get(turno));
     }
 
@@ -249,7 +249,7 @@ public class Juego implements Comando{
 
 //////---METODO LANZA DADOS ALEATORIOS---
     @Override
-    public void lanzarDados(){
+    public void lanzarDados() throws AcabarTurno {
         dado1 = new Dado();
         dado2 = new Dado();
         Avatar avatarActual = avatares.get(turno);
@@ -279,7 +279,7 @@ public class Juego implements Comando{
         }
     }
 //////---METODO LANZAMIENTOS DADOS EN CARCEL ALEATORIOS---
-    public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) {
+    public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) throws AcabarTurno {
         if (jugadorActual.getTiradasCarcel() >= 3) {
             consola.imprimir("Has pasado 3 turnos en la cárcel, sales! Tira los dados!");
             salirCarcel();
@@ -302,7 +302,7 @@ public class Juego implements Comando{
         }
     }
 //////---METODO LANZAMIENTOS DADOS ALEATORIOS---
-    public void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) {
+    public void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) throws AcabarTurno {
         int resultado1 = dado1.hacerTirada();
         int resultado2 = dado2.hacerTirada();
 
@@ -395,28 +395,25 @@ public class Juego implements Comando{
     }
     
     @Override
-    public void comprar(String nombre) throws Exception {
+    public void comprar(String nombre) throws CompraSinPoder {
         Jugador jugador = jugadores.get(turno);
         Casilla casilla = jugador.getAvatar().getLugar();
 
         if (!(casilla instanceof Propiedad)){
-            consola.imprimirAdvertencia("No se puede comprar esta casilla");
-            throw new excepcionPropiedad("La casilla solicitada de compra no se puede comprar");
+            throw new CompraSinPoder("La casilla solicitada no se puede comprar");
         }
 
         if (!casilla.getNombre().equals(nombre)){
-            consola.imprimirAdvertencia("No estás en esa casilla");
-            throw new excepcionPropiedad("El usuario no se encuentra en la casilla que solicita");
+            throw new CompraSinPoder("El usuario no se encuentra en la casilla que solicita");
         }
 
         Propiedad propiedad = (Propiedad) casilla;
 
         if (!propiedad.esComprable(jugador, banca)){
-            consola.imprimirAdvertencia("No puedes comprar esta casilla");
-            throw new excepcionPropiedad("El usuario no puede comprar la casilla que solicita");
+            throw new CompraSinPoder("El usuario no puede comprar la casilla que solicita");
         }
 
-        propiedad.comprarCasilla(jugador, banca);
+        propiedad.comprarCasilla(jugador, banca);// Tira las excepciones de las comprobaciones restantes
 
     }
 //////---METODO SALIR CARCEL---
@@ -486,7 +483,7 @@ public class Juego implements Comando{
         }
     }
 //////---METODO ACABAR TURNO---
-    public void acabarTurno() {
+    public void acabarTurno() throws AcabarTurno{
         Avatar avatarActual = avatares.get(turno);
         if (avatarActual.isCocheParado()){
             avatarActual.reducirTurnosParado();
@@ -507,7 +504,7 @@ public class Juego implements Comando{
             lanzamientos = 0;
             tirado = false;
             consola.imprimir("Turno de "+ jugadores.get(turno).getNombre());}
-        else consola.imprimir("Debes lanzar los dados antes de acabar el turno.");
+        else throw new AcabarTurno("Debes lanzar los dados antes de acabar el turno.");
     }
 
 
@@ -578,7 +575,7 @@ public class Juego implements Comando{
     }
 //////---METODO VENDER EDIFICIO
     @Override
-    public void vender_edificio(String casilla, String tipo,String num) {
+    public void vender_edificio(String tipo, String casilla,String num) throws VenderSinTener {
 
         try{
 
@@ -586,6 +583,7 @@ public class Juego implements Comando{
             Casilla c = buscar_Casilla(casilla);
 
             if(c == null){
+                //Lo consideramos error de ejecución
                 consola.imprimirAdvertencia("Casilla no encontrada");
                 return;
             }
@@ -596,8 +594,7 @@ public class Juego implements Comando{
             Jugador jugadorActual = jugadores.get(turno);
             
             if (solar.getDuenho() != jugadorActual){
-                consola.imprimirAdvertencia("No te pertenece esa casilla");
-                return;
+                throw new VenderSinTener("No te pertenece esa casilla");
             }
 
             solar.vender_edificio(tipo,numero);
@@ -618,7 +615,7 @@ public class Juego implements Comando{
             }
 
         }catch (NumberFormatException e){
-            System.out.println("Error: "+ e);
+            throw new VenderSinTener("El número introducido no es válido");
         }
     }
     public Casilla buscar_Casilla(String casilla){
@@ -663,24 +660,24 @@ public class Juego implements Comando{
 ////////////////////////////////////DEBUG COMMANDS////////////////////////////////////
 //////---METODO LANZA DADOS VALORES ESPECIFICOS---
     @Override
-    public void lanzarDados(String dado1, String dado2) throws LanzarDado{
+    public void lanzarDados(String dado1, String dado2) throws LanzarDado, AcabarTurno {
         int dadoint1= Integer.parseInt(dado1);
         int dadoint2= Integer.parseInt(dado2);
         Avatar avatarActual = avatares.get(turno);
         if (avatarActual.isCocheParado()) {
-            throw new LanzarDado("El coche está parado, no puede lanzar los dados en "+avatarActual.getTurnosParado() +"turnos consecutivos.");
+            throw new LanzarDado("\nEl coche está parado, no puede lanzar los dados en "+avatarActual.getTurnosParado() +"turnos consecutivos.");
         }
         if ((dadoint1>6)||(dadoint2>6)) consola.imprimir("Valor de tirada no válida");    
         if (tirado) {
-            throw new LanzarDado("Ya has lanzado los dados en este turno.");
+            throw new LanzarDado("\nYa has lanzado los dados en este turno.");
         }
         
         if (avatarActual.getTiros_extra() == 4){
-            throw new LanzarDado("Se han acabado tus tiros extra de coche");
+            throw new LanzarDado("\nSe han acabado tus tiros extra de coche");
 
         }
         if (avatarActual.getJugador().getFortuna()<0) {
-            throw new LanzarDado("No puedes lanzar los dados. Debes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
+            throw new LanzarDado("\nDebes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
         }
 
         Jugador jugadorActual = jugadores.get(turno);
@@ -693,7 +690,7 @@ public class Juego implements Comando{
         }
     }
 //////---METODO LANZAMIENTOS DADOS EN CARCEL VALORES ESPECIFICOS---
-    public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) {
+    public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) throws AcabarTurno {
         if (jugadorActual.getTiradasCarcel() >= 3) {
             consola.imprimir("Has pasado 3 turnos en la cárcel, sales! Tira los dados!");
             salirCarcel();
@@ -716,7 +713,7 @@ public class Juego implements Comando{
         }
     }
 //////---METODO LANZAMIENTOS DADOS VALORES ESPECIFICOS---
-    public void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) {
+    public void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) throws AcabarTurno {
         int resultado1 = dado1;
         int resultado2 = dado2;
         tiradados(resultado1, resultado2);
@@ -893,7 +890,7 @@ public class Juego implements Comando{
         acabarTurnoBancarrota(); //Checkear que se haga bien1
     }
 
-    public void hipotecar(String nombreCasilla,Jugador actual){
+    public void hipotecar(String nombreCasilla,Jugador actual) throws HipotecaSinTener{
 
         Casilla c = tablero.casillaByName(nombreCasilla);
 
@@ -923,8 +920,9 @@ public class Juego implements Comando{
             propiedad.deshipotecar(actual);
         }else System.out.println("Casilla no encontrada");
     }
+
     @Override
-    public void avanzar(){
+    public void avanzar() throws AvanzarSinPoder{
         Avatar avatarActual = avatares.get(turno);
         if (avatarActual.puedeAvanzar()){
             Jugador jugadorActual = jugadores.get(turno);
@@ -935,7 +933,7 @@ public class Juego implements Comando{
             moverYVerTablero(jugadorActual, avatarActual, posicionActual, valor,true);
             if(avatarActual.nextPelota(false)==0){
                 avatarActual.limpiarMovPelota();
-                consola.imprimir("Limpiando movimientos de pelota");
+                //consola.imprimir("Limpiando movimientos de pelota");
             }
         }
     }
@@ -965,7 +963,7 @@ public class Juego implements Comando{
 
 
     @Override
-    public void crearTrato(String[] partes){
+    public void crearTrato(String[] partes) throws TratoIncompatible{
         Jugador jugador1 = jugadores.get(turno);
         Jugador jugador2 = nombreJugador(partes[1]);
         Trato trato=null;
@@ -1023,8 +1021,7 @@ public class Juego implements Comando{
         }
 
         if (trato==null){
-            consola.imprimir("Trato no válido");
-            return;
+            throw new TratoIncompatible("Haces un trato de tipo no contemplado");
         }
         if (trato.valido(true)){
             jugador1.getTratosPropuestos().add(trato);
@@ -1035,13 +1032,13 @@ public class Juego implements Comando{
     }
 
     @Override
-    public void aceptarTrato(String id){
+    public void aceptarTrato(String id) throws TratoIncompatible{
         Jugador jugador1 = jugadores.get(turno);
         int ident = Integer.parseInt(id);
         ArrayList<Trato> tratos=   jugador1.getTratosRecibidos();
         for (Trato trato : tratos) {
             if (trato.getid() == ident){
-                trato.aceptarTrato();
+                trato.aceptarTrato();// Si el trato no es valido en el momento de aceptar, o hay error de ejecucion por no tener dinero, se lanza excepcion
                 tratos.remove(trato);
                 return;
             }

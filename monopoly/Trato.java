@@ -1,5 +1,6 @@
 package monopoly;
 
+import Excepciones.MalUsoComando.TratoIncompatible;
 import partida.*;
 
 public class Trato {
@@ -74,21 +75,21 @@ public class Trato {
     }
 
     //Comprueba si el trato es válido   
-    public boolean valido(boolean changeid){
+    public boolean valido(boolean changeid) throws TratoIncompatible {
         if (SolarX != null && SolarX.getDuenho() != jugadorPropone) {
-            Juego.consola.imprimir("El jugador " + jugadorPropone.getNombre() + " no es dueño de la Propiedad " + SolarX.getNombre());
-            return false;
+            throw new TratoIncompatible("El jugador " + jugadorPropone.getNombre() + " no tiene la Propiedad " + SolarX.getNombre());
         }
         if (SolarY != null && SolarY.getDuenho() != jugadorAcepta) {
-            Juego.consola.imprimir("El jugador " + jugadorAcepta.getNombre() + " no es dueño de la Propiedad " + SolarY.getNombre());
-            return false;
+            throw new TratoIncompatible("El jugador " + jugadorAcepta.getNombre() + " no tiene la Propiedad " + SolarY.getNombre());
         }
         if(changeid) this.id = ++numTratos; // se le asigna el id solo al comprobar que es válido
         return true;
     }
 
-    public void aceptarTrato() {
+    public void aceptarTrato() throws TratoIncompatible {
         if (this.valido(false)) {
+            //Los tomaremos como fallos de ejecución estos, ya que se miran una vez comprobado si el trato era valido
+            //Ademas se dejan hacer tratos independientemente de si hay el dinero o no
             if ((type == 2 || type == 5) && jugadorPropone.getFortuna() < dinero) {
                 Juego.consola.imprimir("El jugador " + jugadorPropone.getNombre() + " no tiene suficiente dinero.");
                 return;
@@ -140,7 +141,7 @@ public class Trato {
             }
             Juego.consola.imprimir("Trato aceptado: "+ this.info);
         } else{
-            Juego.consola.imprimir("Trato no válido, alguna de las propiedades no pertenece al jugador correspondiente.");
+            Juego.consola.imprimir("Trato no válido, alguna de las propiedades no pertenece al jugador correspondiente."); //Tampoco deberia, tira una excepcion antes
         }
     }
 

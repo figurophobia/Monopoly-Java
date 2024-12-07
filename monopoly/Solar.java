@@ -2,6 +2,10 @@ package monopoly;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import Excepciones.MalUsoComando.CompraSinPoder;
+import Excepciones.MalUsoComando.HipotecaSinTener;
+import Excepciones.MalUsoComando.VenderSinTener;
 import partida.*;
 
 public class Solar extends Propiedad {
@@ -30,24 +34,20 @@ public class Solar extends Propiedad {
     }
 
     @Override
-    public void comprarCasilla(Jugador comprador, Jugador banca) throws dineroInsuficiente, compraCocheNoDisponible, casillaIncorrecta{
+    public void comprarCasilla(Jugador comprador, Jugador banca) throws CompraSinPoder{
 
         if (comprador != duenho && duenho != banca){
-            consola.imprimirAdvertencia("Esa casilla ya pertenece a " + duenho.getNombre() + "!");
-            throw new casillaIncorrecta("La casilla solicitada de compra ya pertenece a otro jugador");
+            throw new CompraSinPoder("La casilla solicitada de compra ya pertenece a otro jugador");
         }
 
         if (!esComprable(comprador, banca)){
-            consola.imprimirAdvertencia("No tienes suficiente dinero para comprar esa casilla");
-            throw new dineroInsuficiente("El usuario solicitante de la compra de la casilla no posee el dinero suficiente");
+            throw new CompraSinPoder("El usuario solicitante de la compra de la casilla no posee el dinero suficiente");
         }
         if (!esComprableCoche(comprador)){
-            consola.imprimirAdvertencia("No puedes comprar esa casilla");
-            throw new dineroInsuficiente("El usuario solicitante de la compra de la casilla está en un movimiento avanzado que no le permite hacer la compra");
+            throw new CompraSinPoder("El usuario solicitante de la compra de la casilla está en un movimiento avanzado que no le permite hacer la compra");
         }
         if (comprador.getAvatar().getLugar() != this){
-            consola.imprimirAdvertencia("No estás en esa casilla");
-            throw new casillaIncorrecta("El usuario solicitante de la compra de la casilla no se encuentra en la casilla indicada");
+            throw new CompraSinPoder("El usuario solicitante de la compra de la casilla no se encuentra en la casilla indicada");
         }
 
         comprador.sumarGastos(valor);
@@ -271,14 +271,14 @@ public class Solar extends Propiedad {
         }
     }
 
-    public void vender_edificio(String tipo,int num){
+    public void vender_edificio(String tipo,int num) throws VenderSinTener{
         tipo=tipo.toLowerCase();
         if(!tipo.equals("casa")&&!tipo.equals("hotel")&&!tipo.equals("pista")&&!tipo.equals("piscina")){
-            System.out.println("Tipo de edificación no válido...");
-            return;
+            throw new VenderSinTener("Tipo de edificación no válido...");
         }
         int num_viviendas=edificaciones.getOrDefault(tipo, new ArrayList<>()).size();
         if (num>num_viviendas){
+            //Lo consideramos error de ejecución
             System.out.println("No tienes "+num+" "+tipo+((num==1) ? "":"s")+ " en esta casilla, tienes "+num_viviendas+"...");
             return;}
         try{
@@ -302,18 +302,15 @@ public class Solar extends Propiedad {
     }
 
     @Override
-    public boolean sePuedeHipotecar(Jugador actual){
+    public boolean sePuedeHipotecar(Jugador actual) throws HipotecaSinTener{
         if (esHipotecada){
-            System.out.println("La casilla ya está hipotecada...");
-            return false;
+            throw new HipotecaSinTener("La casilla ya está hipotecada...");
         }
         else if(this.duenho!=actual){
-            System.out.println("No eres el dueño de la casilla...");
-            return false;
+            throw new HipotecaSinTener("No eres el dueño de la casilla...");
         }
         else if(!edificaciones.isEmpty()){
-            System.out.println("No puedes hipotecar una casilla con edificaciones,debes venderlos primero...");
-            return false;
+            throw new HipotecaSinTener("No puedes hipotecar una casilla con edificaciones,debes venderlos primero...");
         }
         else{return true;}
     }

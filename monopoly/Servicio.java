@@ -1,4 +1,5 @@
 package monopoly;
+import Excepciones.MalUsoComando.CompraSinPoder;
 import partida.*;
 
 public class Servicio extends Propiedad {
@@ -21,24 +22,21 @@ public class Servicio extends Propiedad {
     }
 
     @Override
-    public void comprarCasilla(Jugador comprador, Jugador banca) throws dineroInsuficiente, compraCocheNoDisponible, casillaIncorrecta{
+    public void comprarCasilla(Jugador comprador, Jugador banca) throws CompraSinPoder{
 
-        if (comprador != duenho){
-            consola.imprimirAdvertencia("Esa casilla ya pertenece a " + duenho.getNombre() + "!");
-            throw new casillaIncorrecta("La casilla solicitada de compra ya pertenece a otro jugador");
+        if (duenho != banca){
+            throw new CompraSinPoder("El usuario solicitante de la compra de la casilla no puede comprarla, porque ya tiene dueño");
         }
 
         if (!esComprable(comprador, banca)){
             consola.imprimirAdvertencia("No tienes suficiente dinero para comprar esa casilla");
-            throw new dineroInsuficiente("El usuario solicitante de la compra de la casilla no posee el dinero suficiente");
+            throw new CompraSinPoder("El usuario solicitante de la compra de la casilla no tiene suficiente dinero para comprarla");
         }
         if (!esComprableCoche(comprador)){
-            consola.imprimirAdvertencia("No puedes comprar esa casilla");
-            throw new dineroInsuficiente("El usuario solicitante de la compra de la casilla está en un movimiento avanzado que no le permite hacer la compra");
+            throw new CompraSinPoder("El usuario solicitante de la compra de la casilla no puede comprarla, por ser un coche en movimiento avanzado");
         }
         if (comprador.getAvatar().getLugar() != this){
-            consola.imprimirAdvertencia("No estás en esa casilla");
-            throw new casillaIncorrecta("El usuario solicitante de la compra de la casilla no se encuentra en la casilla indicada");
+            throw new CompraSinPoder("El usuario solicitante de la compra de la casilla no está en ella");
         }
 
         comprador.sumarGastos(valor);

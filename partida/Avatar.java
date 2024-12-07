@@ -2,6 +2,8 @@ package partida;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import Excepciones.MalUsoComando.AvanzarSinPoder;
 import monopoly.*;
 
 
@@ -193,24 +195,19 @@ public class Avatar {
         this.primerMovPelota = true;
     }
     
-    public boolean puedeAvanzar(){
+    public boolean puedeAvanzar() throws AvanzarSinPoder{
         if(this.getJugador().isEnDeuda()||this.getJugador().isEnCarcel()){
-            Juego.consola.imprimir("No puedes avanzar, estás en deuda o en la cárcel");
-            return false;
+            throw new AvanzarSinPoder("No puedes avanzar, estás en deuda o en la cárcel");
         }
         if (!this.esMovAvanzado()){
-            Juego.consola.imprimir("No puedes avanzar, el modo avanzado no está activado");
-            return false;
+            throw new AvanzarSinPoder("No puedes avanzar, el modo avanzado no está activado");
         }
         if (!this.getTipo().equals("Pelota")){
-            Juego.consola.imprimir("No puedes avanzar, no eres una pelota");
-            return false;
+            throw new AvanzarSinPoder("No puedes avanzar, no eres una pelota");
         }
         if (this.nextPelota(false)==0){
             limpiarMovPelota();
-            Juego.consola.imprimir("No puedes avanzar, no te quedan movimientos");
-            
-            return false;
+            throw new AvanzarSinPoder("No puedes avanzar, no te quedan movimientos");            
 
         }
         return true;

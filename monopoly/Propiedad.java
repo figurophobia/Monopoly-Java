@@ -1,4 +1,6 @@
 package monopoly;
+import Excepciones.MalUsoComando.CompraSinPoder;
+import Excepciones.MalUsoComando.HipotecaSinTener;
 import partida.*;
 
 public class Propiedad extends Casilla{
@@ -51,7 +53,7 @@ public class Propiedad extends Casilla{
         return !(jugador.getCochePuedeComprar() && avatar.esMovAvanzado() && avatar.getTipo().equals("Coche"));
     }
 
-    public void comprarCasilla(Jugador comprador, Jugador banca) throws excepcionPropiedad{
+    public void comprarCasilla(Jugador comprador, Jugador banca) throws  CompraSinPoder{
 
     }
 
@@ -76,14 +78,12 @@ public class Propiedad extends Casilla{
         return info.toString();
     }
 
-    public boolean sePuedeHipotecar(Jugador actual){
+    public boolean sePuedeHipotecar(Jugador actual) throws HipotecaSinTener{
         if (esHipotecada){
-            System.out.println("La casilla ya está hipotecada...");
-            return false;
+            throw new HipotecaSinTener("La casilla ya está hipotecada...");
         }
         else if(this.duenho!=actual){
-            System.out.println("No eres el dueño de la casilla...");
-            return false;
+            throw new HipotecaSinTener("No eres el dueño de la casilla...");
         }
         else{return true;}
     }
@@ -104,7 +104,7 @@ public class Propiedad extends Casilla{
         else{return true;}
     }
 
-    public void hipotecar(Jugador actual){
+    public void hipotecar(Jugador actual) throws HipotecaSinTener{
         if (sePuedeHipotecar(actual)){
             actual.setFortuna(actual.getFortuna() + hipotecaInicial);
             //actual.setDineroInvertido(actual.getDineroInvertido()-hipoteca);
@@ -143,26 +143,3 @@ public class Propiedad extends Casilla{
     
 }
 
-class excepcionPropiedad extends Exception{
-    public excepcionPropiedad(String mensaje) {
-        super(mensaje);
-    }
-}
-
-class dineroInsuficiente extends excepcionPropiedad{
-    public dineroInsuficiente(String mensaje) {
-        super(mensaje);
-    }
-}
-
-class casillaIncorrecta extends excepcionPropiedad{
-    public casillaIncorrecta(String mensaje) {
-        super(mensaje);
-    }
-}
-
-class compraCocheNoDisponible extends excepcionPropiedad{
-    public compraCocheNoDisponible(String mensaje) {
-        super(mensaje);
-    }
-}
