@@ -234,7 +234,8 @@ public class Juego implements Comando{
         // Verificar si el avatar tiene movimiento avanzado y es de tipo "Coche"
         if (avatarActual.esMovAvanzado() && avatarActual.getTipo().equals("Coche")) {
             // Verificar si es necesario cambiar la tirada
-            if (avatarActual.getUltimoTiroFueCoche() || avatarActual.getJugador().isEnCarcel()) {
+            
+            if ((avatarActual instanceof Coche coche && coche.getUltimoTiroFueCoche()) || avatarActual.getJugador().isEnCarcel()) {
                 tirado = true;
                 lanzamientos++;
             }
@@ -253,19 +254,20 @@ public class Juego implements Comando{
         dado1 = new Dado();
         dado2 = new Dado();
         Avatar avatarActual = avatares.get(turno);
-        if (avatarActual.isCocheParado()) {
-            consola.imprimir("El coche está parado, no puede lanzar los dados en "+avatarActual.getTurnosParado() +"turnos consecutivos.");            
-            return;
-        }
         if (tirado) {
             consola.imprimir("Ya has lanzado los dados en este turno.");
             return;
         }
-        if (avatarActual.getTiros_extra() == 4){
-            consola.imprimir("Se han acabado tus tiros extra");
-            tirado=true;
-            return;
-
+        if (avatarActual instanceof Coche coche) {
+            if (coche.isCocheParado()) {
+                consola.imprimir("El coche está parado, no puede lanzar los dados en " + coche.getTurnosParado() + " turnos consecutivos.");
+                return;
+            }
+            if (coche.getTiros_extra() == 4) {
+                consola.imprimir("Se han acabado tus tiros extra");
+                tirado = true;
+                return;
+            }
         }
 
     
@@ -346,9 +348,14 @@ public class Juego implements Comando{
         }
         if (avanzar){
             // Verificar si el jugador puede pagar sus deudas
-            if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, avatarActual.getValorTotalTirada())) {
-                return;
+            
+
+            if (avatarActual instanceof Pelota p){
+                if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, p.getValorTotalTirada())) {
+                    return;
+                }
             }
+
         }else{
             if (!nuevaCasilla.evaluarCasilla(jugadorActual, banca, total)) {
                 return;
@@ -485,17 +492,19 @@ public class Juego implements Comando{
 //////---METODO ACABAR TURNO---
     public void acabarTurno() throws AcabarTurno{
         Avatar avatarActual = avatares.get(turno);
-        if (avatarActual.isCocheParado()){
-            avatarActual.reducirTurnosParado();
-            tirado = true;
-            avatarActual.setUltimoTiroFueCoche(false);
-            if (avatarActual.getTurnosParado()==0) {
-                avatarActual.setCocheParado(false);
+        if (avatarActual instanceof Coche car){
+            if (car.isCocheParado()){
+                car.reducirTurnosParado();
+                tirado = true;
+                car.setUltimoTiroFueCoche(false);
+                if (car.getTurnosParado()==0) {
+                    car.setCocheParado(false);
+                }
             }
+            car.setTiros_extra(0);
+            car.setUltimoTiroFueCoche(false);
+            car.getJugador().setCochePuedeComprar(true);
         }
-        avatarActual.setTiros_extra(0);
-        avatarActual.setUltimoTiroFueCoche(false);
-        avatarActual.getJugador().setCochePuedeComprar(true);
         if (tirado) {
             turno++;
             if (turno>(jugadores.size()-1)) {
@@ -512,17 +521,19 @@ public class Juego implements Comando{
     @Override
     public void acabarTurnoForce() {
         Avatar avatarActual = avatares.get(turno);
-        if (avatarActual.isCocheParado()){
-            avatarActual.reducirTurnosParado();
-            tirado = true;
-            avatarActual.setUltimoTiroFueCoche(false);
-            if (avatarActual.getTurnosParado()==0) {
-                avatarActual.setCocheParado(false);
+        if (avatarActual instanceof Coche car){
+            if (car.isCocheParado()){
+                car.reducirTurnosParado();
+                tirado = true;
+                car.setUltimoTiroFueCoche(false);
+                if (car.getTurnosParado()==0) {
+                    car.setCocheParado(false);
+                }
             }
+            car.setTiros_extra(0);
+            car.setUltimoTiroFueCoche(false);
+            car.getJugador().setCochePuedeComprar(true);
         }
-        avatarActual.setTiros_extra(0);
-        avatarActual.setUltimoTiroFueCoche(false);
-        avatarActual.getJugador().setCochePuedeComprar(true);
         turno++;
         if (turno>(jugadores.size()-1)) {
             turno = 1;
@@ -663,21 +674,23 @@ public class Juego implements Comando{
         int dadoint1= Integer.parseInt(dado1);
         int dadoint2= Integer.parseInt(dado2);
         Avatar avatarActual = avatares.get(turno);
-        if (avatarActual.isCocheParado()) {
-            throw new LanzarDado("\nEl coche está parado, no puede lanzar los dados en "+avatarActual.getTurnosParado() +"turnos consecutivos.");
+        if ((avatarActual instanceof Coche car) && car.isCocheParado()) {
+            throw new LanzarDado("\nEl coche está parado, no puede lanzar los dados en "+car.getTurnosParado() +"turnos consecutivos.");
         }
         if ((dadoint1>6)||(dadoint2>6)) consola.imprimir("Valor de tirada no válida");    
-        if (tirado) {
-            throw new LanzarDado("\nYa has lanzado los dados en este turno.");
-        }
         
-        if (avatarActual.getTiros_extra() == 4){
-            throw new LanzarDado("\nSe han acabado tus tiros extra de coche");
-
-        }
         if (avatarActual.getJugador().getFortuna()<0) {
             throw new LanzarDado("\nDebes declarar bancarrota, hipotecar propiedades o vender edificaciones.");
         }
+
+        if ((avatarActual instanceof Coche car) && car.getTiros_extra() == 4){
+            throw new LanzarDado("\nSe han acabado tus tiros extra de coche");
+
+        }
+        if (tirado) {
+            throw new LanzarDado("\nYa has lanzado los dados en este turno.");
+        }
+
 
         Jugador jugadorActual = jugadores.get(turno);
         Casilla posicionActual = avatarActual.getLugar();
@@ -924,15 +937,18 @@ public class Juego implements Comando{
     @Override
     public void avanzar() throws AvanzarSinPoder,EdificarSinPoder, DineroError, InstanciaIncorrecta {
         Avatar avatarActual = avatares.get(turno);
-        if (avatarActual.puedeAvanzar()){
+        if (!(avatarActual instanceof Pelota p)){
+            throw new InstanciaIncorrecta("Pelota");
+        }
+        if (p.puedeAvanzar()){
             Jugador jugadorActual = jugadores.get(turno);
             Casilla posicionActual = avatarActual.getLugar();
-            int valor = avatarActual.nextPelota(true);
+            int valor = p.nextPelota(true);
             consola.imprimir("Avanzamos "+valor+" posiciones");
 
             moverYVerTablero(jugadorActual, avatarActual, posicionActual, valor,true);
-            if(avatarActual.nextPelota(false)==0){
-                avatarActual.limpiarMovPelota();
+            if(p.nextPelota(false)==0){
+                p.limpiarMovPelota();
                 //consola.imprimir("Limpiando movimientos de pelota");
             }
         }

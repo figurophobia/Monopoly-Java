@@ -16,22 +16,7 @@ public class Avatar {
     private Casilla lugar; //Los avatares se sitúan en casillas del tablero.
     private boolean CuartaVuelta; //Indica si el jugador acaba de hacer una vuelta completa multiplo de 4.
     private boolean movAvanzado; //Indica si el jugador ha activado el modo avanzado de movimiento
-    private boolean compradoCoche = false; //Indica si el jugador ha comprado en su turno de ser coche
-    private boolean cocheParado = false; //Indica si se detiene el movimiento del coche por 2 turnos
-    private int turnosParado = 0; //Contador de turnos que lleva el coche parado
-    private boolean ultimoTiroFueCoche = false; //Indica si es el ultimo tiro de los extras de coche
-    private int tiros_extra= 0; //Contador de tiros de coche
-    private int valorTotalTirada = 0; //Valor total de la tirada de la pelota
-    private int[] ArrayMovPelota = new int[5]; //Movimientos de la pelota
-    private boolean primerMovPelota = true; //Indica si es el primer movimiento de la pelota
 
-    public int getTiros_extra() {
-        return tiros_extra;
-    }
-
-    public void setTiros_extra(int tiros_extra) {
-        this.tiros_extra = tiros_extra;
-    }
 
 
     public String getId() {
@@ -43,42 +28,6 @@ public class Avatar {
         else Juego.consola.imprimir("Id inválido");
     }
 
-    public boolean isCompradoCoche() {
-        return compradoCoche;
-    }
-
-    public void setCompradoCoche(boolean compradoCoche) {
-        this.compradoCoche = compradoCoche;
-    }
-
-    public boolean getUltimoTiroFueCoche() {
-        return ultimoTiroFueCoche;
-    }
-
-    public void setUltimoTiroFueCoche(boolean ultimoTiroFueCoche) {
-        this.ultimoTiroFueCoche = ultimoTiroFueCoche;
-    }
-
-    public int getTurnosParado() {
-        return turnosParado;
-    }
-
-    public void reducirTurnosParado() {
-        if (turnosParado>0) turnosParado--;
-        if (turnosParado==0) cocheParado=false;
-    }
-    public boolean isCocheParado() {
-        return cocheParado;
-    }
-
-    public void setCocheParado(boolean cocheParado) {
-        this.cocheParado = cocheParado;
-    }
-
-    public void pararCoche(){
-        this.cocheParado = true;
-        turnosParado = 3;
-    }
 
     public boolean esMovAvanzado() {
         return this.movAvanzado;
@@ -128,13 +77,6 @@ public class Avatar {
         CuartaVuelta = cuartaVuelta;
     }
 
-    public int getValorTotalTirada() {
-        return valorTotalTirada;
-    }
-
-    public void setValorTotalTirada(int valorTotalTirada) {
-        this.valorTotalTirada = valorTotalTirada;
-    }
 
     //Constructor vacío
     public Avatar() {
@@ -188,42 +130,11 @@ public class Avatar {
         return newposition;
     }
 
-    public void limpiarMovPelota(){
-        for (int i = 0; i < ArrayMovPelota.length; i++) {
-            ArrayMovPelota[i] = 0;
-        }
-        this.primerMovPelota = true;
-    }
+
     
-    public boolean puedeAvanzar() throws AvanzarSinPoder{
-        if(this.getJugador().isEnDeuda()||this.getJugador().isEnCarcel()){
-            throw new AvanzarSinPoder("No puedes avanzar, estás en deuda o en la cárcel");
-        }
-        if (!this.esMovAvanzado()){
-            throw new AvanzarSinPoder("No puedes avanzar, el modo avanzado no está activado");
-        }
-        if (!this.getTipo().equals("Pelota")){
-            throw new AvanzarSinPoder("No puedes avanzar, no eres una pelota");
-        }
-        if (this.nextPelota(false)==0){
-            limpiarMovPelota();
-            throw new AvanzarSinPoder("No puedes avanzar, no te quedan movimientos");            
 
-        }
-        return true;
-    }
 
-    //Devolvemos el siguiente movimiento de la pelota, y lo eliminamos del array si borrar es true
-    public int nextPelota(boolean borrar){
-        for (int i = 0; i < ArrayMovPelota.length; i++) {
-            if (ArrayMovPelota[i]!=0){
-                int mov = ArrayMovPelota[i];
-                if (borrar) ArrayMovPelota[i] = 0;
-                return mov;
-            }
-        }
-        return 0;
-    }
+
 
     public int moverEnAvanzado(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) { //Clase a implementar en cada avatar
         return moverEnBasico(casillas, valorTirada);

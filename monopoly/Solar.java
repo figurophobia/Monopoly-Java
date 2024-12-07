@@ -82,7 +82,6 @@ public class Solar extends Propiedad {
                 try {
                     comprarCasilla(jugador, banca);
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
             return true;
         }
@@ -305,7 +304,6 @@ public class Solar extends Propiedad {
             (properties_left==1 ? "queda ":"quedan ")+Valor.RED+properties_left+" "+
             tipo+((properties_left==1) ? "":"s")+". "+Valor.RESET);
         }catch (Exception e){
-            System.out.println("Error: "+e);
         }
     }
 

@@ -61,7 +61,6 @@ public class Transporte extends Propiedad {
                 try {
                     comprarCasilla(jugador, banca);
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
             return true;
         }

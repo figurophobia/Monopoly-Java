@@ -133,11 +133,7 @@ public class Menu {
             }
             case "comprar" -> {
                 if (partes.length == 2){
-                    try {
-                        juego.comprar(partes[1]);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    juego.comprar(partes[1]);
                 } else {
                     Juego.consola.imprimir("Comando no reconocido");
                 }
