@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import Excepciones.Ejecucion.InstanciaIncorrecta;
+import Excepciones.MalUsoComando.EdificarSinPoder;
 import monopoly.*;
 
 public class Jugador {
@@ -533,15 +535,14 @@ public class Jugador {
         this.tiradasCarcel = 0;
     }
 
-    public boolean puedeEdificar(Casilla actual){
+    public boolean puedeEdificar(Casilla actual) throws InstanciaIncorrecta, EdificarSinPoder{
 
         if (!(actual instanceof Solar solar))
-            return false;
+            throw new InstanciaIncorrecta("Solar");
 
         if (solar.getGrupo()!=null){
             if(solar.getGrupo().tieneHipotecaEnGrupo(this)){
-                System.out.println("No puedes edificar en un grupo en el que tienes propiedades hipotecadas");
-                return false;
+                throw new EdificarSinPoder("No puedes edificar en un grupo en el que tienes propiedades hipotecadas");
             }
             return (solar.getGrupo().esDuenhoGrupo(this) || ((numeroVisitas.get(solar) >= 3) && (this == solar.getDuenho())));
         }else return false;

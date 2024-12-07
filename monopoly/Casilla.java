@@ -1,6 +1,10 @@
 package monopoly;
 
 import java.util.ArrayList;
+
+import Excepciones.Ejecucion.DineroError;
+import Excepciones.Ejecucion.InstanciaIncorrecta;
+import Excepciones.MalUsoComando.EdificarSinPoder;
 import partida.*;
 
 public class Casilla {
@@ -51,7 +55,7 @@ public class Casilla {
         return (casillaAvatar == this);
     }
 
-    public boolean evaluarCasilla(Jugador jugador, Jugador banca, int tirada){
+    public boolean evaluarCasilla(Jugador jugador, Jugador banca, int tirada) throws EdificarSinPoder, DineroError, InstanciaIncorrecta {
         visitarCasilla(jugador);
         return true;
     }
@@ -74,7 +78,7 @@ public class Casilla {
         }
     }
 
-    public void edificar(String tipo){
+    public void edificar(String tipo) throws EdificarSinPoder, DineroError, InstanciaIncorrecta {
         consola.imprimirAdvertencia("No puedes edificar en esta casilla");
     }
 

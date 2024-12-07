@@ -198,33 +198,33 @@ public class Juego implements Comando{
 
 //////---METODO DESCRIBE JUGADOR---
     @Override
-    public void descJugador(String nombre)  {
+    public void descJugador(String nombre)  throws JugadorNoEncontrado{
         for (Jugador player : jugadores) {
             if (player!=null && player.getNombre().equals(nombre)) {
                 consola.imprimir(player.toString());
-                
+                break;
             }
         }
+        throw new JugadorNoEncontrado(nombre);
     }
 //////---METODO DESCRIBE AVATAR---
     @Override
-    public void descAvatar(String ID)  {
+    public void descAvatar(String ID) throws AvatarNoEncontrado {
         for (Avatar av : avatares) {
             if (av!=null && av.getId().equals(ID)) {
                 consola.imprimir(av.toString());
-                
+                break;
             }
         }
+        throw new AvatarNoEncontrado(ID);
     }
 //////---METODO DESCRIBE CASILLA---
     @Override
-    public void descCasilla(String nombre)  {
+    public void descCasilla(String nombre) throws CasillaNoEncontrada {
         Casilla casilla = this.tablero.casillaByName(nombre);
         if (casilla != null) {
             consola.imprimir(casilla.infoCasilla());
-        } else {
-            consola.imprimir("Casilla no encontrada con ese nombre.");
-        }
+        }else throw new CasillaNoEncontrada(nombre);
     }
 //////---METODO SIMULA LANZAMIENTO DADOS---
     public void tiradados(int dado1, int dado2){
@@ -249,7 +249,7 @@ public class Juego implements Comando{
 
 //////---METODO LANZA DADOS ALEATORIOS---
     @Override
-    public void lanzarDados() throws AcabarTurno {
+    public void lanzarDados() throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
         dado1 = new Dado();
         dado2 = new Dado();
         Avatar avatarActual = avatares.get(turno);
@@ -279,7 +279,7 @@ public class Juego implements Comando{
         }
     }
 //////---METODO LANZAMIENTOS DADOS EN CARCEL ALEATORIOS---
-    public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) throws AcabarTurno {
+    public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
         if (jugadorActual.getTiradasCarcel() >= 3) {
             consola.imprimir("Has pasado 3 turnos en la cárcel, sales! Tira los dados!");
             salirCarcel();
@@ -302,7 +302,7 @@ public class Juego implements Comando{
         }
     }
 //////---METODO LANZAMIENTOS DADOS ALEATORIOS---
-    public void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) throws AcabarTurno {
+    public void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual)  throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
         int resultado1 = dado1.hacerTirada();
         int resultado2 = dado2.hacerTirada();
 
@@ -326,7 +326,7 @@ public class Juego implements Comando{
         moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2,false);
     }
 //////---METODO MOVER AVATAR AL LANZAR DADOS---
-    public void moverYVerTablero(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int total, boolean avanzar) {
+    public void moverYVerTablero(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int total, boolean avanzar) throws EdificarSinPoder, DineroError, InstanciaIncorrecta  {
         Casilla nuevaCasilla;
         int newposition = moverJugador(total);
         nuevaCasilla = tablero.getCasilla(newposition);
@@ -395,12 +395,12 @@ public class Juego implements Comando{
     }
     
     @Override
-    public void comprar(String nombre) throws CompraSinPoder {
+    public void comprar(String nombre) throws CompraSinPoder, InstanciaIncorrecta {
         Jugador jugador = jugadores.get(turno);
         Casilla casilla = jugador.getAvatar().getLugar();
 
         if (!(casilla instanceof Propiedad)){
-            throw new CompraSinPoder("La casilla solicitada no se puede comprar");
+            throw new InstanciaIncorrecta("Propiedad");
         }
 
         if (!casilla.getNombre().equals(nombre)){
@@ -575,7 +575,7 @@ public class Juego implements Comando{
     }
 //////---METODO VENDER EDIFICIO
     @Override
-    public void vender_edificio(String tipo, String casilla,String num) throws VenderSinTener {
+    public void vender_edificio(String tipo, String casilla,String num) throws VenderSinTener, CasillaNoEncontrada, InstanciaIncorrecta, EdificioNotFound {
 
         try{
 
@@ -584,12 +584,11 @@ public class Juego implements Comando{
 
             if(c == null){
                 //Lo consideramos error de ejecución
-                consola.imprimirAdvertencia("Casilla no encontrada");
-                return;
+                throw new CasillaNoEncontrada(casilla); 
             }
 
             if (!(c instanceof Solar solar))
-                return;
+                throw new InstanciaIncorrecta("Solar");
             
             Jugador jugadorActual = jugadores.get(turno);
             
@@ -597,7 +596,7 @@ public class Juego implements Comando{
                 throw new VenderSinTener("No te pertenece esa casilla");
             }
 
-            solar.vender_edificio(tipo,numero);
+            solar.vender_edificio(tipo,numero); //Tira las excepciones de edificio no encontrado si no existe el edificio del tipo, o no hay suficientes
 
             boolean isDeudaPagada = (jugadorActual.isEnDeuda() && jugadorActual.getFortuna()>0);
             Jugador deudor = jugadorActual.getDeudor();
@@ -660,7 +659,7 @@ public class Juego implements Comando{
 ////////////////////////////////////DEBUG COMMANDS////////////////////////////////////
 //////---METODO LANZA DADOS VALORES ESPECIFICOS---
     @Override
-    public void lanzarDados(String dado1, String dado2) throws LanzarDado, AcabarTurno {
+    public void lanzarDados(String dado1, String dado2) throws LanzarDado, AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
         int dadoint1= Integer.parseInt(dado1);
         int dadoint2= Integer.parseInt(dado2);
         Avatar avatarActual = avatares.get(turno);
@@ -690,7 +689,7 @@ public class Juego implements Comando{
         }
     }
 //////---METODO LANZAMIENTOS DADOS EN CARCEL VALORES ESPECIFICOS---
-    public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) throws AcabarTurno {
+    public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
         if (jugadorActual.getTiradasCarcel() >= 3) {
             consola.imprimir("Has pasado 3 turnos en la cárcel, sales! Tira los dados!");
             salirCarcel();
@@ -713,7 +712,7 @@ public class Juego implements Comando{
         }
     }
 //////---METODO LANZAMIENTOS DADOS VALORES ESPECIFICOS---
-    public void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) throws AcabarTurno {
+    public void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
         int resultado1 = dado1;
         int resultado2 = dado2;
         tiradados(resultado1, resultado2);
@@ -736,12 +735,13 @@ public class Juego implements Comando{
     }
 
     @Override
-    public void estadisticas(String nombre) {
+    public void estadisticas(String nombre) throws JugadorNoEncontrado {
         for (Jugador jugador : jugadores) {
             if (jugador.getNombre().equals(nombre)) {
                 jugador.estadisticas();
             }
         }
+        throw new JugadorNoEncontrado(nombre);
     }
 
 
@@ -922,7 +922,7 @@ public class Juego implements Comando{
     }
 
     @Override
-    public void avanzar() throws AvanzarSinPoder{
+    public void avanzar() throws AvanzarSinPoder,EdificarSinPoder, DineroError, InstanciaIncorrecta {
         Avatar avatarActual = avatares.get(turno);
         if (avatarActual.puedeAvanzar()){
             Jugador jugadorActual = jugadores.get(turno);
@@ -963,13 +963,12 @@ public class Juego implements Comando{
 
 
     @Override
-    public void crearTrato(String[] partes) throws TratoIncompatible{
+    public void crearTrato(String[] partes) throws TratoIncompatible, JugadorNoEncontrado, CasillaNoEncontrada{
         Jugador jugador1 = jugadores.get(turno);
         Jugador jugador2 = nombreJugador(partes[1]);
         Trato trato=null;
         if (jugador2==null){
-            consola.imprimir("No se ha encontrado al jugador "+partes[1]);
-            return;
+            throw new JugadorNoEncontrado(partes[1]);
         }
         int campos=0;
         if (partes.length==5){
@@ -985,6 +984,9 @@ public class Juego implements Comando{
             dinero = Float.parseFloat(partes[3]);
         }catch (NumberFormatException e){ //Si el primero no es numero, es un Solar
             SolarX = (Propiedad) tablero.casillaByName(partes[3]);
+            if (SolarX==null){
+                throw new CasillaNoEncontrada(partes[3]);
+            }
         }
 
         if (campos==2){
@@ -996,6 +998,9 @@ public class Juego implements Comando{
             }catch (NumberFormatException e){ //Si el segundo no es numero, es SolarY
                 SolarY = (Propiedad) tablero.casillaByName(partes[4]);
                 if (dinero!=0){ //Trato SolarX dinero
+                    if (SolarY==null){
+                        throw new CasillaNoEncontrada(partes[4]);
+                    }
                     trato = new Trato(jugador1,jugador2,dinero,SolarY);
                 }
                 if (SolarX!=null && SolarY!=null){ //Trato SolarX SolarY
@@ -1007,13 +1012,25 @@ public class Juego implements Comando{
         }else if(campos==3){
             if(partes[4].equals("y")){
                 SolarX = (Propiedad) tablero.casillaByName(partes[3]);
+                if (SolarX==null){
+                    throw new CasillaNoEncontrada(partes[3]);
+                }
                 SolarY = (Propiedad) tablero.casillaByName(partes[6]);
+                if (SolarY==null){
+                    throw new CasillaNoEncontrada(partes[6]);
+                }
                 dinero = Float.parseFloat(partes[5]);
                 trato = new Trato(jugador1,jugador2,SolarX,dinero,SolarY); //Trato SolarX y dinero por SolarY
             }
             else if (partes[5].equals("y")){
                 SolarX = (Propiedad) tablero.casillaByName(partes[3]);
+                if (SolarX==null){
+                    throw new CasillaNoEncontrada(partes[3]);
+                }
                 SolarY = (Propiedad) tablero.casillaByName(partes[4]);
+                if (SolarY==null){
+                    throw new CasillaNoEncontrada(partes[4]);
+                }
                 dinero = Float.parseFloat(partes[6]);
                 trato = new Trato(jugador1,jugador2,SolarX,SolarY,dinero); //Trato SolarX por SolarY y dinero
             }
@@ -1032,7 +1049,7 @@ public class Juego implements Comando{
     }
 
     @Override
-    public void aceptarTrato(String id) throws TratoIncompatible{
+    public void aceptarTrato(String id) throws TratoIncompatible, TratoNoEncontrado{
         Jugador jugador1 = jugadores.get(turno);
         int ident = Integer.parseInt(id);
         ArrayList<Trato> tratos=   jugador1.getTratosRecibidos();
@@ -1042,13 +1059,14 @@ public class Juego implements Comando{
                 tratos.remove(trato);
                 return;
             }
-        }
+        }//Si salimos del bucle, es que no se ha encontrado el trato
+        throw new TratoNoEncontrado(id);
 
     }
 
     //Eliminamos el trato de los dos jugadores, tanto de los tratos propuestos del jugador1, como de los recibidos del jugador2
     @Override
-    public void eliminarTrato(String id){
+    public void eliminarTrato(String id) throws TratoNoEncontrado{
         Jugador jugador1 = jugadores.get(turno);
         int ident = Integer.parseInt(id);
         ArrayList<Trato> tratos=   jugador1.getTratosPropuestos();
@@ -1069,6 +1087,7 @@ public class Juego implements Comando{
                 }
             }
         }
+        throw new TratoNoEncontrado(id);
 
     }
 
@@ -1123,7 +1142,7 @@ public class Juego implements Comando{
 
 //////---METODO QUE LANZA DADOS UN VALOR??
    @Override
-    public void lanzarDados(int tiradaTotal){
+    public void lanzarDados(int tiradaTotal) throws EdificarSinPoder, DineroError, InstanciaIncorrecta {
         Jugador jugadorActual = jugadores.get(turno);
         Avatar avatarActual = avatares.get(turno);
         Casilla posicionActual = avatarActual.getLugar();

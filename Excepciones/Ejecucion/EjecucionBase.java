@@ -4,7 +4,7 @@ import Excepciones.ExcepcionBase;
 
 public class EjecucionBase extends ExcepcionBase {
     public EjecucionBase(String mensaje){
-        super(mensaje);
+        super("Fallo en la ejecución debido a:\n"+mensaje);
     }
     
 }

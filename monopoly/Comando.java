@@ -1,28 +1,27 @@
 package monopoly;
-import Excepciones.MalFormato.*;
 import Excepciones.Ejecucion.*;
 import Excepciones.MalUsoComando.*;
 
 public interface Comando {
     void anadirjugador();
     void jugadorInfo();
-    void edificar(String nombre);
+    void edificar(String tipo) throws EdificarSinPoder, DineroError, InstanciaIncorrecta;
     void listarJugadores();
     void listarAvatares();
     void listarVenta();
     void listarEdificios() ;
     void listarGrupo(String grupo);
-    void lanzarDados() throws AcabarTurno;
-    void lanzarDados(String dado1, String dado2) throws LanzarDado, AcabarTurno;
-    void lanzarDados(int valor);
+    void lanzarDados() throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta;
+    void lanzarDados(String dado1, String dado2) throws LanzarDado, AcabarTurno, EdificarSinPoder, DineroError, InstanciaIncorrecta ;
+    void lanzarDados(int valor) throws EdificarSinPoder, DineroError, InstanciaIncorrecta ;
     void comprar(String nombre) throws Exception;
     void salirCarcel();
     void acabar() throws AcabarTurno;
     void acabarTurnoForce();
-    void descJugador(String nombre);
-    void descAvatar(String nombre);
-    void descCasilla(String nombre);
-    void vender_edificio(String edificio, String nombre, String cantidad) throws VenderSinTener;
+    void descJugador(String nombre) throws JugadorNoEncontrado;
+    void descAvatar(String nombre) throws AvatarNoEncontrado;
+    void descCasilla(String nombre) throws CasillaNoEncontrada;
+    void vender_edificio(String tipo, String casilla,String num) throws VenderSinTener, CasillaNoEncontrada, InstanciaIncorrecta, EdificioNotFound;
     void verTablero();
     void endGame();
     void fortunaManual(float cantidad);
@@ -30,11 +29,11 @@ public interface Comando {
     void bancarrota();
     void hipotecar(String nombre) throws HipotecaSinTener;
     void deshipotecar(String nombre);
-    void avanzar() throws AvanzarSinPoder;
+    void avanzar() throws AvanzarSinPoder, EdificarSinPoder, DineroError, InstanciaIncorrecta ;
     void verTratos();
-    void crearTrato(String[] partes) throws TratoIncompatible;
-    void aceptarTrato(String id) throws TratoIncompatible;
-    void eliminarTrato(String id);
-    void estadisticas(String nombre);
+    void crearTrato(String[] partes) throws TratoIncompatible, JugadorNoEncontrado, CasillaNoEncontrada;
+    void aceptarTrato(String id) throws TratoIncompatible, TratoNoEncontrado;
+    void eliminarTrato(String id) throws TratoNoEncontrado;
+    void estadisticas(String nombre) throws JugadorNoEncontrado;
     void estadisticasjuego();
 }

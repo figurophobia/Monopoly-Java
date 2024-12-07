@@ -2,6 +2,10 @@ package monopoly;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import Excepciones.Ejecucion.DineroError;
+import Excepciones.Ejecucion.InstanciaIncorrecta;
+import Excepciones.MalUsoComando.EdificarSinPoder;
 import partida.*;
 
 public class Cartas {
@@ -25,7 +29,7 @@ public class Cartas {
         accionesCaja.add("Alquilas a tus compañeros una villa en Solar7 durante una semana. Paga 200000€ a cada jugador.");
     }
 
-    public void gestionCartas(Avatar actual, Tablero tablero, ArrayList<Jugador> jugadores){
+    public void gestionCartas(Avatar actual, Tablero tablero, ArrayList<Jugador> jugadores) throws EdificarSinPoder, DineroError, InstanciaIncorrecta {
 
         if (actual.getLugar() instanceof AccionSuerte){
             //Barajar las cartas
@@ -67,7 +71,7 @@ public class Cartas {
         }
     }
     
-    public void realizarAccion(int indice, Avatar actual, Tablero tablero, ArrayList<Jugador> jugadores){
+    public void realizarAccion(int indice, Avatar actual, Tablero tablero, ArrayList<Jugador> jugadores) throws EdificarSinPoder, DineroError, InstanciaIncorrecta {
     
         Jugador jactual = actual.getJugador();
 
@@ -204,7 +208,7 @@ public class Cartas {
             }
         }
     }
-    public void moverEspecial(Tablero tablero, int i, Avatar actual,Jugador banca){
+    public void moverEspecial(Tablero tablero, int i, Avatar actual,Jugador banca) throws EdificarSinPoder, DineroError, InstanciaIncorrecta {
         actual.getLugar().eliminarAvatar(actual);
         Casilla casilla = tablero.getCasilla(i);
         actual.setLugar(casilla);

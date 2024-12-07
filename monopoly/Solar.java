@@ -3,7 +3,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import Excepciones.Ejecucion.DineroError;
+import Excepciones.Ejecucion.EdificioNotFound;
+import Excepciones.Ejecucion.InstanciaIncorrecta;
 import Excepciones.MalUsoComando.CompraSinPoder;
+import Excepciones.MalUsoComando.EdificarSinPoder;
 import Excepciones.MalUsoComando.HipotecaSinTener;
 import Excepciones.MalUsoComando.VenderSinTener;
 import partida.*;
@@ -41,7 +45,7 @@ public class Solar extends Propiedad {
         }
 
         if (!esComprable(comprador, banca)){
-            throw new CompraSinPoder("El usuario solicitante de la compra de la casilla no posee el dinero suficiente");
+            throw new CompraSinPoder("El usuario solicitante de la compra de la casilla no tiene suficiente dinero para comprarla");
         }
         if (!esComprableCoche(comprador)){
             throw new CompraSinPoder("El usuario solicitante de la compra de la casilla está en un movimiento avanzado que no le permite hacer la compra");
@@ -66,7 +70,7 @@ public class Solar extends Propiedad {
     }
 
     @Override
-    public boolean evaluarCasilla(Jugador jugador, Jugador banca, int tirada){
+    public boolean evaluarCasilla(Jugador jugador, Jugador banca, int tirada) throws EdificarSinPoder, DineroError, InstanciaIncorrecta  {
 
         visitarCasilla(jugador);
 
@@ -132,7 +136,7 @@ public class Solar extends Propiedad {
         }; 
     }
     @Override
-    public void edificar(String tipo){
+    public void edificar(String tipo) throws EdificarSinPoder, DineroError, InstanciaIncorrecta{
         if(duenho.puedeEdificar(this)){
             switch (tipo) {
                 case "casa"-> {
@@ -155,7 +159,7 @@ public class Solar extends Propiedad {
         }else System.out.println(Valor.RED + "No "+ Valor.RESET+ "puedes edificar en esta casilla.");
     }
 
-    private void comprarCasa() {
+    private void comprarCasa() throws EdificarSinPoder, DineroError{
         int maxcasa;
         grupo.getEdificaciones().putIfAbsent("casa", new ArrayList<>());
         edificaciones.putIfAbsent("casa", new ArrayList<>());
@@ -180,14 +184,14 @@ public class Solar extends Propiedad {
                 edificaciones.get("casa").add(casa);
                 grupo.getEdificaciones().get("casa").add(new Casa(duenho, this, precio));
             } else {
-                System.out.println("No puedes construir más casas");
+                throw new EdificarSinPoder("No puedes construir más casas");
             }
         } else {
-            System.out.println("No tienes suficiente dinero");
+            throw new DineroError(duenho.getFortuna());
         }
     }
     //FIXME: añadir las propiedades a los jugadores
-    private void comprarHotel() {
+    private void comprarHotel() throws EdificarSinPoder, DineroError{
         grupo.getEdificaciones().putIfAbsent("hotel", new ArrayList<>());
         edificaciones.putIfAbsent("hotel", new ArrayList<>());
         float precio=(0.6f*grupo.valor());
@@ -205,16 +209,16 @@ public class Solar extends Propiedad {
                     edificaciones.get("hotel").add(new Hotel(duenho, this, precio));
                     grupo.getEdificaciones().get("hotel").add(new Hotel(duenho, this, precio));
                 } else {
-                    System.out.println("No puedes construir más hoteles");
+                    throw new EdificarSinPoder("No puedes construir más hoteles");
                 }
             } else {
-                System.out.println("No tienes cuatro casas en esta casilla...");
+                throw new EdificarSinPoder("No tienes cuatro casas construidas...");
             }
         } else {
-            System.out.println("No tienes suficiente dinero");
+            throw new DineroError(duenho.getFortuna());
         }
     }
-    private void comprarPiscina() {
+    private void comprarPiscina() throws EdificarSinPoder, DineroError{
         grupo.getEdificaciones().putIfAbsent("piscina", new ArrayList<>());
         edificaciones.putIfAbsent("piscina", new ArrayList<>());
         float precio=(0.4f*grupo.valor());
@@ -229,16 +233,16 @@ public class Solar extends Propiedad {
                     edificaciones.get("piscina").add(new Piscina(duenho, this, precio));
                     grupo.getEdificaciones().get("piscina").add(new Piscina(duenho, this, precio));
                 } else {
-                    System.out.println("No puedes construir más piscinas");
+                    throw new EdificarSinPoder("No puedes construir más piscinas");
                 }
             } else {
-                System.out.println("No tienes al menos dos casas y un hotel...");
+                throw new EdificarSinPoder("No tienes al menos dos casas y un hotel...");
             }
         } else {
-            System.out.println("No tienes suficiente dinero");
+            throw new DineroError(duenho.getFortuna());
         }
     }
-    private void comprarPista() {
+    private void comprarPista() throws EdificarSinPoder, DineroError {
         grupo.getEdificaciones().putIfAbsent("pista", new ArrayList<>());
         edificaciones.putIfAbsent("pista", new ArrayList<>());
         float precio=(1.25f*grupo.valor());
@@ -251,13 +255,13 @@ public class Solar extends Propiedad {
                     edificaciones.get("pista").add(new Pista(duenho, this, precio));
                     grupo.getEdificaciones().get("pista").add(new Pista(duenho, this, precio));
                 } else {
-                    System.out.println("No puedes construir más pistas de deporte");
+                    throw new EdificarSinPoder("No puedes construir más pistas de deporte");
                 }
             } else {
-                System.out.println("No tienes dos hoteles construidos...");
+                throw new EdificarSinPoder("No tienes al menos dos hoteles...");
             }
         } else {
-            System.out.println("No tienes suficiente dinero");
+            throw new DineroError(duenho.getFortuna());
         }
     }
 
@@ -274,7 +278,7 @@ public class Solar extends Propiedad {
         }
     }
 
-    public void vender_edificio(String tipo,int num) throws VenderSinTener{
+    public void vender_edificio(String tipo,int num) throws VenderSinTener, EdificioNotFound{
         tipo=tipo.toLowerCase();
         if(!tipo.equals("casa")&&!tipo.equals("hotel")&&!tipo.equals("pista")&&!tipo.equals("piscina")){
             throw new VenderSinTener("Tipo de edificación no válido...");
@@ -282,8 +286,9 @@ public class Solar extends Propiedad {
         int num_viviendas=edificaciones.getOrDefault(tipo, new ArrayList<>()).size();
         if (num>num_viviendas){
             //Lo consideramos error de ejecución
-            System.out.println("No tienes "+num+" "+tipo+((num==1) ? "":"s")+ " en esta casilla, tienes "+num_viviendas+"...");
-            return;}
+
+            throw new EdificioNotFound("No tienes "+num+" "+tipo+((num==1) ? "":"s")+ " en esta casilla, tienes "+num_viviendas+"...");
+            }
         try{
             int ganancias=0;
             for(int i=0;i<num;i++){
