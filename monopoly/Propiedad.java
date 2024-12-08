@@ -61,7 +61,15 @@ public class Propiedad extends Casilla{
         this.valor +=suma;
     }
 
-    //TODO: boolean perteneceAJugador(jugador)
+    
+
+    public boolean perteneceAJugador(Jugador jugador) {
+        return (duenho == jugador);
+    }
+
+    public float alquiler(int tirada) {
+        return precioAlquiler;
+    }
 
     public String casEnVenta() {
         StringBuilder info = new StringBuilder();

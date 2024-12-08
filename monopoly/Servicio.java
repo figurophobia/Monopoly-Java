@@ -22,6 +22,14 @@ public class Servicio extends Propiedad {
     }
 
     @Override
+    public float alquiler(int tirada) {
+        if (duenho.numServicios() == 1)
+            return precioAlquiler * tirada * 4;
+        else    
+            return precioAlquiler * tirada * 10;
+    }
+
+    @Override
     public void comprarCasilla(Jugador comprador, Jugador banca) throws CompraSinPoder{
 
         if (duenho != banca){
