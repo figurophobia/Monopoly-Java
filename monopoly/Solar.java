@@ -388,6 +388,17 @@ public class Solar extends Propiedad {
         return info.toString();
     }
 
+    public float getValorTotal(){
+        float valorTotal = valor;
+        for (Map.Entry<String, ArrayList<Edificacion>> entry : edificaciones.entrySet()) {
+            ArrayList<Edificacion> listaEdificios = entry.getValue();
+            for (Edificacion edificio : listaEdificios) {
+                valorTotal += edificio.getPrecio();
+            }
+        }
+        return valorTotal;
+    }
+
 
     
 
