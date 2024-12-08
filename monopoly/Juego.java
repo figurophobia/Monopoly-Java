@@ -392,13 +392,14 @@ public class Juego implements Comando{
                 }
                 return avatares.get(turno).moverEnAvanzado(tablero.getPosiciones(), posiciones);
                 
+            }else{
+                return avatares.get(turno).moverEnAvanzado(tablero.getPosiciones(), posiciones);
             }
             
         }
         else {
             return this.avatares.get(turno).moverEnBasico(this.tablero.getPosiciones(), posiciones);
         }
-        return 0;
     }
     
     @Override
