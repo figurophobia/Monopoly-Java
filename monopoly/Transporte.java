@@ -19,6 +19,11 @@ public class Transporte extends Propiedad {
     }
 
     @Override
+    public float alquiler(int tirada) {
+        return (this.precioAlquiler * 0.25f * this.duenho.numTransportes());
+    }
+
+    @Override
     public void comprarCasilla(Jugador comprador, Jugador banca) throws CompraSinPoder{
 
         if (comprador.getAvatar().getLugar() != this){

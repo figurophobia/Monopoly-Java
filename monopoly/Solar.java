@@ -1,8 +1,4 @@
 package monopoly;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import Excepciones.Ejecucion.DineroError;
 import Excepciones.Ejecucion.EdificioNotFound;
 import Excepciones.Ejecucion.InstanciaIncorrecta;
@@ -10,6 +6,9 @@ import Excepciones.MalUsoComando.CompraSinPoder;
 import Excepciones.MalUsoComando.EdificarSinPoder;
 import Excepciones.MalUsoComando.HipotecaSinTener;
 import Excepciones.MalUsoComando.VenderSinTener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import partida.*;
 
 public class Solar extends Propiedad {
@@ -125,6 +124,24 @@ public class Solar extends Propiedad {
         precioAlquiler += inicial * edificaciones.getOrDefault("pista", new ArrayList<>()).size() * 25;
     }
 
+    @Override
+    public float alquiler(int tirada) {
+
+        float inicial = valor * 0.1f;
+        precioAlquiler = inicial;
+        if (grupo.esDuenhoGrupo(duenho))
+            precioAlquiler *= 2;
+
+
+        precioAlquiler += inicial * calcularMultiplicadorAlquiler(edificaciones.getOrDefault("casa", new ArrayList<>()).size());
+        precioAlquiler += inicial * edificaciones.getOrDefault("hotel", new ArrayList<>()).size() * 70;
+        precioAlquiler += inicial * edificaciones.getOrDefault("piscina", new ArrayList<>()).size() * 25;
+        precioAlquiler += inicial * edificaciones.getOrDefault("pista", new ArrayList<>()).size() * 25;
+
+        return precioAlquiler;
+    }
+    
+
     private float calcularMultiplicadorAlquiler(int numCasas) {
         return switch (numCasas) {
             case 1 -> 5.0f;
@@ -189,7 +206,6 @@ public class Solar extends Propiedad {
             throw new DineroError(duenho.getFortuna());
         }
     }
-    //FIXME: añadir las propiedades a los jugadores
     private void comprarHotel() throws EdificarSinPoder, DineroError{
         grupo.getEdificaciones().putIfAbsent("hotel", new ArrayList<>());
         edificaciones.putIfAbsent("hotel", new ArrayList<>());
@@ -323,24 +339,25 @@ public class Solar extends Propiedad {
 
     @Override
     public String infoCasilla() { 
+        float alquiler = valor*0.1f;
         StringBuilder info = new StringBuilder();
         info.append("{\n");
         info.append("tipo: ").append(this.getClass().getSimpleName()).append(",\n");
         info.append("grupo: ").append(this.grupo.getColorGrupo()).append("#####" + Valor.RESET).append(",\n")
         .append("propietario: ").append(this.duenho != null ? this.duenho.getNombre() : "N/A").append(",\n")
         .append("valor: ").append(this.valor).append(",\n")
-        .append("alquiler: ").append(this.precioAlquiler).append(",\n")
+        .append("alquiler: ").append(alquiler).append(",\n")
         .append("valor hotel: ").append(this.valor * 0.6f).append(",\n")
         .append("valor casa: ").append(this.valor * 0.6f).append(",\n")
         .append("valor piscina: ").append(this.valor * 0.4f).append(",\n")
         .append("valor pista de deporte: ").append(this.valor * 1.25f).append(",\n")
-        .append("alquiler una casa: ").append(this.precioAlquiler * 5).append(",\n")
-        .append("alquiler dos casas: ").append(this.precioAlquiler * 15).append(",\n")
-        .append("alquiler tres casas: ").append(this.precioAlquiler * 35).append(",\n")
-        .append("alquiler cuatro casas: ").append(this.precioAlquiler * 50).append(",\n")
-        .append("alquiler hotel: ").append(this.precioAlquiler * 70).append(",\n")
-        .append("alquiler piscina: ").append(this.precioAlquiler * 25).append(",\n")
-        .append("alquiler pista de deporte: ").append(this.precioAlquiler * 25).append("\n");
+        .append("alquiler una casa: ").append(alquiler * 5).append(",\n")
+        .append("alquiler dos casas: ").append(alquiler * 15).append(",\n")
+        .append("alquiler tres casas: ").append(alquiler * 35).append(",\n")
+        .append("alquiler cuatro casas: ").append(alquiler * 50).append(",\n")
+        .append("alquiler hotel: ").append(alquiler * 70).append(",\n")
+        .append("alquiler piscina: ").append(alquiler * 25).append(",\n")
+        .append("alquiler pista de deporte: ").append(alquiler * 25).append("\n");
         info.append("jugadores: [");
         for (Avatar avatar : this.avatares) {
             info.append(avatar.getJugador().getNombre()).append(", ");
