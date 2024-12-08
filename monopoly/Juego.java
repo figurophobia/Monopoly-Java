@@ -23,6 +23,8 @@ public class Juego implements Comando{
     private boolean tirado; //Booleano para comprobar si el jugador que tiene el turno ha tirado o no.
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
     private Cartas cartas = new Cartas(); //Objeto de la clase Cartas
+    private CartaSuerte CartasSuerte = new CartaSuerte();
+    private CartaCajaComunidad CartasComunidad = new CartaCajaComunidad();
     public static Consola consola = new ConsolaNormal(); //Objeto de la clase ConsolaNormal
 
 //////---CONSTRUCTOR JUEGO---
@@ -343,9 +345,17 @@ public class Juego implements Comando{
 
         String tipo = nuevaCasilla.getClass().getSuperclass().getSimpleName();
 
+        if (nuevaCasilla instanceof AccionComunidad){
+            CartasComunidad.gestionCartas(avatarActual, tablero, jugadores);
+        }
+
+        if (nuevaCasilla instanceof AccionSuerte) {
+            CartasSuerte.gestionCartas(avatarActual, tablero, jugadores);
+        }
+        /*/
         if (tipo.equals("Accion")) {
             cartas.gestionCartas(avatarActual, tablero, jugadores);
-        }
+        }*/
         if (avanzar){
             // Verificar si el jugador puede pagar sus deudas
             
