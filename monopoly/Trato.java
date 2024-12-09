@@ -91,11 +91,11 @@ public class Trato {
         if (this.valido(false)) {
             //Los tomaremos como fallos de ejecución estos, ya que se miran una vez comprobado si el trato era valido
             //Ademas se dejan hacer tratos independientemente de si hay el dinero o no
-            if ((type == 2 || type == 5) && jugadorPropone.getFortuna() < dinero) {
+            if ((type == 3 || type == 5) && jugadorPropone.getFortuna() < dinero) {
                 Juego.consola.imprimir("El jugador " + jugadorPropone.getNombre() + " no tiene suficiente dinero.");
                 throw new DineroError(jugadorPropone.getFortuna());
             }
-            if ((type == 3 || type == 4) && jugadorAcepta.getFortuna() < dinero) {
+            if ((type == 2 || type == 4) && jugadorAcepta.getFortuna() < dinero) {
                 Juego.consola.imprimir("El jugador " + jugadorAcepta.getNombre() + " no tiene suficiente dinero.");
                 throw new DineroError(jugadorAcepta.getFortuna());
             }

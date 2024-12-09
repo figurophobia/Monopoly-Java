@@ -10,7 +10,7 @@ public class TratosFormato extends MalFormatoBase {
          * (SolarX, SolarY, dinero)
          * (SolarX, dinero, SolarY)
          */
-        super("tratos [nombre jugador] cambiar [caso sin parentesis ni comas]\n" +
+        super("trato [nombre jugador] cambiar [caso sin parentesis ni comas]\n" +
               "Casos:\n" +
               "  - SolarX, SolarY\n" +
               "  - SolarX, dinero\n" +

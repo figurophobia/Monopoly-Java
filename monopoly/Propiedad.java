@@ -3,7 +3,7 @@ import Excepciones.MalUsoComando.CompraSinPoder;
 import Excepciones.MalUsoComando.HipotecaSinTener;
 import partida.*;
 
-public class Propiedad extends Casilla{
+public abstract class Propiedad extends Casilla{
     protected float valor;
     protected final float VALOR_INICIAL;
     protected Jugador duenho;
