@@ -109,31 +109,31 @@ public class Trato {
             }
     
             switch (type) {
-                case 1:
+                case 1: //Cambiar (SolarX, SolarY)
                     jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
                     jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
                     break;
     
-                case 2:
+                case 2: //Cambiar (SolarX, dinero)
                     jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
                     jugadorAcepta.setFortuna(jugadorAcepta.getFortuna() - dinero);
                     jugadorPropone.setFortuna(jugadorPropone.getFortuna() + dinero);
                     break;
     
-                case 3:
+                case 3: //Cambiar (dinero, SolarY)
                     jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
                     jugadorAcepta.setFortuna(jugadorAcepta.getFortuna() + dinero);
                     jugadorAcepta.cambiarPropiedad(SolarX, jugadorPropone);
                     break;
     
-                case 4:
+                case 4: //Cambiar (SolarX, SolarY y dinero)
                     jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
                     jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
-                    jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
-                    jugadorAcepta.setFortuna(jugadorAcepta.getFortuna() + dinero);
+                    jugadorPropone.setFortuna(jugadorPropone.getFortuna() + dinero);
+                    jugadorAcepta.setFortuna(jugadorAcepta.getFortuna() - dinero);
                     break;
     
-                case 5:
+                case 5: //Cambiar (SolarX y dinero, SolarY)
                     jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
                     jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
                     jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
