@@ -5,7 +5,7 @@ import Excepciones.MalUsoComando.TratoIncompatible;
 import partida.*;
 
 public class Trato {
-    static int numTratos = 0; //Static para poder llevar la cuenta de diferentes instancias de tratos
+    static int numero = 0; //Static para poder llevar la cuenta de diferentes instancias de tratos
     private int id = -1; // Valor inicial, hasta que se haga comprobarTratoValido()
     private Jugador jugadorPropone; // Jugador que propone el trato
     private Jugador jugadorAcepta; // Jugador que recibe el trato
@@ -83,7 +83,7 @@ public class Trato {
         if (SolarY != null && SolarY.getDuenho() != jugadorAcepta) {
             throw new TratoIncompatible("El jugador " + jugadorAcepta.getNombre() + " no tiene la Propiedad " + SolarY.getNombre());
         }
-        if(changeid) this.id = ++numTratos; // se le asigna el id solo al comprobar que es válido
+        if(changeid) this.id = ++numero; // se le asigna el id solo al comprobar que es válido
         return true;
     }
 
