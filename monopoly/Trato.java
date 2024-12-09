@@ -117,10 +117,12 @@ public class Trato {
                 case 2:
                     jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
                     jugadorAcepta.setFortuna(jugadorAcepta.getFortuna() - dinero);
+                    jugadorPropone.setFortuna(jugadorPropone.getFortuna() + dinero);
                     break;
     
                 case 3:
                     jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
+                    jugadorAcepta.setFortuna(jugadorAcepta.getFortuna() + dinero);
                     jugadorAcepta.cambiarPropiedad(SolarX, jugadorPropone);
                     break;
     
@@ -128,12 +130,14 @@ public class Trato {
                     jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
                     jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
                     jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
+                    jugadorAcepta.setFortuna(jugadorAcepta.getFortuna() + dinero);
                     break;
     
                 case 5:
                     jugadorPropone.cambiarPropiedad(SolarX, jugadorAcepta);
                     jugadorAcepta.cambiarPropiedad(SolarY, jugadorPropone);
                     jugadorPropone.setFortuna(jugadorPropone.getFortuna() - dinero);
+                    jugadorAcepta.setFortuna(jugadorAcepta.getFortuna() + dinero);
                     break;
     
                 default:
