@@ -176,6 +176,11 @@ public class Solar extends Propiedad {
     }
 
     private void comprarCasa() throws EdificarSinPoder, DineroError{
+        String B = Valor.BLUE;
+        String R = Valor.RED;
+        String G = Valor.GREEN;
+        String RE = Valor.RESET;
+        String Y = Valor.YELLOW;
         int maxcasa;
         grupo.getEdificaciones().putIfAbsent("casa", new ArrayList<>());
         edificaciones.putIfAbsent("casa", new ArrayList<>());
@@ -193,20 +198,26 @@ public class Solar extends Propiedad {
     
             if (puedeConstruirCasa) {
                 duenho.setFortuna(duenho.getFortuna() - precio);
-                System.out.println("Has comprado una" + Valor.YELLOW + " casa" + Valor.RESET + " en " + Valor.BLUE + this.nombre + Valor.RESET + " por "
-                + Valor.RED + precio + "€"+Valor.RESET +", te quedan " + Valor.RED + duenho.getFortuna()+ "€"+Valor.RESET +".");
+                System.out.println("Has comprado una" + B + " casa" + RE + " en " + Y + this.nombre + RE + " por "
+                + R + precio + "€"+RE +", te quedan " + R + duenho.getFortuna()+ "€"+RE +".");
                 
                 Edificacion casa = new Casa(duenho, this, precio);
                 edificaciones.get("casa").add(casa);
                 grupo.getEdificaciones().get("casa").add(new Casa(duenho, this, precio));
             } else {
-                throw new EdificarSinPoder("No puedes construir más casas");
+                throw new EdificarSinPoder(R + "No puedes construir más casas..." + RE);
             }
         } else {
             throw new DineroError(duenho.getFortuna());
         }
     }
     private void comprarHotel() throws EdificarSinPoder, DineroError{
+        String B = Valor.BLUE;
+        String R = Valor.RED;
+        String G = Valor.GREEN;
+        String RE = Valor.RESET;
+        String Y = Valor.YELLOW;
+
         grupo.getEdificaciones().putIfAbsent("hotel", new ArrayList<>());
         edificaciones.putIfAbsent("hotel", new ArrayList<>());
         float precio=(0.6f*grupo.valor());
@@ -214,7 +225,7 @@ public class Solar extends Propiedad {
             if (edificaciones.getOrDefault("casa",new ArrayList<>()).size() == 4) {
                 if (grupo.getEdificaciones().get("hotel").size() < grupo.getMiembros().size()) {
                     duenho.setFortuna(duenho.getFortuna() - precio);
-                    System.out.println("Has comprado un hotel por " + precio + "€.");
+                    System.out.println("Has comprado un " + B + "hotel " + RE + " en " + Y + this.nombre + RE +  " por " + R + precio + "€" + RE + ".");
                     edificaciones.get("casa").clear();
                     
                     for (int i = 0; i < 4; i++) {
@@ -224,16 +235,21 @@ public class Solar extends Propiedad {
                     edificaciones.get("hotel").add(new Hotel(duenho, this, precio));
                     grupo.getEdificaciones().get("hotel").add(new Hotel(duenho, this, precio));
                 } else {
-                    throw new EdificarSinPoder("No puedes construir más hoteles");
+                    throw new EdificarSinPoder(R + "No puedes construir más hoteles..." + RE);
                 }
             } else {
-                throw new EdificarSinPoder("No tienes cuatro casas construidas...");
+                throw new EdificarSinPoder(R + "No tienes cuatro casas construidas..." + RE);
             }
         } else {
             throw new DineroError(duenho.getFortuna());
         }
     }
     private void comprarPiscina() throws EdificarSinPoder, DineroError{
+        String B = Valor.BLUE;
+        String R = Valor.RED;
+        String G = Valor.GREEN;
+        String RE = Valor.RESET;
+        String Y = Valor.YELLOW;
         grupo.getEdificaciones().putIfAbsent("piscina", new ArrayList<>());
         edificaciones.putIfAbsent("piscina", new ArrayList<>());
         float precio=(0.4f*grupo.valor());
@@ -242,38 +258,43 @@ public class Solar extends Propiedad {
             int numhotel=edificaciones.getOrDefault("hotel",new ArrayList<>()).size();
             if (((numcasa >= 2) && (numhotel>=1))||numhotel>=2){
                 if (grupo.getEdificaciones().getOrDefault("piscina", new ArrayList<>()).size() < grupo.getMiembros().size()) {
-                    System.out.println("Has comprado una piscina por " + precio + "€.");
+                    System.out.println("Has comprado una " + B + "piscina " + RE + " en " + Y + this.nombre + RE + " por " + R + precio + "€" + RE + ".");
                     duenho.setFortuna(duenho.getFortuna() - precio);
                     
                     edificaciones.get("piscina").add(new Piscina(duenho, this, precio));
                     grupo.getEdificaciones().get("piscina").add(new Piscina(duenho, this, precio));
                 } else {
-                    throw new EdificarSinPoder("No puedes construir más piscinas");
+                    throw new EdificarSinPoder(R + "No puedes construir más piscinas..." + RE);
                 }
             } else {
-                throw new EdificarSinPoder("No tienes al menos dos casas y un hotel...");
+                throw new EdificarSinPoder(R + "No tienes al menos dos casas y un hotel..." + RE);
             }
         } else {
             throw new DineroError(duenho.getFortuna());
         }
     }
     private void comprarPista() throws EdificarSinPoder, DineroError {
+        String B = Valor.BLUE;
+        String R = Valor.RED;
+        String G = Valor.GREEN;
+        String RE = Valor.RESET;
+        String Y = Valor.YELLOW;
         grupo.getEdificaciones().putIfAbsent("pista", new ArrayList<>());
         edificaciones.putIfAbsent("pista", new ArrayList<>());
         float precio=(1.25f*grupo.valor());
         if (duenho.getFortuna() >= precio) {
             if (edificaciones.getOrDefault("hotel",new ArrayList<>()).size()>=2){
                 if (grupo.getEdificaciones().getOrDefault("pista", new ArrayList<>()).size() < grupo.getMiembros().size()) {
-                    System.out.println("Has comprado una pista de deporte por " + precio + "€.");
+                    System.out.println("Has comprado una " + B + "pista de deporte" + RE + " en " + Y + this.nombre + RE + " por " + R + precio + "€" + RE + ".");
                     duenho.setFortuna(duenho.getFortuna() - precio);
                     
                     edificaciones.get("pista").add(new Pista(duenho, this, precio));
                     grupo.getEdificaciones().get("pista").add(new Pista(duenho, this, precio));
                 } else {
-                    throw new EdificarSinPoder("No puedes construir más pistas de deporte");
+                    throw new EdificarSinPoder(R + "No puedes construir más pistas de deporte..." + RE);
                 }
             } else {
-                throw new EdificarSinPoder("No tienes al menos dos hoteles...");
+                throw new EdificarSinPoder(R + "No tienes al menos dos hoteles..."+ RE);
             }
         } else {
             throw new DineroError(duenho.getFortuna());

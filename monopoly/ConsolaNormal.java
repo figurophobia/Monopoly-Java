@@ -19,6 +19,10 @@ public class ConsolaNormal implements Consola {
         System.out.println(cadena);
     }
     @Override
+    public void imprimirlinea(String cadena) {
+        System.out.print(cadena);
+    }
+    @Override
     public void imprimirMensaje(String mensaje) {
         System.out.println(ANSI_BLUE + "[+] " + ANSI_RESET + mensaje);
     }
