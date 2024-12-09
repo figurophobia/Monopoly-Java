@@ -10,6 +10,12 @@ public interface Consola {
     void imprimir(String cadena);
 
     /**
+     * Imprime un string en la consola.
+     * @param cadena La cadena que se va a imprimir.
+     */
+    void imprimirlinea(String cadena);
+
+    /**
      * Imprime un mensaje en la consola. Para mensajes de una línea.
      * @param mensaje El mensaje que se desea mostrar.
      */

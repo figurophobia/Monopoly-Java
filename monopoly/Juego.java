@@ -27,6 +27,7 @@ public class Juego implements Comando{
     private CartaCajaComunidad CartasComunidad = new CartaCajaComunidad();
     public static Consola consola = new ConsolaNormal(); //Objeto de la clase ConsolaNormal
 
+
 //////---CONSTRUCTOR JUEGO---
 
     public Juego() {
@@ -229,8 +230,44 @@ public class Juego implements Comando{
         }else throw new CasillaNoEncontrada(nombre);
     }
 //////---METODO SIMULA LANZAMIENTO DADOS---
+
+    private void cargando(int milliseconds, int ratio) {
+
+        consola.imprimirlinea("|"); 
+
+        int count = 0;
+        while (count < milliseconds) {
+
+            sleep(ratio);
+            count += ratio;
+            consola.imprimirlinea("\b/");
+            sleep(ratio);
+            count += ratio;
+            consola.imprimirlinea("\b—");
+            sleep(ratio);
+            count += ratio;
+            consola.imprimirlinea("\b\\");
+            sleep(ratio);
+            count += ratio;
+            consola.imprimirlinea("\b|");
+
+        }
+
+        consola.imprimirlinea("\b" + Valor.RESET);
+
+    }
+
+
+
     public void tiradados(int dado1, int dado2){
-        consola.imprimir("Lanzando dados");sleep(600);consola.imprimir(".");sleep(600);consola.imprimir(".");sleep(600);consola.imprimir(".");sleep(400);
+
+        String B = Valor.BLUE;
+        String R = Valor.RED;
+        String RE = Valor.RESET;
+
+
+        consola.imprimirlinea("Lanzando dados... " + B);
+        cargando(2000, 100);
         Avatar avatarActual = avatares.get(turno);
         avatarActual.getJugador().setVecesDados(avatarActual.getJugador().getVecesDados()+1);
         // Verificar si el avatar tiene movimiento avanzado y es de tipo "Coche"
@@ -246,7 +283,8 @@ public class Juego implements Comando{
             lanzamientos++;
             tirado=true;
         }
-        consola.imprimir("Han salido "+dado1+" y "+dado2+"!");
+
+        consola.imprimir("Han salido "+ B + dado1 + RE + " y " + B + dado2 + RE + "!");
     }
 
 
@@ -284,6 +322,11 @@ public class Juego implements Comando{
     }
 //////---METODO LANZAMIENTOS DADOS EN CARCEL ALEATORIOS---
     public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
+        String B = Valor.BLUE;
+        String R = Valor.RED;
+        String G = Valor.GREEN;
+        String RE = Valor.RESET;
+
         if (jugadorActual.getTiradasCarcel() >= 3) {
             consola.imprimir("Has pasado 3 turnos en la cárcel, sales! Tira los dados!");
             salirCarcel();
@@ -294,7 +337,7 @@ public class Juego implements Comando{
             tiradados(resultado1, resultado2);
     
             if (resultado1 == resultado2) {
-                consola.imprimir("¡Dobles! Sales de la cárcel.");
+                consola.imprimir(G + "¡Dobles!" + RE + " Sales de la cárcel.");
                 jugadorActual.sacarCarcel();
                 sleep(1000);
                 moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2,false);
@@ -310,17 +353,22 @@ public class Juego implements Comando{
         int resultado1 = dado1.hacerTirada();
         int resultado2 = dado2.hacerTirada();
 
+        String B = Valor.BLUE;
+        String R = Valor.RED;
+        String G = Valor.GREEN;
+        String RE = Valor.RESET;
+
         tiradados(resultado1, resultado2);
     
         if (resultado1 == resultado2) {
             if (lanzamientos == 3) {
-                consola.imprimir("¡Dobles! Has sacado tres veces dobles, vas a la cárcel.");
+                consola.imprimir(R + "¡Dobles! " + RE + "Has sacado tres veces dobles, vas a la cárcel.");
                 jugadorActual.encarcelar(tablero.getPosiciones());
                 verTablero();
                 acabarTurno();
                 return;
             } else {
-                consola.imprimir("¡Dobles! Puedes tirar otra vez.");
+                consola.imprimir(B + "¡Dobles!" + RE + " Puedes tirar otra vez.");
                 consola.imprimir("Entra a dobles una vez");
                 tirado = false;
             }
@@ -714,6 +762,10 @@ public class Juego implements Comando{
     }
 //////---METODO LANZAMIENTOS DADOS EN CARCEL VALORES ESPECIFICOS---
     public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
+        String B = Valor.BLUE;
+        String R = Valor.RED;
+        String G = Valor.GREEN;
+        String RE = Valor.RESET;
         if (jugadorActual.getTiradasCarcel() >= 3) {
             consola.imprimir("Has pasado 3 turnos en la cárcel, sales! Tira los dados!");
             salirCarcel();
@@ -724,7 +776,7 @@ public class Juego implements Comando{
             tiradados(resultado1, resultado2);
 
             if (resultado1 == resultado2) {
-                consola.imprimir("¡Dobles! Sales de la cárcel.");
+                consola.imprimir(G + "¡Dobles! " + RE + "Sales de la cárcel.");
                 jugadorActual.sacarCarcel();
                 sleep(1000);
                 moverYVerTablero(jugadorActual, avatarActual, posicionActual, resultado1 + resultado2,false);
@@ -737,19 +789,25 @@ public class Juego implements Comando{
     }
 //////---METODO LANZAMIENTOS DADOS VALORES ESPECIFICOS---
     public void manejarTiradaNormal(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
+
+        String B = Valor.BLUE;
+        String R = Valor.RED;
+        String G = Valor.GREEN;
+        String RE = Valor.RESET;
+
         int resultado1 = dado1;
         int resultado2 = dado2;
         tiradados(resultado1, resultado2);
 
         if (resultado1 == resultado2) {
             if (lanzamientos == 3) {
-                consola.imprimir("¡Dobles! Has sacado tres veces dobles, vas a la cárcel.");
+                consola.imprimir(R + "¡Dobles! " + RE + "Has sacado tres veces dobles, vas a la cárcel.");
                 jugadorActual.encarcelar(tablero.getPosiciones());
                 verTablero();
                 acabarTurno();
                 return;
             } else {
-                consola.imprimir("¡Dobles! Puedes tirar otra vez.");
+                consola.imprimir(B + "¡Dobles! " + RE + "Puedes tirar otra vez.");
                 tirado = false;
             }
         }
