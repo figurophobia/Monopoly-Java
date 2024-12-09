@@ -202,7 +202,7 @@ public class Juego implements Comando{
         for (Jugador player : jugadores) {
             if (player!=null && player.getNombre().equals(nombre)) {
                 consola.imprimir(player.toString());
-                break;
+                return;
             }
         }
         throw new JugadorNoEncontrado(nombre);
@@ -213,7 +213,7 @@ public class Juego implements Comando{
         for (Avatar av : avatares) {
             if (av!=null && av.getId().equals(ID)) {
                 consola.imprimir(av.toString());
-                break;
+                return;
             }
         }
         throw new AvatarNoEncontrado(ID);
