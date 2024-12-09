@@ -3,10 +3,8 @@ package monopoly;
 import java.util.ArrayList;
 import java.util.Map;
 
-import Excepciones.MalFormato.*;
 import Excepciones.Ejecucion.*;
 import Excepciones.MalUsoComando.*;
-import monopoly.Edificacion;
 import partida.*;
 
 public class Juego implements Comando{
@@ -22,7 +20,6 @@ public class Juego implements Comando{
     private Jugador banca; //El jugador banca.
     private boolean tirado; //Booleano para comprobar si el jugador que tiene el turno ha tirado o no.
     private boolean partida_OFF; //Booleano para comprobar si la partida ha finalizado.
-    private Cartas cartas = new Cartas(); //Objeto de la clase Cartas
     private CartaSuerte CartasSuerte = new CartaSuerte();
     private CartaCajaComunidad CartasComunidad = new CartaCajaComunidad();
     public static Consola consola = new ConsolaNormal(); //Objeto de la clase ConsolaNormal
@@ -262,7 +259,6 @@ public class Juego implements Comando{
     public void tiradados(int dado1, int dado2){
 
         String B = Valor.BLUE;
-        String R = Valor.RED;
         String RE = Valor.RESET;
 
 
@@ -322,8 +318,6 @@ public class Juego implements Comando{
     }
 //////---METODO LANZAMIENTOS DADOS EN CARCEL ALEATORIOS---
     public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual) throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
-        String B = Valor.BLUE;
-        String R = Valor.RED;
         String G = Valor.GREEN;
         String RE = Valor.RESET;
 
@@ -355,7 +349,6 @@ public class Juego implements Comando{
 
         String B = Valor.BLUE;
         String R = Valor.RED;
-        String G = Valor.GREEN;
         String RE = Valor.RESET;
 
         tiradados(resultado1, resultado2);
@@ -391,7 +384,6 @@ public class Juego implements Comando{
             jugadorActual.encarcelar(tablero.getPosiciones());
         }
 
-        String tipo = nuevaCasilla.getClass().getSuperclass().getSimpleName();
 
         if (nuevaCasilla instanceof AccionComunidad){
             CartasComunidad.gestionCartas(avatarActual, tablero, jugadores);
@@ -441,12 +433,9 @@ public class Juego implements Comando{
 //////---METODO MUEVE AVATAR VALOR ESPECIFICO---
     public int moverJugador(int posiciones) {
         if (avatares.get(turno).esMovAvanzado()) {
-            if (avatares.get(turno).getTipo().equals("Pelota")) {
-                return avatares.get(turno).moverEnAvanzado(tablero.getPosiciones(), posiciones);
-            }
-            else if (avatares.get(turno).getTipo().equals("Coche")) {
+            if (avatares.get(turno).getTipo().equals("Coche")) {
                 if (lanzamientos<2 && posiciones>4){
-                    consola.imprimir("Tienes tirada extra, puedes seguir lanzando los dados, llevas "+lanzamientos+" lanzamientos.");
+                    consola.imprimir("Tienes tirada extra, puedes seguir lanzando los dados.");
                 }
                 return avatares.get(turno).moverEnAvanzado(tablero.getPosiciones(), posiciones);
                 
@@ -762,8 +751,6 @@ public class Juego implements Comando{
     }
 //////---METODO LANZAMIENTOS DADOS EN CARCEL VALORES ESPECIFICOS---
     public void manejarCarcel(Jugador jugadorActual, Avatar avatarActual, Casilla posicionActual, int dado1, int dado2) throws AcabarTurno,EdificarSinPoder, DineroError, InstanciaIncorrecta  {
-        String B = Valor.BLUE;
-        String R = Valor.RED;
         String G = Valor.GREEN;
         String RE = Valor.RESET;
         if (jugadorActual.getTiradasCarcel() >= 3) {
@@ -792,7 +779,6 @@ public class Juego implements Comando{
 
         String B = Valor.BLUE;
         String R = Valor.RED;
-        String G = Valor.GREEN;
         String RE = Valor.RESET;
 
         int resultado1 = dado1;

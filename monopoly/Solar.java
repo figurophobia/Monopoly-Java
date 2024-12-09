@@ -178,7 +178,6 @@ public class Solar extends Propiedad {
     private void comprarCasa() throws EdificarSinPoder, DineroError{
         String B = Valor.BLUE;
         String R = Valor.RED;
-        String G = Valor.GREEN;
         String RE = Valor.RESET;
         String Y = Valor.YELLOW;
         int maxcasa;
@@ -214,7 +213,6 @@ public class Solar extends Propiedad {
     private void comprarHotel() throws EdificarSinPoder, DineroError{
         String B = Valor.BLUE;
         String R = Valor.RED;
-        String G = Valor.GREEN;
         String RE = Valor.RESET;
         String Y = Valor.YELLOW;
 
@@ -247,7 +245,6 @@ public class Solar extends Propiedad {
     private void comprarPiscina() throws EdificarSinPoder, DineroError{
         String B = Valor.BLUE;
         String R = Valor.RED;
-        String G = Valor.GREEN;
         String RE = Valor.RESET;
         String Y = Valor.YELLOW;
         grupo.getEdificaciones().putIfAbsent("piscina", new ArrayList<>());
@@ -276,7 +273,6 @@ public class Solar extends Propiedad {
     private void comprarPista() throws EdificarSinPoder, DineroError {
         String B = Valor.BLUE;
         String R = Valor.RED;
-        String G = Valor.GREEN;
         String RE = Valor.RESET;
         String Y = Valor.YELLOW;
         grupo.getEdificaciones().putIfAbsent("pista", new ArrayList<>());

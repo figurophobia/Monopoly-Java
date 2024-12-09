@@ -1,7 +1,6 @@
 package monopoly;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import Excepciones.Ejecucion.DineroError;
 import Excepciones.Ejecucion.InstanciaIncorrecta;
